@@ -1,13 +1,13 @@
 import { Screen } from '../App'
 import type { NavParams } from '../App'
-import { companies, missions, mockStudent, preferenceLabels } from '../data/mock'
+import { companies, missions, mockStudent, preferenceLabels, scoutInvitations } from '../data/mock'
 import BottomNav from '../components/BottomNav'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function StudentHome({ navigate }: Props) {
   const featured = missions[0]
-  const topCompany = companies[0]
+  const latestScout = scoutInvitations[0]
   const topValues = [...preferenceLabels]
     .sort((a, b) => (mockStudent.preferenceScores as any)[b.key] - (mockStudent.preferenceScores as any)[a.key])
     .slice(0, 2)
@@ -38,9 +38,9 @@ export default function StudentHome({ navigate }: Props) {
             <button onClick={() => navigate('studentProfile')} className="text-xs text-[#6C5CE7] font-bold flex-shrink-0">詳しく</button>
           </div>
           <div className="flex gap-2 mt-3">
-            {topValues.map(({ key, label, icon }) => (
+            {topValues.map(({ key, shortLabel, icon }) => (
               <span key={key} className="text-xs bg-[#EEF0FF] text-[#6C5CE7] rounded-full px-3 py-1">
-                {icon} {label}
+                {icon} {shortLabel}
               </span>
             ))}
           </div>
@@ -68,17 +68,21 @@ export default function StudentHome({ navigate }: Props) {
           </div>
         </button>
 
-        <button onClick={() => navigate('companyMatch')}
-          className="w-full bg-white rounded-3xl p-4 card-shadow text-left flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-            style={{ background: topCompany.color + '18' }}>
-            {topCompany.emoji}
+        <button onClick={() => navigate('scoutInbox')}
+          className="w-full bg-white rounded-[28px] p-4 card-shadow text-left">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-[#FDF2F8] flex items-center justify-center text-xl flex-shrink-0">
+              💌
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-bold text-gray-900">スカウトが届いています</p>
+                <span className="text-[10px] font-bold text-white bg-[#EC4899] rounded-full px-2 py-0.5">{scoutInvitations.length}</span>
+              </div>
+              <p className="text-xs text-gray-500 mt-0.5 truncate">{latestScout.companyName} · {latestScout.signal}</p>
+            </div>
+            <span className="text-gray-300 text-lg">›</span>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-gray-900">企業候補が見つかっています</p>
-            <p className="text-xs text-gray-500 mt-0.5 truncate">{topCompany.name} ほか{companies.length - 1}社</p>
-          </div>
-          <span className="text-gray-300 text-lg">›</span>
         </button>
       </div>
 

@@ -328,6 +328,53 @@ export const companies = [
   },
 ]
 
+export const scoutInvitations = [
+  {
+    id: 'scout_001',
+    companyId: 'com_001',
+    companyName: '株式会社Lumo',
+    role: '商品企画インターン',
+    message: 'SNS企画Missionの発想が、若年層向けブランドづくりと相性が良さそうです。',
+    receivedAt: '今日 10:20',
+    signal: '商品企画Missionの記録に関心',
+    status: '未確認',
+  },
+  {
+    id: 'scout_002',
+    companyId: 'com_006',
+    companyName: 'People Garden',
+    role: '採用広報アシスタント',
+    message: '人や雰囲気を大事にする傾向が、対話型の採用広報に合いそうです。',
+    receivedAt: '昨日 18:40',
+    signal: '価値観サマリに関心',
+    status: '保存中',
+  },
+]
+
+export const profileViews = [
+  {
+    id: 'view_001',
+    companyId: 'com_003',
+    companyName: 'Bridge Works',
+    viewedAt: '今日',
+    reason: 'イベント企画Missionの記録を確認',
+  },
+  {
+    id: 'view_002',
+    companyId: 'com_004',
+    companyName: 'Michi Labs',
+    viewedAt: '昨日',
+    reason: '価値観サマリを確認',
+  },
+  {
+    id: 'view_003',
+    companyId: 'com_001',
+    companyName: '株式会社Lumo',
+    viewedAt: '2日前',
+    reason: '商品企画Missionの提出内容を確認',
+  },
+]
+
 export const passportData = {
   completedMissions: 3,
   totalTime: '60分',

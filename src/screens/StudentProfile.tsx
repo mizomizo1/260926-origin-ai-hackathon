@@ -1,5 +1,5 @@
 import { Screen } from '../App'
-import { mockStudent, preferenceLabels, passportData } from '../data/mock'
+import { companies, mockStudent, preferenceLabels, passportData, profileViews, scoutInvitations } from '../data/mock'
 import BottomNav from '../components/BottomNav'
 
 interface Props { navigate: (s: Screen) => void }
@@ -46,6 +46,10 @@ export default function StudentProfile({ navigate }: Props) {
   const weeklyPct = Math.round((weeklyDone / weeklyGoal) * 100)
   const circleRadius = 38
   const circumference = 2 * Math.PI * circleRadius
+  const enrichedViews = profileViews.map(view => ({
+    ...view,
+    company: companies.find(company => company.id === view.companyId) ?? companies[0],
+  }))
 
   return (
     <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
@@ -112,6 +116,47 @@ export default function StudentProfile({ navigate }: Props) {
                 <span key={axis.key} className="text-[11px] font-bold bg-white text-[#6C5CE7] rounded-full px-3 py-1">
                   {axis.icon} {axis.label}
                 </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Company signals */}
+        <div className="bg-white rounded-3xl p-4 card-shadow">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-bold text-gray-900">企業からの反応</h3>
+            <span className="text-xs text-gray-400">直近</span>
+          </div>
+
+          <div className="rounded-2xl bg-[#FDF2F8] p-3 mb-3">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-lg flex-shrink-0">💌</div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs font-bold text-[#EC4899]">スカウト {scoutInvitations.length}件</p>
+                  <span className="text-[11px] text-gray-400">{scoutInvitations[0].receivedAt}</span>
+                </div>
+                <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">{scoutInvitations[0].companyName} · {scoutInvitations[0].role}</p>
+                <p className="text-xs text-gray-600 leading-relaxed mt-1 line-clamp-2">{scoutInvitations[0].signal}がきっかけです。</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-bold text-gray-500 mb-2">あなたをチェックした会社</p>
+            <div className="space-y-2">
+              {enrichedViews.map(view => (
+                <div key={view.id} className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                    style={{ background: view.company.color + '18' }}>
+                    {view.company.emoji}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-gray-800 truncate">{view.companyName}</p>
+                    <p className="text-[11px] text-gray-400 truncate">{view.reason}</p>
+                  </div>
+                  <span className="text-[11px] text-gray-400">{view.viewedAt}</span>
+                </div>
               ))}
             </div>
           </div>

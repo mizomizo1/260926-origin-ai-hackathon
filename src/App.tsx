@@ -15,6 +15,7 @@ import Reflection from './screens/Reflection'
 import UpdatedResult from './screens/UpdatedResult'
 import CompanyMatch from './screens/CompanyMatch'
 import StudentProfile from './screens/StudentProfile'
+import ScoutInbox from './screens/ScoutInbox'
 import CompanyLogin from './screens/company/CompanyLogin'
 import CompanyDashboard from './screens/company/CompanyDashboard'
 import MissionList from './screens/company/MissionList'
@@ -27,7 +28,7 @@ export type Screen =
   | 'splash' | 'onboarding' | 'roleSelect'
   | 'studentLogin' | 'profileSetup' | 'abIntro' | 'abQuestion' | 'preferenceResult'
   | 'studentHome' | 'missionExplore' | 'missionDetail' | 'missionTrial'
-  | 'reflection' | 'updatedResult' | 'companyMatch' | 'studentProfile'
+  | 'reflection' | 'updatedResult' | 'companyMatch' | 'scoutInbox' | 'studentProfile'
   | 'companyLogin' | 'companyDashboard' | 'missionList' | 'createMission'
   | 'missionAnalytics' | 'studentList' | 'studentDetail'
 
@@ -48,7 +49,7 @@ export default function App() {
   const isCompany = ['companyLogin', 'companyDashboard', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail'].includes(screen)
   const bgClass = isCompany ? 'bg-gray-50' : 'bg-[#F7F6FF] min-h-screen'
 
-  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'companyMatch', 'studentProfile']
+  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'companyMatch', 'scoutInbox', 'studentProfile']
   const showPhoneFrame = studentScreens.includes(screen) || ['onboarding', 'roleSelect', 'studentLogin', 'profileSetup', 'abIntro', 'abQuestion', 'preferenceResult'].includes(screen)
 
   const sharedProps = { navigate, params }
@@ -78,6 +79,7 @@ export default function App() {
       case 'reflection': return <Reflection navigate={navigate} missionId={params.missionId} />
       case 'updatedResult': return <UpdatedResult navigate={navigate} />
       case 'companyMatch': return <CompanyMatch navigate={navigate} />
+      case 'scoutInbox': return <ScoutInbox navigate={navigate} />
       case 'studentProfile': return <StudentProfile navigate={navigate} />
       case 'companyLogin': return <CompanyLogin navigate={navigate} />
       case 'companyDashboard': return <CompanyDashboard navigate={navigate} />
