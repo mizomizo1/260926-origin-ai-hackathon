@@ -1,0 +1,114 @@
+import { useState } from 'react'
+import Splash from './screens/Splash'
+import Onboarding from './screens/Onboarding'
+import RoleSelect from './screens/RoleSelect'
+import StudentLogin from './screens/StudentLogin'
+import ProfileSetup from './screens/ProfileSetup'
+import ABIntro from './screens/ABIntro'
+import ABQuestion from './screens/ABQuestion'
+import PreferenceResult from './screens/PreferenceResult'
+import StudentHome from './screens/StudentHome'
+import MissionExplore from './screens/MissionExplore'
+import MissionDetail from './screens/MissionDetail'
+import MissionTrial from './screens/MissionTrial'
+import Reflection from './screens/Reflection'
+import UpdatedResult from './screens/UpdatedResult'
+import CareerPassport from './screens/CareerPassport'
+import CompanyMatch from './screens/CompanyMatch'
+import StudentProfile from './screens/StudentProfile'
+import CompanyLogin from './screens/company/CompanyLogin'
+import CompanyDashboard from './screens/company/CompanyDashboard'
+import MissionList from './screens/company/MissionList'
+import CreateMission from './screens/company/CreateMission'
+import MissionAnalytics from './screens/company/MissionAnalytics'
+import StudentList from './screens/company/StudentList'
+import StudentDetail from './screens/company/StudentDetail'
+
+export type Screen =
+  | 'splash' | 'onboarding' | 'roleSelect'
+  | 'studentLogin' | 'profileSetup' | 'abIntro' | 'abQuestion' | 'preferenceResult'
+  | 'studentHome' | 'missionExplore' | 'missionDetail' | 'missionTrial'
+  | 'reflection' | 'updatedResult' | 'careerPassport' | 'companyMatch' | 'studentProfile'
+  | 'companyLogin' | 'companyDashboard' | 'missionList' | 'createMission'
+  | 'missionAnalytics' | 'studentList' | 'studentDetail'
+
+export type NavParams = { missionId?: string; studentId?: string; companyScreen?: string }
+
+export default function App() {
+  const [screen, setScreen] = useState<Screen>('splash')
+  const [params, setParams] = useState<NavParams>({})
+  const [abAnswers, setAbAnswers] = useState<('a' | 'b')[]>([])
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+
+  const navigate = (s: Screen, p?: NavParams) => {
+    setScreen(s)
+    if (p) setParams(p)
+    window.scrollTo(0, 0)
+  }
+
+  const isCompany = ['companyLogin', 'companyDashboard', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail'].includes(screen)
+  const bgClass = isCompany ? 'bg-gray-50' : 'bg-[#F7F6FF] min-h-screen'
+
+  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'careerPassport', 'companyMatch', 'studentProfile']
+  const showPhoneFrame = studentScreens.includes(screen) || ['onboarding', 'roleSelect', 'studentLogin', 'profileSetup', 'abIntro', 'abQuestion', 'preferenceResult'].includes(screen)
+
+  const sharedProps = { navigate, params }
+
+  const renderScreen = () => {
+    switch (screen) {
+      case 'splash': return <Splash navigate={navigate} />
+      case 'onboarding': return <Onboarding navigate={navigate} />
+      case 'roleSelect': return <RoleSelect navigate={navigate} />
+      case 'studentLogin': return <StudentLogin navigate={navigate} />
+      case 'profileSetup': return <ProfileSetup navigate={navigate} />
+      case 'abIntro': return <ABIntro navigate={navigate} />
+      case 'abQuestion': return (
+        <ABQuestion
+          navigate={navigate}
+          questionIndex={currentQuestion}
+          answers={abAnswers}
+          setAnswers={setAbAnswers}
+          setQuestionIndex={setCurrentQuestion}
+        />
+      )
+      case 'preferenceResult': return <PreferenceResult navigate={navigate} answers={abAnswers} />
+      case 'studentHome': return <StudentHome navigate={navigate} />
+      case 'missionExplore': return <MissionExplore navigate={navigate} />
+      case 'missionDetail': return <MissionDetail navigate={navigate} missionId={params.missionId} />
+      case 'missionTrial': return <MissionTrial navigate={navigate} missionId={params.missionId} />
+      case 'reflection': return <Reflection navigate={navigate} missionId={params.missionId} />
+      case 'updatedResult': return <UpdatedResult navigate={navigate} />
+      case 'careerPassport': return <CareerPassport navigate={navigate} />
+      case 'companyMatch': return <CompanyMatch navigate={navigate} />
+      case 'studentProfile': return <StudentProfile navigate={navigate} />
+      case 'companyLogin': return <CompanyLogin navigate={navigate} />
+      case 'companyDashboard': return <CompanyDashboard navigate={navigate} />
+      case 'missionList': return <MissionList navigate={navigate} />
+      case 'createMission': return <CreateMission navigate={navigate} />
+      case 'missionAnalytics': return <MissionAnalytics navigate={navigate} />
+      case 'studentList': return <StudentList navigate={navigate} />
+      case 'studentDetail': return <StudentDetail navigate={navigate} studentId={params.studentId} />
+      default: return <Splash navigate={navigate} />
+    }
+  }
+
+  if (screen === 'splash') {
+    return <div className="min-h-screen">{renderScreen()}</div>
+  }
+
+  if (isCompany) {
+    return <div className="min-h-screen bg-gray-50">{renderScreen()}</div>
+  }
+
+  return (
+    <div className={`min-h-screen ${bgClass} flex items-center justify-center p-4`}>
+      {showPhoneFrame ? (
+        <div className="w-full max-w-sm phone-shadow rounded-[40px] overflow-hidden bg-white" style={{ minHeight: 780 }}>
+          {renderScreen()}
+        </div>
+      ) : (
+        renderScreen()
+      )}
+    </div>
+  )
+}

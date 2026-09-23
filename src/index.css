@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+@theme inline {
+  --color-primary: #6C5CE7;
+  --color-primary-light: #EEF0FF;
+  --color-mint: #00B894;
+  --color-orange: #F59E0B;
+  --color-surface: #F7F6FF;
+  --font-sans: 'Outfit', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* {
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  background: #F7F6FF;
+  color: #1A1A2E;
+}
+
+::-webkit-scrollbar { width: 0; height: 0; }
+* { scrollbar-width: none; }
+
+.phone-shadow {
+  box-shadow: 0 20px 60px rgba(108, 92, 231, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.card-shadow {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.primary-btn {
+  background: #6C5CE7;
+  color: white;
+  border-radius: 9999px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s;
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+}
+.primary-btn:hover { background: #5B4BD6; transform: translateY(-1px); }
+.primary-btn:active { transform: translateY(0); }
+
+.ghost-btn {
+  background: transparent;
+  color: #6C5CE7;
+  border-radius: 9999px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s;
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid #6C5CE7;
+}
+.ghost-btn:hover { background: #EEF0FF; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'DM Mono', monospace;
+}
+
+.ab-card {
+  border: 2px solid #E8E6F5;
+  border-radius: 20px;
+  padding: 20px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ab-card:hover { border-color: #6C5CE7; background: #EEF0FF; }
+.ab-card.selected { border-color: #6C5CE7; background: #EEF0FF; }
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #9CA3AF;
+  font-size: 11px;
+  font-weight: 500;
+  transition: color 0.2s;
+  border: none;
+  background: none;
+}
+.bottom-nav-item.active { color: #6C5CE7; }
+
+.mission-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.mission-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,92,231,0.12); }
+
+/* Memphis decorative shapes */
+.memphis-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+}
+
+input, textarea, select {
+  font-family: 'Outfit', sans-serif;
+}
+
+.company-sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: #1A1A2E;
+  color: white;
+  flex-shrink: 0;
+}
+
+.company-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.company-sidebar-item:hover { color: white; background: rgba(255,255,255,0.08); }
+.company-sidebar-item.active { color: white; background: #6C5CE7; }
+
+.kpi-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.radar-axis { fill: none; stroke: #E8E6F5; stroke-width: 1; }
+.radar-polygon { fill: rgba(108,92,231,0.15); stroke: #6C5CE7; stroke-width: 2; }
