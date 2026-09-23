@@ -1,24 +1,25 @@
 import { Screen } from '../App'
 import { passportData } from '../data/mock'
-import BottomNav from '../components/BottomNav'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen) => void }
 
 export default function CareerPassport({ navigate }: Props) {
   return (
-    <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
-      {/* Header */}
-      <div className="bg-white px-5 pt-8 pb-5">
-        <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="passport" navigate={navigate} />
+      <main className="mx-auto max-w-[1200px] px-6 py-8">
+        <div className="flex justify-between items-end mb-6">
           <div>
-            <p className="text-xs text-gray-500">佐藤 美咲さんの</p>
-            <h2 className="text-xl font-bold text-gray-900">Career Passport</h2>
+            <p className="text-sm font-semibold text-[#6C5CE7]">Your progress</p>
+            <h1 className="text-3xl font-bold text-gray-900 mt-1">Career Passport</h1>
+            <p className="text-sm text-gray-500 mt-2">体験を重ねるほど、あなたのキャリア仮説が具体的になります。</p>
           </div>
-          <div className="text-3xl">🗺️</div>
+          <div className="hidden sm:block text-4xl">🗺️</div>
         </div>
 
         {/* Stats */}
-        <div className="flex gap-3 mt-4">
+        <div className="grid grid-cols-2 gap-4 mb-6 max-w-md">
           {[
             { label: '完了Mission', value: passportData.completedMissions, unit: '個', color: '#6C5CE7' },
             { label: '総体験時間', value: passportData.totalTime, unit: '', color: '#00B894' },
@@ -29,11 +30,10 @@ export default function CareerPassport({ navigate }: Props) {
             </div>
           ))}
         </div>
-      </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 py-4 space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
         {/* Skills */}
-        <div className="bg-white rounded-3xl p-4">
+        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm h-fit">
           <h3 className="text-sm font-bold text-gray-900 mb-3">スキル傾向</h3>
           <div className="space-y-3">
             {passportData.skills.map(({ label, value }) => (
@@ -56,7 +56,7 @@ export default function CareerPassport({ navigate }: Props) {
           <h3 className="text-sm font-bold text-gray-900 mb-3">体験ログ</h3>
           <div className="space-y-3">
             {passportData.experiences.map(exp => (
-              <div key={exp.id} className="bg-white rounded-3xl p-4 card-shadow">
+              <div key={exp.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                 <div className="flex items-start gap-3">
                   <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
                     style={{ background: '#EEF0FF' }}>
@@ -86,9 +86,8 @@ export default function CareerPassport({ navigate }: Props) {
             ))}
           </div>
         </div>
+        </div>
+      </main>
       </div>
-
-      <BottomNav current="passport" navigate={navigate} />
-    </div>
   )
 }

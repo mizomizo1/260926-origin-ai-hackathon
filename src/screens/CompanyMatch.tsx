@@ -1,6 +1,6 @@
 import { Screen } from '../App'
 import { companies } from '../data/mock'
-import BottomNav from '../components/BottomNav'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -10,17 +10,20 @@ export default function CompanyMatch({ navigate }: Props) {
   const growing = companies.slice(4)
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="companies" navigate={navigate} />
       {/* Header */}
-      <div className="bg-white px-5 pt-8 pb-4">
+      <div className="bg-white border-b border-gray-100">
+        <div className="mx-auto max-w-[1200px] px-6 py-8">
         <p className="text-xs text-gray-500 mb-1">あなたの体験から</p>
-        <h2 className="text-xl font-bold text-gray-900">あなたに関心が近い企業</h2>
+        <h1 className="text-3xl font-bold text-gray-900">あなたに関心が近い企業</h1>
         <p className="text-sm text-gray-500 mt-1">体験結果から、候補企業が{companies.length}社見つかりました</p>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 pt-4 space-y-5">
+      <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
         {/* Featured company */}
-        <div className="px-5">
+        <div>
           <div className="rounded-3xl bg-white card-shadow p-4 border-l-4" style={{ borderColor: featured.color }}>
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -65,7 +68,7 @@ export default function CompanyMatch({ navigate }: Props) {
               <span className="text-xs text-gray-400">横にスワイプ</span>
             </div>
 
-            <div className={`flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-8' : 'pl-8 pr-5'}`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
               {section.items.map((company, index) => (
                 <div key={company.id} className={`snap-start shrink-0 bg-white rounded-[22px] card-shadow p-3 border-t-4 ${index === 0 ? 'w-[232px]' : 'w-[200px]'}`}
                   style={{ borderColor: company.color }}>
@@ -93,14 +96,12 @@ export default function CompanyMatch({ navigate }: Props) {
             </div>
           </div>
         ))}
-        <div className="px-5">
+        <div>
           <button onClick={() => navigate('missionExplore')} className="w-full py-3 rounded-full bg-[#6C5CE7] text-white text-sm font-bold">
             次のMissionを選ぶ
           </button>
         </div>
-      </div>
-
-      <BottomNav current="company" navigate={navigate} />
+      </main>
     </div>
   )
 }

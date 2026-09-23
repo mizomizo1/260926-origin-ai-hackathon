@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions } from '../data/mock'
-import BottomNav from '../components/BottomNav'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -21,105 +21,93 @@ export default function MissionExplore({ navigate }: Props) {
     return matchCat
   })
 
+  const catalogItems = showShelves ? missions : filtered
+
   return (
-    <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
-      {/* Header */}
-      <div className="bg-white px-5 pt-8 pb-4">
-        <h2 className="text-xl font-bold text-gray-900">Missionを選ぶ</h2>
-        <p className="text-sm text-gray-500 mt-1">難易度から選ぶと迷いにくくなります</p>
-      </div>
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="explore" navigate={navigate} />
 
-      {/* Category filter */}
-      <div className="px-5 py-3 bg-white border-b border-gray-50 overflow-x-auto">
-        <div className="flex gap-2 min-w-max">
-          {['すべて', '初級', '中級'].map(c => (
-            <button key={c} onClick={() => setCat(c)}
-              className="px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap"
-              style={cat === c
-                ? { background: '#6C5CE7', color: 'white' }
-                : { background: '#F3F4F6', color: '#6B7280' }
-              }>
-              {c}
-            </button>
-          ))}
+      <main className="mx-auto max-w-[1200px] px-6 py-8">
+        <div className="mb-8">
+          <p className="text-sm font-semibold text-[#6C5CE7]">Explore Trials</p>
+          <h1 className="text-3xl font-bold text-gray-900 mt-1">Job Trial Catalog</h1>
+          <p className="text-sm text-gray-500 mt-2">求人ではなく、仕事を短く試して自分の理解を更新します。</p>
         </div>
-      </div>
 
-      {/* List */}
-      <div className="flex-1 overflow-y-auto pb-24 pt-4">
-        {filtered.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
-            <div className="text-4xl mb-3">🔍</div>
-            <p className="text-sm">該当するMissionが見つかりません</p>
-          </div>
-        )}
-        {showShelves ? (
-          <div className="space-y-5">
-            {shelves.map((section, sectionIndex) => (
-              <div key={section.title}>
-                <div className="flex items-end justify-between px-5 mb-2.5">
-                  <div>
-                    <h3 className="text-base font-bold text-gray-900">{section.title}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{section.hint}</p>
-                  </div>
-                  <span className="text-xs text-gray-400">横にスワイプ</span>
-                </div>
-                <div className={`flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-8' : 'pl-8 pr-5'}`}>
-                  {section.items.map((m, itemIndex) => (
-                    <button
-                      key={m.id}
-                      onClick={() => navigate('missionDetail', { missionId: m.id })}
-                      className={`snap-start shrink-0 rounded-[22px] bg-white card-shadow text-left overflow-hidden ${itemIndex === 0 ? 'w-[216px]' : 'w-[184px]'}`}
-                    >
-                      <div className={`${itemIndex === 0 ? 'h-[120px]' : 'h-[104px]'} relative overflow-hidden p-3 text-white`} style={{ background: `linear-gradient(135deg, ${m.color}, #1F2937)` }}>
-                        <div className="absolute -right-4 -bottom-6 text-6xl opacity-25">{m.emoji}</div>
-                        <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">{m.duration}</span>
-                        <div className="absolute left-3 bottom-3 text-3xl">{m.emoji}</div>
-                      </div>
-                      <div className="p-3">
-                        <p className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 min-h-8">{m.title}</p>
-                        <p className="text-xs text-gray-500 mt-1 truncate">{m.company}</p>
-                        <div className="flex gap-1.5 mt-2.5 flex-wrap">
-                          {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">共通</span>}
-                          <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
-                        </div>
-                      </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6">
+          <aside className="bg-white border border-gray-100 rounded-2xl p-5 h-fit shadow-sm">
+            <h2 className="text-sm font-bold text-gray-900 mb-4">Filter</h2>
+            <div className="space-y-5">
+              <div>
+                <p className="text-xs font-bold text-gray-500 mb-2">難易度</p>
+                <div className="flex flex-wrap gap-2">
+                  {['すべて', '初級', '中級'].map(c => (
+                    <button key={c} onClick={() => setCat(c)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold ${cat === c ? 'bg-[#6C5CE7] text-white' : 'bg-gray-50 text-gray-500'}`}>
+                      {c}
                     </button>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="px-5 space-y-3">
-            {filtered.map(m => (
-              <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
-                className="w-full mission-card card-shadow text-left">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
-                    style={{ background: m.color + '20' }}>
-                    {m.emoji}
+              <div>
+                <p className="text-xs font-bold text-gray-500 mb-2">形式</p>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <label className="flex gap-2"><input type="checkbox" defaultChecked /> 個人向き</label>
+                  <label className="flex gap-2"><input type="checkbox" /> チーム向き</label>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-500 mb-2">職種</p>
+                <div className="flex flex-wrap gap-2">
+                  {['基礎力', '商品企画', 'マーケティング', 'データ分析', '人事'].map(item => (
+                    <span key={item} className="px-2.5 py-1 rounded-full bg-gray-50 text-xs text-gray-500">{item}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <section>
+            {showShelves && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                {shelves.map(section => (
+                  <div key={section.title} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                    <p className="text-sm font-bold text-gray-900">{section.title}</p>
+                    <p className="text-xs text-gray-500 mt-1">{section.items.length} Trials</p>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-gray-900 mb-1">{m.title}</p>
-                    <p className="text-xs text-gray-500 mb-2">{m.company}</p>
-                    <div className="flex gap-2 flex-wrap">
-                      {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">共通Mission</span>}
-                      <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
-                      <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
+                ))}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {catalogItems.map(m => (
+                <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
+                  className="text-left bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:border-[#6C5CE7] transition-colors">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: m.color + '18' }}>
+                      {m.emoji}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs text-gray-500 truncate">{m.company}</p>
+                      <h3 className="text-base font-bold text-gray-900 leading-snug line-clamp-2">{m.title}</h3>
                     </div>
                   </div>
-                </div>
-                <div className="mt-3 pt-3 border-t border-gray-50">
-                  <p className="text-xs text-gray-500 line-clamp-2">{m.summary}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <BottomNav current="mission" navigate={navigate} />
+                  <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 min-h-[62px]">{m.summary}</p>
+                  <div className="flex gap-1.5 mt-4 flex-wrap">
+                    {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">Core</span>}
+                    <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
+                    <span className="chip bg-gray-100 text-gray-600">{m.difficulty}</span>
+                    <span className="chip bg-gray-100 text-gray-600">{m.category}</span>
+                  </div>
+                  <div className="mt-4 border-t border-gray-100 pt-3">
+                    <p className="text-xs text-[#6C5CE7] font-bold">詳細を見る</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+        </div>
+      </main>
     </div>
   )
 }

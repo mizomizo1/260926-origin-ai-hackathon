@@ -1,6 +1,7 @@
 import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions, preferenceLabels, mockStudent } from '../data/mock'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -9,9 +10,11 @@ const afterScores = mockStudent.preferenceScores
 
 export default function UpdatedResult({ navigate }: Props) {
   return (
-    <div className="flex flex-col min-h-[780px] bg-white">
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="home" navigate={navigate} />
       {/* Header */}
-      <div className="px-5 pt-10 pb-6 text-center" style={{ background: 'linear-gradient(180deg, #EEF0FF 0%, white 100%)' }}>
+      <div className="border-b border-gray-100" style={{ background: 'linear-gradient(180deg, #EEF0FF 0%, white 100%)' }}>
+        <div className="mx-auto max-w-[760px] px-6 py-10 text-center">
         <div className="w-16 h-16 rounded-full bg-[#6C5CE7] flex items-center justify-center text-3xl mx-auto mb-4"
           style={{ boxShadow: '0 8px 24px rgba(108,92,231,0.3)' }}>
           🗺️
@@ -19,8 +22,9 @@ export default function UpdatedResult({ navigate }: Props) {
         <h2 className="text-xl font-bold text-gray-900">キャリア地図を更新しました！</h2>
         <p className="text-sm text-gray-500 mt-1">体験の結果を反映しました</p>
       </div>
+      </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-4 pb-24 space-y-5">
+      <main className="mx-auto max-w-[760px] px-6 py-8 space-y-5">
         {/* Before/After comparison */}
         <div className="bg-[#F7F6FF] rounded-3xl p-4">
           <h3 className="text-sm font-bold text-gray-700 mb-4">価値観の変化</h3>
@@ -88,9 +92,9 @@ export default function UpdatedResult({ navigate }: Props) {
             企業を確認する →
           </button>
         </div>
-      </div>
+      </main>
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 px-5 py-4">
+      <div className="mx-auto max-w-[760px] px-6 pb-10">
         <button onClick={() => navigate('studentHome')} className="primary-btn">
           ホームに戻る
         </button>

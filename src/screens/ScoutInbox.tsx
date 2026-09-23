@@ -1,6 +1,6 @@
 import { Screen } from '../App'
 import { companies, profileViews, scoutInvitations } from '../data/mock'
-import BottomNav from '../components/BottomNav'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -18,14 +18,17 @@ export default function ScoutInbox({ navigate }: Props) {
     .slice(0, 4)
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
-      <div className="bg-white px-5 pt-8 pb-4">
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="scout" navigate={navigate} />
+      <div className="bg-white border-b border-gray-100">
+        <div className="mx-auto max-w-[1200px] px-6 py-8">
         <p className="text-xs text-gray-500 mb-1">企業からの関心</p>
-        <h2 className="text-xl font-bold text-gray-900">Scout</h2>
+        <h1 className="text-3xl font-bold text-gray-900">Scout</h1>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-4">
-        <div className="bg-white rounded-3xl p-4 card-shadow">
+      <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-bold text-[#6C5CE7] mb-1">企業の反応</p>
@@ -56,9 +59,9 @@ export default function ScoutInbox({ navigate }: Props) {
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {scouts.map(({ scout, company }) => (
-              <div key={scout.id} className="bg-white rounded-3xl p-3.5 card-shadow">
+              <div key={scout.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
                     style={{ background: company.color + '18' }}>
@@ -91,7 +94,7 @@ export default function ScoutInbox({ navigate }: Props) {
               <h3 className="text-base font-bold text-gray-900">あなたをチェックした会社</h3>
             </div>
           </div>
-          <div className="bg-white rounded-3xl p-3.5 card-shadow">
+          <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
             <div className="space-y-4">
               {views.map((view, index) => (
                 <div key={view.id} className="relative flex gap-3">
@@ -114,9 +117,7 @@ export default function ScoutInbox({ navigate }: Props) {
             </div>
           </div>
         </section>
-      </div>
-
-      <BottomNav current="scout" navigate={navigate} />
+      </main>
     </div>
   )
 }

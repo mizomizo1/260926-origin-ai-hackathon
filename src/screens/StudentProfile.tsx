@@ -1,6 +1,6 @@
 import { Screen } from '../App'
 import { companies, mockStudent, preferenceLabels, passportData, profileViews, scoutInvitations } from '../data/mock'
-import BottomNav from '../components/BottomNav'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -42,22 +42,27 @@ export default function StudentProfile({ navigate }: Props) {
   }))
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="profile" navigate={navigate} />
       {/* Header */}
-      <div className="bg-white px-5 pt-10 pb-6 text-center">
-        <div className="w-20 h-20 rounded-full bg-[#6C5CE7] text-white text-3xl font-bold flex items-center justify-center mx-auto mb-3">
+      <div className="bg-white border-b border-gray-100">
+        <div className="mx-auto max-w-[1200px] px-6 py-8 flex items-center gap-5">
+        <div className="w-20 h-20 rounded-full bg-[#6C5CE7] text-white text-3xl font-bold flex items-center justify-center shrink-0">
           美
         </div>
-        <h2 className="text-xl font-bold text-gray-900">{mockStudent.name}</h2>
-        <p className="text-sm text-gray-500">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
-        <div className="flex gap-2 justify-center mt-3 flex-wrap">
+        <div>
+        <h1 className="text-2xl font-bold text-gray-900">{mockStudent.name}</h1>
+        <p className="text-sm text-gray-500 mt-1">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
+        <div className="flex gap-2 mt-3 flex-wrap">
           {mockStudent.interests.map(i => (
             <span key={i} className="chip bg-[#EEF0FF] text-[#6C5CE7]">{i}</span>
           ))}
         </div>
+        </div>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 py-4 space-y-3">
+      <main className="mx-auto max-w-[1200px] px-6 py-8 grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Value summary */}
         <div className="bg-white rounded-3xl p-4 card-shadow">
           <div className="flex items-center justify-between mb-3">
@@ -208,12 +213,10 @@ export default function StudentProfile({ navigate }: Props) {
           </div>
         </div>
 
-        <button onClick={() => navigate('splash')} className="w-full text-center text-xs text-gray-400 py-2">
+        <button onClick={() => navigate('splash')} className="w-full text-center text-xs text-gray-400 py-2 lg:col-span-2">
           ← トップに戻る
         </button>
-      </div>
-
-      <BottomNav current="profile" navigate={navigate} />
+      </main>
     </div>
   )
 }
