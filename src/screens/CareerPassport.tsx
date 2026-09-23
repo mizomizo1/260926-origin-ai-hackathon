@@ -19,13 +19,13 @@ export default function CareerPassport({ navigate }: Props) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-6 max-w-md">
+        <div className="grid grid-cols-2 gap-4 mb-8 max-w-lg">
           {[
             { label: '完了Mission', value: passportData.completedMissions, unit: '個', color: '#6C5CE7' },
             { label: '総体験時間', value: passportData.totalTime, unit: '', color: '#00B894' },
           ].map(({ label, value, unit, color }) => (
-            <div key={label} className="flex-1 rounded-2xl p-3 text-center" style={{ background: color + '15' }}>
-              <p className="text-2xl font-bold" style={{ color }}>{value}{unit}</p>
+            <div key={label} className="rounded-2xl p-5" style={{ background: color + '15' }}>
+              <p className="text-3xl font-bold" style={{ color }}>{value}{unit}</p>
               <p className="text-xs text-gray-600 mt-0.5">{label}</p>
             </div>
           ))}
@@ -33,16 +33,17 @@ export default function CareerPassport({ navigate }: Props) {
 
         <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
         {/* Skills */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm h-fit">
-          <h3 className="text-sm font-bold text-gray-900 mb-3">スキル傾向</h3>
+        <div className="bg-[#17152B] rounded-3xl p-6 shadow-sm h-fit text-white">
+          <p className="text-xs font-bold text-[#A29BFE]">YOUR SIGNALS</p>
+          <h3 className="text-xl font-bold mt-2 mb-6">スキル傾向</h3>
           <div className="space-y-3">
             {passportData.skills.map(({ label, value }) => (
               <div key={label}>
-                <div className="flex justify-between text-xs text-gray-600 mb-1">
+                <div className="flex justify-between text-xs text-white/60 mb-1">
                   <span>{label}</span>
                   <span className="font-mono font-semibold">{value}</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full rounded-full transition-all duration-700"
                     style={{ width: `${value}%`, background: 'linear-gradient(90deg, #6C5CE7, #A29BFE)' }} />
                 </div>
@@ -53,10 +54,11 @@ export default function CareerPassport({ navigate }: Props) {
 
         {/* Experience cards */}
         <div>
-          <h3 className="text-sm font-bold text-gray-900 mb-3">体験ログ</h3>
-          <div className="space-y-3">
+          <div className="flex items-end justify-between mb-4"><div><p className="text-xs font-bold text-[#6C5CE7]">YOUR JOURNEY</p><h3 className="text-xl font-bold text-gray-900 mt-1">体験ログ</h3></div><span className="text-xs text-gray-400">3 experiences</span></div>
+          <div className="space-y-4 border-l-2 border-[#EEF0FF] pl-5">
             {passportData.experiences.map(exp => (
-              <div key={exp.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div key={exp.id} className="relative bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <span className="absolute -left-[27px] top-6 w-3 h-3 rounded-full bg-[#6C5CE7] ring-4 ring-[#F7F8FB]" />
                 <div className="flex items-start gap-3">
                   <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
                     style={{ background: '#EEF0FF' }}>

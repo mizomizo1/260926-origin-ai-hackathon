@@ -27,12 +27,22 @@ export default function ScoutInbox({ navigate }: Props) {
         </div>
       </div>
 
-      <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-6">
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+      <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: 'Scout', value: scoutInvitations.length, color: '#EC4899' },
+            { label: 'Profile views', value: profileViews.length, color: '#6C5CE7' },
+            { label: 'Companies', value: interestedCompanies.length, color: '#00B894' },
+          ].map(item => (
+            <div key={item.label} className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm"><p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}</p><p className="text-xs text-gray-500 mt-1">{item.label}</p></div>
+          ))}
+        </div>
+        <div className="bg-[#17152B] rounded-3xl p-6 text-white shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold text-[#6C5CE7] mb-1">企業の反応</p>
-              <h3 className="text-base font-bold text-gray-900">{scoutInvitations.length} Scout / {profileViews.length} Views</h3>
+              <p className="text-xs font-bold text-[#F9A8D4] mb-1">YOUR SIGNALS</p>
+              <h3 className="text-xl font-bold">あなたに関心を持つ企業</h3>
+              <p className="text-sm text-white/55 mt-2">Missionと価値観の記録を見て、企業があなたを見つけています。</p>
             </div>
             <div className="flex -space-x-2 pt-1">
               {interestedCompanies.map(company => (
@@ -45,7 +55,7 @@ export default function ScoutInbox({ navigate }: Props) {
           </div>
           <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
             {interestedCompanies.map(company => (
-              <span key={company.id} className="shrink-0 rounded-full bg-[#F7F6FF] px-3 py-1.5 text-xs font-bold text-gray-700">
+                <span key={company.id} className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/80">
                 {company.emoji} {company.name}
               </span>
             ))}
@@ -55,13 +65,13 @@ export default function ScoutInbox({ navigate }: Props) {
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>
-              <h3 className="text-base font-bold text-gray-900">スカウト</h3>
+              <p className="text-xs font-bold text-[#EC4899]">NEW OPPORTUNITIES</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {scouts.map(({ scout, company }) => (
-              <div key={scout.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div key={scout.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:-translate-y-1 transition-transform">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
                     style={{ background: company.color + '18' }}>
@@ -91,7 +101,7 @@ export default function ScoutInbox({ navigate }: Props) {
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>
-              <h3 className="text-base font-bold text-gray-900">あなたをチェックした会社</h3>
+              <p className="text-xs font-bold text-[#6C5CE7]">RECENT ACTIVITY</p><h3 className="text-xl font-bold text-gray-900 mt-1">あなたをチェックした会社</h3>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">

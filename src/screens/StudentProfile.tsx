@@ -45,17 +45,18 @@ export default function StudentProfile({ navigate }: Props) {
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="profile" navigate={navigate} />
       {/* Header */}
-      <div className="bg-white border-b border-gray-100">
+      <div className="bg-[#17152B] text-white">
         <div className="mx-auto max-w-[1200px] px-6 py-8 flex items-center gap-5">
-        <div className="w-20 h-20 rounded-full bg-[#6C5CE7] text-white text-3xl font-bold flex items-center justify-center shrink-0">
+        <div className="w-20 h-20 rounded-full bg-[#6C5CE7] text-white text-3xl font-bold flex items-center justify-center shrink-0 ring-4 ring-white/10">
           美
         </div>
         <div>
-        <h1 className="text-2xl font-bold text-gray-900">{mockStudent.name}</h1>
-        <p className="text-sm text-gray-500 mt-1">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
+        <p className="text-xs font-bold text-[#A29BFE] mb-1">YOUR PROFILE</p>
+        <h1 className="text-2xl font-bold">{mockStudent.name}</h1>
+        <p className="text-sm text-white/55 mt-1">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
         <div className="flex gap-2 mt-3 flex-wrap">
           {mockStudent.interests.map(i => (
-            <span key={i} className="chip bg-[#EEF0FF] text-[#6C5CE7]">{i}</span>
+            <span key={i} className="chip bg-white/10 text-white/80">{i}</span>
           ))}
         </div>
         </div>
@@ -64,21 +65,21 @@ export default function StudentProfile({ navigate }: Props) {
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Value summary */}
-        <div className="bg-white rounded-3xl p-4 card-shadow">
+        <div className="bg-white rounded-3xl p-6 card-shadow lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-bold text-gray-900">価値観サマリ</h3>
+            <div><p className="text-xs font-bold text-[#6C5CE7]">YOUR HYPOTHESIS</p><h3 className="text-xl font-bold text-gray-900 mt-1">価値観サマリ</h3></div>
             <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">更新中</span>
           </div>
 
-          <div className="rounded-3xl bg-[#F7F6FF] p-4 border-l-4 border-[#6C5CE7]">
+          <div className="rounded-3xl bg-[#F7F6FF] p-5 border-l-4 border-[#6C5CE7] mt-5">
             <p className="text-xs font-bold text-[#6C5CE7] mb-2">現在の仮説</p>
             <p className="text-lg font-bold text-gray-900 leading-tight">{typeTitle}</p>
             <p className="text-xs text-gray-600 leading-relaxed mt-2">{typeDescription}</p>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
             <p className="text-xs font-bold text-gray-500 mb-2">そう見ている理由</p>
-            <div className="space-y-2">
+            <div className="space-y-2 md:col-span-2">
               {analysisEvidence.map(item => (
                 <div key={item} className="flex items-center gap-2 rounded-2xl bg-white border border-gray-100 px-3 py-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#6C5CE7] flex-shrink-0" />
@@ -88,7 +89,7 @@ export default function StudentProfile({ navigate }: Props) {
             </div>
           </div>
 
-          <div className="mt-3 rounded-2xl bg-[#EEF0FF] px-3 py-2.5">
+          <div className="mt-3 rounded-2xl bg-[#EEF0FF] px-4 py-3 md:col-span-2">
             <p className="text-[11px] font-bold text-[#6C5CE7] mb-1">次に確かめること</p>
             <p className="text-xs text-gray-700 leading-relaxed">人と話しながら企画を作るMissionで、楽しさが続くかを見る。</p>
           </div>

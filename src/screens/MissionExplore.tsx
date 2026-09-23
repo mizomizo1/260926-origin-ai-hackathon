@@ -28,85 +28,61 @@ export default function MissionExplore({ navigate }: Props) {
       <StudentTopNav current="explore" navigate={navigate} />
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
-        <div className="mb-8">
-          <p className="text-sm font-semibold text-[#6C5CE7]">Explore Trials</p>
-          <h1 className="text-3xl font-bold text-gray-900 mt-1">Job Trial Catalog</h1>
-          <p className="text-sm text-gray-500 mt-2">求人ではなく、仕事を短く試して自分の理解を更新します。</p>
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between mb-8">
+          <div>
+            <p className="text-sm font-semibold text-[#6C5CE7]">Explore Trials</p>
+            <h1 className="text-3xl font-bold text-gray-900 mt-1">Job Trial Catalog</h1>
+            <p className="text-sm text-gray-500 mt-2">気になる仕事を、求人を見る前に短く試してみる。</p>
+          </div>
+          <div className="flex items-center gap-2 rounded-2xl bg-white border border-gray-100 p-1.5 shadow-sm">
+            {['すべて', '初級', '中級'].map(c => (
+              <button key={c} onClick={() => setCat(c)} className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors ${cat === c ? 'bg-[#6C5CE7] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>
+                {c === 'すべて' ? 'All trials' : c}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6">
-          <aside className="bg-white border border-gray-100 rounded-2xl p-5 h-fit shadow-sm">
-            <h2 className="text-sm font-bold text-gray-900 mb-4">Filter</h2>
-            <div className="space-y-5">
-              <div>
-                <p className="text-xs font-bold text-gray-500 mb-2">難易度</p>
-                <div className="flex flex-wrap gap-2">
-                  {['すべて', '初級', '中級'].map(c => (
-                    <button key={c} onClick={() => setCat(c)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold ${cat === c ? 'bg-[#6C5CE7] text-white' : 'bg-gray-50 text-gray-500'}`}>
-                      {c}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-bold text-gray-500 mb-2">形式</p>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <label className="flex gap-2"><input type="checkbox" defaultChecked /> 個人向き</label>
-                  <label className="flex gap-2"><input type="checkbox" /> チーム向き</label>
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-bold text-gray-500 mb-2">職種</p>
-                <div className="flex flex-wrap gap-2">
-                  {['基礎力', '商品企画', 'マーケティング', 'データ分析', '人事'].map(item => (
-                    <span key={item} className="px-2.5 py-1 rounded-full bg-gray-50 text-xs text-gray-500">{item}</span>
-                  ))}
-                </div>
-              </div>
+        {showShelves && (
+          <section className="mb-10 rounded-3xl bg-[#17152B] p-6 lg:p-8 text-white overflow-hidden relative">
+            <div className="relative z-10 max-w-xl">
+              <span className="chip bg-white/10 text-[#A29BFE]">START HERE</span>
+              <h2 className="text-2xl lg:text-3xl font-bold mt-4">まずは、あなたの仮説を<br />ひとつ試してみよう。</h2>
+              <p className="text-sm text-white/60 mt-3 leading-relaxed">初めてなら基礎Missionがおすすめ。正解ではなく、考え方のクセを知るための12分です。</p>
+              <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="mt-6 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">おすすめを開く →</button>
             </div>
-          </aside>
+            <div className="absolute -right-8 -bottom-16 text-[180px] opacity-20">🧩</div>
+          </section>
+        )}
 
-          <section>
-            {showShelves && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                {shelves.map(section => (
-                  <div key={section.title} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-                    <p className="text-sm font-bold text-gray-900">{section.title}</p>
-                    <p className="text-xs text-gray-500 mt-1">{section.items.length} Trials</p>
-                  </div>
+        <section className="space-y-10">
+          {(showShelves ? shelves : [{ title: `${cat}のTrial`, hint: '条件に合うMission', items: catalogItems }]).map(section => (
+            <div key={section.title}>
+              <div className="flex items-end justify-between mb-4">
+                <div><h2 className="text-lg font-bold text-gray-900">{section.title}</h2><p className="text-xs text-gray-500 mt-1">{section.hint}</p></div>
+                <span className="text-xs text-gray-400">{section.items.length} trials <span className="hidden sm:inline">· 横にスクロール</span></span>
+              </div>
+              <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+                {section.items.map(m => (
+                  <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
+                    className="group text-left snap-start shrink-0 w-[280px] bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:border-[#6C5CE7] transition-all">
+                    <div className="flex items-start justify-between gap-3 mb-7">
+                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: m.color + '18' }}>{m.emoji}</div>
+                      <span className="text-gray-300 group-hover:text-[#6C5CE7] text-xl">↗</span>
+                    </div>
+                    <p className="text-xs text-gray-500 truncate">{m.company}</p>
+                    <h3 className="text-base font-bold text-gray-900 leading-snug mt-1 line-clamp-2 min-h-[44px]">{m.title}</h3>
+                    <div className="flex gap-1.5 mt-5 flex-wrap">
+                      {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">Core</span>}
+                      <span className="chip bg-gray-100 text-gray-600">{m.duration}</span><span className="chip bg-gray-100 text-gray-600">{m.difficulty}</span>
+                    </div>
+                    <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between"><span className="text-xs text-gray-500">{m.category}</span><span className="text-xs font-bold text-[#6C5CE7]">View trial</span></div>
+                  </button>
                 ))}
               </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {catalogItems.map(m => (
-                <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
-                  className="text-left bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:border-[#6C5CE7] transition-colors">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: m.color + '18' }}>
-                      {m.emoji}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs text-gray-500 truncate">{m.company}</p>
-                      <h3 className="text-base font-bold text-gray-900 leading-snug line-clamp-2">{m.title}</h3>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 min-h-[62px]">{m.summary}</p>
-                  <div className="flex gap-1.5 mt-4 flex-wrap">
-                    {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">Core</span>}
-                    <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
-                    <span className="chip bg-gray-100 text-gray-600">{m.difficulty}</span>
-                    <span className="chip bg-gray-100 text-gray-600">{m.category}</span>
-                  </div>
-                  <div className="mt-4 border-t border-gray-100 pt-3">
-                    <p className="text-xs text-[#6C5CE7] font-bold">詳細を見る</p>
-                  </div>
-                </button>
-              ))}
             </div>
-          </section>
-        </div>
+          ))}
+        </section>
       </main>
     </div>
   )

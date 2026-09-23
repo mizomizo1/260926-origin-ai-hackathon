@@ -16,35 +16,50 @@ export default function StudentHome({ navigate }: Props) {
       <StudentTopNav current="home" navigate={navigate} />
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
-          <section className="rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
-            <div className="p-6 lg:p-8">
+        <section className="relative overflow-hidden rounded-3xl bg-[#17152B] text-white p-7 lg:p-10 mb-6">
+          <div className="relative z-10 max-w-2xl">
               <p className="text-sm font-semibold text-[#6C5CE7] mb-2">あなたの現在のキャリア仮説</p>
-              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight max-w-2xl">
+              <h1 className="text-3xl lg:text-4xl font-bold leading-tight">
                 人と関わりながら、企画を考える仕事への関心が高いようです。
               </h1>
-              <p className="text-sm text-gray-500 mt-3 max-w-2xl">
+              <p className="text-sm text-white/55 mt-4 max-w-xl leading-relaxed">
                 次のJob Trialで、仮説が本当に合っているかを確かめましょう。
               </p>
+              <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="mt-7 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">次のTrialを見る →</button>
+          </div>
+          <div className="absolute right-8 bottom-[-32px] text-[190px] opacity-15">{featured.emoji}</div>
+        </section>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+          {[
+            { label: 'Completed Trials', value: passportData.completedMissions, suffix: '個', color: '#6C5CE7' },
+            { label: 'Experience time', value: passportData.totalTime, suffix: '', color: '#00B894' },
+            { label: 'Scout received', value: scoutInvitations.length, suffix: '件', color: '#EC4899' },
+            { label: 'Weekly progress', value: '2/3', suffix: '', color: '#F59E0B' },
+          ].map(item => (
+            <div key={item.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}{item.suffix}</p>
+              <p className="text-xs text-gray-500 mt-1">{item.label}</p>
             </div>
-            <div className="border-t border-gray-100 bg-[#F7F6FF] p-6">
-              <div className="flex flex-col md:flex-row md:items-center gap-5">
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
+          <section className="rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <div><p className="text-xs font-bold text-[#6C5CE7]">CONTINUE WHERE YOU LEFT OFF</p><h2 className="text-xl font-bold text-gray-900 mt-1">{currentTrial.title}</h2></div>
+              <span className="text-2xl">{currentTrial.emoji}</span>
+            </div>
+            <div className="p-6 bg-[#F7F6FF]">
+              <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0" style={{ background: featured.color + '20' }}>
-                  {featured.emoji}
+                  {currentTrial.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex gap-2 mb-2">
-                    <span className="chip text-white" style={{ background: featured.color }}>Next Trial</span>
-                    <span className="chip bg-white text-gray-600">{featured.duration}</span>
-                    <span className="chip bg-white text-gray-600">{featured.difficulty}</span>
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900">{featured.title}</h2>
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">{featured.summary}</p>
+                  <p className="text-sm text-gray-600">{currentTrial.company} · {currentTrial.duration}</p>
+                  <div className="h-2 bg-white rounded-full overflow-hidden mt-3"><div className="h-full w-2/5 rounded-full bg-[#6C5CE7]" /></div>
                 </div>
-                <button onClick={() => navigate('missionDetail', { missionId: featured.id })}
-                  className="px-5 py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
-                  Trialを見る
-                </button>
+                <button onClick={() => navigate('missionTrial', { missionId: currentTrial.id })} className="px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-bold">再開</button>
               </div>
             </div>
           </section>
@@ -94,9 +109,9 @@ export default function StudentHome({ navigate }: Props) {
             </div>
             <button onClick={() => navigate('careerPassport')} className="text-sm font-bold text-[#6C5CE7]">Passportを見る</button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
             {passportData.experiences.slice(0, 3).map(exp => (
-              <div key={exp.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div key={exp.id} className="snap-start shrink-0 w-[300px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                 <p className="text-2xl mb-3">{exp.emoji}</p>
                 <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
                 <p className="text-xs text-gray-500 mt-1">{exp.company} · {exp.date}</p>
