@@ -52,7 +52,7 @@ export default function ProfileSetup({ navigate }: Props) {
       </div>
 
       <button onClick={() => setStep(1)} className="primary-btn mt-6">次へ</button>
-      <button onClick={() => navigate('abIntro')} className="text-center text-sm text-gray-400 mt-3 py-2">あとで設定する</button>
+      <button onClick={() => navigate('abQuestion')} className="text-center text-sm text-gray-400 mt-3 py-2">あとで設定する</button>
     </div>
   )
 
@@ -89,7 +89,7 @@ export default function ProfileSetup({ navigate }: Props) {
         ))}
       </div>
 
-      <button onClick={() => navigate('abIntro')} className="primary-btn mt-6">次へ</button>
+      <button onClick={() => navigate('abQuestion')} className="primary-btn mt-6">次へ</button>
     </div>
   )
 }

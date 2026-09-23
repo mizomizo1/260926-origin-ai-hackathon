@@ -58,7 +58,7 @@ export default function StudentList({ navigate }: Props) {
             <tbody>
               {filtered.map(s => (
                 <tr key={s.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer"
-                  onClick={() => navigate('studentDetail')}>
+                  onClick={() => navigate('studentDetail', { studentId: s.id })}>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-[#6C5CE7] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">
@@ -97,10 +97,18 @@ export default function StudentList({ navigate }: Props) {
                     </span>
                   </td>
                   <td className="px-5 py-4">
-                    <button onClick={e => { e.stopPropagation(); navigate('studentDetail') }}
-                      className="text-xs px-3 py-1.5 rounded-lg bg-[#EEF0FF] text-[#6C5CE7] font-medium">
-                      詳細
-                    </button>
+                    <div className="flex gap-2">
+                      <button onClick={e => { e.stopPropagation(); navigate('studentDetail', { studentId: s.id }) }}
+                        className="text-xs px-3 py-1.5 rounded-lg bg-[#EEF0FF] text-[#6C5CE7] font-medium">
+                        詳細
+                      </button>
+                      {s.status === 'スカウト候補' && (
+                        <button onClick={e => { e.stopPropagation(); navigate('companyScouts') }}
+                          className="text-xs px-3 py-1.5 rounded-lg bg-[#FDF2F8] text-[#EC4899] font-medium">
+                          スカウト
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

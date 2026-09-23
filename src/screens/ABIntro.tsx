@@ -1,44 +1,76 @@
+import { useState } from 'react'
 import { Screen } from '../App'
 
 interface Props { navigate: (s: Screen) => void }
 
 export default function ABIntro({ navigate }: Props) {
+  const [pressedIndex, setPressedIndex] = useState<number | null>(null)
+  const [demoChoice, setDemoChoice] = useState<number | null>(null)
+  const [startPressed, setStartPressed] = useState(false)
+
+  const start = () => {
+    setStartPressed(true)
+    window.setTimeout(() => {
+      setStartPressed(false)
+      navigate('abQuestion')
+    }, 160)
+  }
+
   return (
     <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
-      <div className="flex-1 flex flex-col items-center justify-center text-center">
-        {/* Visual */}
-        <div className="relative mb-8">
-          <div className="w-36 h-36 rounded-[40px] flex items-center justify-center mx-auto"
-            style={{ background: 'linear-gradient(135deg, #6C5CE7, #A29BFE)', boxShadow: '0 16px 40px rgba(108,92,231,0.3)' }}>
-            <span className="text-6xl">⚡</span>
+      <div className="flex-1 flex flex-col justify-center">
+        <div className="w-14 h-14 rounded-3xl bg-[#EEF0FF] text-3xl flex items-center justify-center mb-5">⚡</div>
+        <h2 className="text-2xl font-bold text-gray-900 leading-tight">5問だけ、直感で選ぶ</h2>
+        <p className="text-sm text-gray-500 leading-relaxed mt-3">
+          正解はありません。近い方を選ぶと、最初のおすすめMissionが出ます。
+        </p>
+
+        <div className="rounded-3xl bg-[#F7F6FF] p-4 mt-8">
+          <p className="text-xs font-bold text-gray-500 mb-3">例</p>
+          <div className="grid grid-cols-2 gap-3">
+            {['一人で集中', 'チームで相談'].map((choice, index) => (
+              <button
+                key={choice}
+                onClick={() => setDemoChoice(index)}
+                onMouseDown={() => setPressedIndex(index)}
+                onMouseUp={() => setPressedIndex(null)}
+                onMouseLeave={() => setPressedIndex(null)}
+                onTouchStart={() => setPressedIndex(index)}
+                onTouchEnd={() => setPressedIndex(null)}
+                className={`rounded-2xl p-4 text-sm font-bold transition-all duration-150 ${pressedIndex === index ? 'scale-95' : demoChoice === index ? 'scale-[1.02]' : ''}`}
+                style={index === 0
+                  ? {
+                    background: demoChoice === index ? '#6C5CE7' : 'white',
+                    color: demoChoice === index ? 'white' : '#6C5CE7',
+                  }
+                  : {
+                    background: demoChoice === index ? '#00B894' : 'white',
+                    color: demoChoice === index ? 'white' : '#00B894',
+                  }
+                }
+              >
+                {choice}{demoChoice === index && <span className="ml-1">✓</span>}
+              </button>
+            ))}
           </div>
-          {/* Decorative dots */}
-          <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#F59E0B]" />
-          <div className="absolute -bottom-2 -left-2 w-3 h-3 rounded-full bg-[#00B894]" />
-        </div>
-
-        <h2 className="text-2xl font-bold text-gray-900 mb-3">まずは5問だけ</h2>
-        <p className="text-base text-[#6C5CE7] font-medium mb-4">
-          あなたが何を大切にしたいか、<br />選択から見つけます。
-        </p>
-        <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
-          AとBのカードを見て、今の自分に近い方を選ぶだけ。正解はありません。直感で選んでみてください。
-        </p>
-
-        {/* Info badges */}
-        <div className="flex gap-3 mt-6">
-          {[{ icon: '⏱️', text: '約1分' }, { icon: '❓', text: '5問' }, { icon: '✨', text: '正解なし' }].map(({ icon, text }) => (
-            <div key={text} className="flex flex-col items-center gap-1 px-4 py-3 rounded-2xl bg-[#F7F6FF]">
-              <span className="text-xl">{icon}</span>
-              <span className="text-xs font-medium text-gray-700">{text}</span>
-            </div>
-          ))}
+          <div className="flex gap-2 mt-4">
+            {['5問', '正解なし', 'すぐ終わる'].map(label => (
+              <span key={label} className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-gray-500">{label}</span>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="pb-4">
-        <button onClick={() => navigate('abQuestion')} className="primary-btn">
-          選択をはじめる
+        <button
+          onClick={start}
+          onMouseDown={() => setStartPressed(true)}
+          onMouseUp={() => setStartPressed(false)}
+          onMouseLeave={() => setStartPressed(false)}
+          onTouchStart={() => setStartPressed(true)}
+          className={`primary-btn transition-transform duration-150 ${startPressed ? 'scale-[0.97]' : ''}`}
+        >
+          5問だけ選ぶ
         </button>
       </div>
     </div>

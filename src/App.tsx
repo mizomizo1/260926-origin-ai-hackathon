@@ -13,9 +13,9 @@ import MissionDetail from './screens/MissionDetail'
 import MissionTrial from './screens/MissionTrial'
 import Reflection from './screens/Reflection'
 import UpdatedResult from './screens/UpdatedResult'
-import CareerPassport from './screens/CareerPassport'
 import CompanyMatch from './screens/CompanyMatch'
 import StudentProfile from './screens/StudentProfile'
+import ScoutInbox from './screens/ScoutInbox'
 import CompanyLogin from './screens/company/CompanyLogin'
 import CompanyDashboard from './screens/company/CompanyDashboard'
 import MissionList from './screens/company/MissionList'
@@ -23,14 +23,15 @@ import CreateMission from './screens/company/CreateMission'
 import MissionAnalytics from './screens/company/MissionAnalytics'
 import StudentList from './screens/company/StudentList'
 import StudentDetail from './screens/company/StudentDetail'
+import ScoutManagement from './screens/company/ScoutManagement'
 
 export type Screen =
   | 'splash' | 'onboarding' | 'roleSelect'
   | 'studentLogin' | 'profileSetup' | 'abIntro' | 'abQuestion' | 'preferenceResult'
   | 'studentHome' | 'missionExplore' | 'missionDetail' | 'missionTrial'
-  | 'reflection' | 'updatedResult' | 'careerPassport' | 'companyMatch' | 'studentProfile'
+  | 'reflection' | 'updatedResult' | 'companyMatch' | 'scoutInbox' | 'studentProfile'
   | 'companyLogin' | 'companyDashboard' | 'missionList' | 'createMission'
-  | 'missionAnalytics' | 'studentList' | 'studentDetail'
+  | 'missionAnalytics' | 'studentList' | 'studentDetail' | 'companyScouts'
 
 export type NavParams = { missionId?: string; studentId?: string; companyScreen?: string }
 
@@ -46,10 +47,10 @@ export default function App() {
     window.scrollTo(0, 0)
   }
 
-  const isCompany = ['companyLogin', 'companyDashboard', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail'].includes(screen)
+  const isCompany = ['companyLogin', 'companyDashboard', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail', 'companyScouts'].includes(screen)
   const bgClass = isCompany ? 'bg-gray-50' : 'bg-[#F7F6FF] min-h-screen'
 
-  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'careerPassport', 'companyMatch', 'studentProfile']
+  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'companyMatch', 'scoutInbox', 'studentProfile']
   const showPhoneFrame = studentScreens.includes(screen) || ['onboarding', 'roleSelect', 'studentLogin', 'profileSetup', 'abIntro', 'abQuestion', 'preferenceResult'].includes(screen)
 
   const sharedProps = { navigate, params }
@@ -78,8 +79,8 @@ export default function App() {
       case 'missionTrial': return <MissionTrial navigate={navigate} missionId={params.missionId} />
       case 'reflection': return <Reflection navigate={navigate} missionId={params.missionId} />
       case 'updatedResult': return <UpdatedResult navigate={navigate} />
-      case 'careerPassport': return <CareerPassport navigate={navigate} />
       case 'companyMatch': return <CompanyMatch navigate={navigate} />
+      case 'scoutInbox': return <ScoutInbox navigate={navigate} />
       case 'studentProfile': return <StudentProfile navigate={navigate} />
       case 'companyLogin': return <CompanyLogin navigate={navigate} />
       case 'companyDashboard': return <CompanyDashboard navigate={navigate} />
@@ -88,6 +89,7 @@ export default function App() {
       case 'missionAnalytics': return <MissionAnalytics navigate={navigate} />
       case 'studentList': return <StudentList navigate={navigate} />
       case 'studentDetail': return <StudentDetail navigate={navigate} studentId={params.studentId} />
+      case 'companyScouts': return <ScoutManagement navigate={navigate} />
       default: return <Splash navigate={navigate} />
     }
   }

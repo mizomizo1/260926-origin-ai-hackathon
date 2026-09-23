@@ -1,10 +1,12 @@
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 
-interface Props { navigate: (s: Screen) => void; missionId?: string }
+interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
 export default function MissionDetail({ navigate, missionId }: Props) {
   const m = missions.find(x => x.id === missionId) ?? missions[0]
+  const isCore = (m as any).source === 'core'
 
   return (
     <div className="flex flex-col min-h-[780px] bg-white">
@@ -18,6 +20,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
           </div>
           <div>
             <div className="flex gap-2 mb-2">
+              {isCore && <span className="chip text-white text-xs px-3 py-1 bg-[#111827]">共通Mission</span>}
               <span className="chip text-white text-xs px-3 py-1" style={{ background: m.color }}>{m.category}</span>
               <span className="chip bg-white text-gray-600 text-xs px-3 py-1">{m.difficulty}</span>
             </div>
@@ -48,6 +51,13 @@ export default function MissionDetail({ navigate, missionId }: Props) {
           <h3 className="text-sm font-bold text-gray-900 mb-2">Mission概要</h3>
           <p className="text-sm text-gray-600 leading-relaxed">{m.description}</p>
         </div>
+
+        {isCore && (
+          <div className="bg-[#F7F6FF] rounded-2xl p-4 border-l-4 border-[#6C5CE7]">
+            <h3 className="text-sm font-bold text-[#6C5CE7] mb-1">このMissionで見ること</h3>
+            <p className="text-xs text-gray-700 leading-relaxed">企業との相性を見る前に、整理力・伝える力・判断のクセを把握します。</p>
+          </div>
+        )}
 
         {/* Recommended for */}
         <div className="bg-[#EEF0FF] rounded-2xl p-4">
@@ -95,7 +105,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
 
       {/* CTA */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 px-5 py-4">
-        <button onClick={() => navigate('missionTrial')} className="primary-btn">
+        <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="primary-btn">
           このMissionを試す
         </button>
       </div>

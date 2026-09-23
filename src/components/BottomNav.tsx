@@ -3,9 +3,9 @@ import { Screen } from '../App'
 type NavItem = { icon: string; label: string; screen: Screen }
 const items: NavItem[] = [
   { icon: '🏠', label: 'Home', screen: 'studentHome' },
-  { icon: '🔍', label: 'Explore', screen: 'missionExplore' },
-  { icon: '🗺️', label: 'Passport', screen: 'careerPassport' },
-  { icon: '🏢', label: 'Companies', screen: 'companyMatch' },
+  { icon: '🎯', label: 'Mission', screen: 'missionExplore' },
+  { icon: '🏢', label: 'Company', screen: 'companyMatch' },
+  { icon: '💌', label: 'Scout', screen: 'scoutInbox' },
   { icon: '👤', label: 'Profile', screen: 'studentProfile' },
 ]
 

@@ -5,87 +5,102 @@ import BottomNav from '../components/BottomNav'
 interface Props { navigate: (s: Screen) => void }
 
 export default function CompanyMatch({ navigate }: Props) {
+  const featured = companies[0]
+  const highFit = companies.slice(1, 5)
+  const growing = companies.slice(4)
+
   return (
     <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
       {/* Header */}
-      <div className="bg-white px-5 pt-8 pb-5">
+      <div className="bg-white px-5 pt-8 pb-4">
         <p className="text-xs text-gray-500 mb-1">あなたの体験から</p>
-        <h2 className="text-xl font-bold text-gray-900">マッチした企業</h2>
-        <p className="text-sm text-gray-500 mt-1">高い満足度を示したMissionを提供した企業です</p>
+        <h2 className="text-xl font-bold text-gray-900">あなたに関心が近い企業</h2>
+        <p className="text-sm text-gray-500 mt-1">体験結果から、候補企業が{companies.length}社見つかりました</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 py-4 space-y-4">
-        {companies.map(company => (
-          <div key={company.id} className="bg-white rounded-3xl p-5 card-shadow">
-            {/* Header */}
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
-                style={{ background: company.color + '20' }}>
-                {company.emoji}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-base font-bold text-gray-900">{company.name}</h3>
-                  <span className="chip text-xs px-2 py-0.5" style={{ background: company.color + '20', color: company.color }}>
-                    マッチ度高
-                  </span>
+      <div className="flex-1 overflow-y-auto pb-24 pt-4 space-y-5">
+        {/* Featured company */}
+        <div className="px-5">
+          <div className="rounded-3xl bg-white card-shadow p-4 border-l-4" style={{ borderColor: featured.color }}>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl"
+                  style={{ background: featured.color + '18' }}>
+                  {featured.emoji}
                 </div>
-                <p className="text-xs text-gray-500">{company.industry} · {company.location}</p>
+                <div>
+                  <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">最有力候補</span>
+                  <h3 className="text-lg font-bold text-gray-900 mt-2">{featured.name}</h3>
+                  <p className="text-xs text-gray-500">{featured.industry} · {featured.location}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold" style={{ color: featured.color }}>92%</p>
+                <p className="text-[10px] text-gray-400">match</p>
               </div>
             </div>
+            <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">{featured.description}</p>
+            <div className="mt-3 rounded-2xl bg-[#F7F6FF] p-3">
+              <p className="text-[11px] font-semibold text-[#6C5CE7] mb-1">合いそうな理由</p>
+              <p className="text-xs text-gray-700 leading-relaxed">{featured.whyFit[0]}</p>
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button className="flex-1 py-2.5 rounded-full text-white text-xs font-bold" style={{ background: featured.color }}>候補を見る</button>
+              <button className="flex-1 py-2.5 rounded-full bg-gray-100 text-gray-700 text-xs font-bold">興味あり</button>
+            </div>
+          </div>
+        </div>
 
-            <p className="text-sm text-gray-600 leading-relaxed mb-4">{company.description}</p>
+        {/* Company shelves */}
+        {[
+          { title: 'あなたに合いそうな企業', items: highFit, scores: [89, 86, 84, 81] },
+          { title: '次に見ておきたい企業', items: growing, scores: [79, 77, 74, 71] },
+        ].map((section, sectionIndex) => (
+          <div key={section.title}>
+            <div className="flex items-end justify-between px-5 mb-3">
+              <div>
+                <h3 className="text-base font-bold text-gray-900">{section.title}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">体験結果から優先表示しています</p>
+              </div>
+              <span className="text-xs text-gray-400">横にスワイプ</span>
+            </div>
 
-            {/* Why fit */}
-            <div className="bg-[#F7F6FF] rounded-2xl p-3 mb-4">
-              <p className="text-xs font-medium text-[#6C5CE7] mb-2">なぜ合いそうか</p>
-              {company.whyFit.map((reason, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-gray-700 mt-1">
-                  <span className="text-[#6C5CE7] mt-0.5">✓</span>
-                  <span>{reason}</span>
+            <div className={`flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-8' : 'pl-8 pr-5'}`}>
+              {section.items.map((company, index) => (
+                <div key={company.id} className={`snap-start shrink-0 bg-white rounded-[22px] card-shadow p-3 border-t-4 ${index === 0 ? 'w-[232px]' : 'w-[200px]'}`}
+                  style={{ borderColor: company.color }}>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+                        style={{ background: company.color + '18' }}>
+                        {company.emoji}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-gray-900 truncate">{company.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{company.industry}</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold" style={{ color: company.color }}>{section.scores[index]}%</span>
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed line-clamp-2 min-h-8">{company.whyFit[0]}</p>
+                  <div className="mt-2.5 flex items-center gap-2 text-[11px] text-gray-400">
+                    <span>{company.location}</span>
+                    <span>·</span>
+                    <span>{company.openMissions} Mission</span>
+                  </div>
                 </div>
               ))}
-            </div>
-
-            {/* Culture */}
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-xs font-medium text-gray-600">文化:</span>
-              <span className="text-xs text-gray-700">{company.culture}</span>
-            </div>
-
-            {/* Stats */}
-            <div className="flex gap-3 mb-4">
-              {[
-                { label: 'Trial参加', value: company.trialCount },
-                { label: '興味あり', value: company.interestCount },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex-1 text-center bg-gray-50 rounded-xl p-2">
-                  <p className="text-base font-bold text-gray-800">{value}</p>
-                  <p className="text-xs text-gray-500">{label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* CTAs */}
-            <div className="flex gap-2">
-              <button className="flex-1 py-2.5 rounded-2xl text-sm font-semibold text-white transition-all"
-                style={{ background: company.color }}>
-                企業を見る
-              </button>
-              <button className="flex-1 py-2.5 rounded-2xl text-sm font-semibold border-2 transition-all"
-                style={{ borderColor: company.color, color: company.color }}>
-                興味ありを送る
-              </button>
             </div>
           </div>
         ))}
-
-        <p className="text-center text-xs text-gray-400 py-4">
-          体験を増やすほど、より多くの企業とマッチします ✨
-        </p>
+        <div className="px-5">
+          <button onClick={() => navigate('missionExplore')} className="w-full py-3 rounded-full bg-[#6C5CE7] text-white text-sm font-bold">
+            次のMissionを選ぶ
+          </button>
+        </div>
       </div>
 
-      <BottomNav current="companies" navigate={navigate} />
+      <BottomNav current="company" navigate={navigate} />
     </div>
   )
 }
