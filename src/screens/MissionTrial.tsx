@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 
-interface Props { navigate: (s: Screen) => void; missionId?: string }
+interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
 export default function MissionTrial({ navigate, missionId }: Props) {
   const m = missions.find(x => x.id === missionId) ?? missions[0]
@@ -16,7 +17,7 @@ export default function MissionTrial({ navigate, missionId }: Props) {
     <div className="flex flex-col min-h-[780px] bg-white">
       {/* Header */}
       <div className="px-5 pt-8 pb-4 border-b border-gray-100">
-        <button onClick={() => navigate('missionDetail')} className="text-gray-400 text-sm mb-3 block">← 戻る</button>
+        <button onClick={() => navigate('missionDetail', { missionId: m.id })} className="text-gray-400 text-sm mb-3 block">← 戻る</button>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl"
             style={{ background: m.color + '20' }}>{m.emoji}</div>
@@ -89,7 +90,7 @@ export default function MissionTrial({ navigate, missionId }: Props) {
           {saved ? '✓ 保存済み' : '保存する'}
         </button>
         <button
-          onClick={() => navigate('reflection')}
+          onClick={() => navigate('reflection', { missionId: m.id })}
           disabled={answer.length < 10}
           className="flex-1 py-3 rounded-2xl text-white text-sm font-semibold transition-all"
           style={{ background: answer.length >= 10 ? '#6C5CE7' : '#D1D5DB' }}>

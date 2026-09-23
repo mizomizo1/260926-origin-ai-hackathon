@@ -1,7 +1,8 @@
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 
-interface Props { navigate: (s: Screen) => void; missionId?: string }
+interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
 export default function MissionDetail({ navigate, missionId }: Props) {
   const m = missions.find(x => x.id === missionId) ?? missions[0]
@@ -95,7 +96,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
 
       {/* CTA */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 px-5 py-4">
-        <button onClick={() => navigate('missionTrial')} className="primary-btn">
+        <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="primary-btn">
           このMissionを試す
         </button>
       </div>

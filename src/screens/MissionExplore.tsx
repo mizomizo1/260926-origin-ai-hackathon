@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 import BottomNav from '../components/BottomNav'
 
-interface Props { navigate: (s: Screen) => void }
+interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
-const categories = ['すべて', '商品企画', 'データ分析', 'マーケティング', 'エンジニア', 'デザイン']
+const categories = ['すべて', '商品企画', 'マーケティング', 'データ分析', 'デザイン', 'カスタマーサクセス', '人事']
 
 export default function MissionExplore({ navigate }: Props) {
   const [search, setSearch] = useState('')
@@ -57,7 +58,7 @@ export default function MissionExplore({ navigate }: Props) {
           </div>
         )}
         {filtered.map(m => (
-          <button key={m.id} onClick={() => navigate('missionDetail')}
+          <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
             className="w-full mission-card card-shadow text-left">
             <div className="flex items-start gap-4">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
