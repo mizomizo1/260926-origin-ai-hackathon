@@ -1,11 +1,13 @@
 import { Screen } from '../App'
-import { missions, mockStudent, preferenceLabels } from '../data/mock'
+import type { NavParams } from '../App'
+import { companies, missions, mockStudent } from '../data/mock'
 import BottomNav from '../components/BottomNav'
 
-interface Props { navigate: (s: Screen) => void }
+interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function StudentHome({ navigate }: Props) {
-  const top2 = preferenceLabels.sort((a, b) => (mockStudent.preferenceScores as any)[b.key] - (mockStudent.preferenceScores as any)[a.key]).slice(0, 2)
+  const featured = missions[0]
+  const topCompany = companies[0]
 
   return (
     <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
@@ -23,90 +25,49 @@ export default function StudentHome({ navigate }: Props) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-20 px-5 pt-4 space-y-4">
-        {/* Today's insight */}
-        <div className="rounded-3xl p-5 text-white relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #6C5CE7, #A29BFE)' }}>
-          <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
-          <div className="absolute -right-2 bottom-0 w-16 h-16 rounded-full bg-white/10" />
-          <p className="text-xs text-white/70 mb-1 relative z-10">今日の一言</p>
-          <p className="text-base font-semibold relative z-10">人と話しながら考える仕事に<br />向いているかも ✨</p>
-          <div className="mt-3 flex gap-2 relative z-10">
-            {top2.map(l => (
-              <span key={l.key} className="text-xs bg-white/20 text-white rounded-full px-2 py-0.5">{l.label}</span>
-            ))}
-          </div>
-        </div>
-
-        {/* Next mission */}
+      <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-4">
+        {/* Primary next action */}
         <div>
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-base font-bold text-gray-900">次に試すMission</h3>
-            <button onClick={() => navigate('missionExplore')} className="text-xs text-[#6C5CE7] font-medium">全て見る</button>
-          </div>
-          <div className="space-y-3">
-            {missions.slice(0, 2).map(m => (
-              <button key={m.id} onClick={() => navigate('missionDetail')}
-                className="w-full mission-card card-shadow text-left">
-                <div className="flex items-start gap-3">
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{ background: m.color + '20' }}>
-                    {m.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex gap-2 mb-1">
-                      <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
-                      <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
-                    </div>
-                    <p className="text-sm font-semibold text-gray-900 truncate">{m.title}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{m.company}</p>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Value summary */}
-        <div className="bg-white rounded-3xl p-4">
-          <h3 className="text-sm font-bold text-gray-900 mb-3">あなたの価値観</h3>
-          <div className="space-y-2">
-            {preferenceLabels.slice(0, 3).map(({ key, label, icon }) => {
-              const val = (mockStudent.preferenceScores as any)[key]
-              return (
-                <div key={key}>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1">
-                    <span>{icon} {label}</span>
-                    <span className="font-mono">{val}</span>
-                  </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${val}%`, background: '#6C5CE7' }} />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-          <button onClick={() => navigate('preferenceResult')} className="text-xs text-[#6C5CE7] font-medium mt-3">詳細を見る →</button>
-        </div>
-
-        {/* Passport preview */}
-        <div className="bg-white rounded-3xl p-4">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-sm font-bold text-gray-900">Career Passport</h3>
-            <button onClick={() => navigate('careerPassport')} className="text-xs text-[#6C5CE7] font-medium">全て見る</button>
-          </div>
-          <div className="flex gap-4">
-            {[
-              { label: '完了Mission', value: `${mockStudent.completedMissions}個`, color: '#6C5CE7' },
-              { label: '得意傾向', value: '企画・チーム', color: '#00B894' },
-              { label: '平均満足度', value: '4.4 ⭐', color: '#F59E0B' },
-            ].map(({ label, value, color }) => (
-              <div key={label} className="flex-1 text-center bg-[#F7F6FF] rounded-2xl p-3">
-                <p className="text-base font-bold" style={{ color }}>{value}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+          <button
+            onClick={() => navigate('missionDetail', { missionId: featured.id })}
+            className="w-full text-left rounded-[28px] overflow-hidden card-shadow bg-gray-900 text-white relative"
+          >
+            <div className="absolute inset-0 opacity-80" style={{ background: `linear-gradient(135deg, ${featured.color}, #111827)` }} />
+            <div className="absolute -right-10 -top-10 text-[120px] opacity-20">{featured.emoji}</div>
+            <div className="relative p-5 min-h-52 flex flex-col justify-end">
+              <div className="flex gap-2 mb-3">
+                <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">今日のおすすめ</span>
+                <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">{featured.duration}</span>
               </div>
-            ))}
-          </div>
+              <p className="text-2xl mb-2">{featured.emoji}</p>
+              <h3 className="text-xl font-bold leading-tight">{featured.title}</h3>
+              <p className="text-xs text-white/70 mt-1">{featured.company} · {featured.category}</p>
+              <p className="text-xs text-white/80 mt-3 line-clamp-2">{featured.summary}</p>
+              <div className="mt-4 flex gap-2">
+                <span className="bg-white text-gray-900 text-xs font-bold rounded-full px-4 py-2">試してみる</span>
+                <span className="bg-white/15 text-white text-xs font-semibold rounded-full px-4 py-2">詳細</span>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        {/* Route cards */}
+        <div className="grid grid-cols-2 gap-3">
+          <button onClick={() => navigate('missionExplore')}
+            className="bg-white rounded-3xl p-4 card-shadow text-left">
+            <div className="w-10 h-10 rounded-2xl bg-[#EEF0FF] text-xl flex items-center justify-center mb-3">🔍</div>
+            <p className="text-sm font-bold text-gray-900">Missionを探す</p>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">職種別に試せる仕事を見る</p>
+          </button>
+          <button onClick={() => navigate('companyMatch')}
+            className="bg-white rounded-3xl p-4 card-shadow text-left">
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl mb-3"
+              style={{ background: topCompany.color + '18' }}>
+              {topCompany.emoji}
+            </div>
+            <p className="text-sm font-bold text-gray-900">企業を見る</p>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">{topCompany.name} ほか</p>
+          </button>
         </div>
       </div>
 

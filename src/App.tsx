@@ -13,7 +13,6 @@ import MissionDetail from './screens/MissionDetail'
 import MissionTrial from './screens/MissionTrial'
 import Reflection from './screens/Reflection'
 import UpdatedResult from './screens/UpdatedResult'
-import CareerPassport from './screens/CareerPassport'
 import CompanyMatch from './screens/CompanyMatch'
 import StudentProfile from './screens/StudentProfile'
 import CompanyLogin from './screens/company/CompanyLogin'
@@ -28,7 +27,7 @@ export type Screen =
   | 'splash' | 'onboarding' | 'roleSelect'
   | 'studentLogin' | 'profileSetup' | 'abIntro' | 'abQuestion' | 'preferenceResult'
   | 'studentHome' | 'missionExplore' | 'missionDetail' | 'missionTrial'
-  | 'reflection' | 'updatedResult' | 'careerPassport' | 'companyMatch' | 'studentProfile'
+  | 'reflection' | 'updatedResult' | 'companyMatch' | 'studentProfile'
   | 'companyLogin' | 'companyDashboard' | 'missionList' | 'createMission'
   | 'missionAnalytics' | 'studentList' | 'studentDetail'
 
@@ -49,7 +48,7 @@ export default function App() {
   const isCompany = ['companyLogin', 'companyDashboard', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail'].includes(screen)
   const bgClass = isCompany ? 'bg-gray-50' : 'bg-[#F7F6FF] min-h-screen'
 
-  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'careerPassport', 'companyMatch', 'studentProfile']
+  const studentScreens: Screen[] = ['studentHome', 'missionExplore', 'missionDetail', 'missionTrial', 'reflection', 'updatedResult', 'companyMatch', 'studentProfile']
   const showPhoneFrame = studentScreens.includes(screen) || ['onboarding', 'roleSelect', 'studentLogin', 'profileSetup', 'abIntro', 'abQuestion', 'preferenceResult'].includes(screen)
 
   const sharedProps = { navigate, params }
@@ -78,7 +77,6 @@ export default function App() {
       case 'missionTrial': return <MissionTrial navigate={navigate} missionId={params.missionId} />
       case 'reflection': return <Reflection navigate={navigate} missionId={params.missionId} />
       case 'updatedResult': return <UpdatedResult navigate={navigate} />
-      case 'careerPassport': return <CareerPassport navigate={navigate} />
       case 'companyMatch': return <CompanyMatch navigate={navigate} />
       case 'studentProfile': return <StudentProfile navigate={navigate} />
       case 'companyLogin': return <CompanyLogin navigate={navigate} />

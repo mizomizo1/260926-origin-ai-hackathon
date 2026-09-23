@@ -1,7 +1,8 @@
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { missions, preferenceLabels, mockStudent } from '../data/mock'
 
-interface Props { navigate: (s: Screen) => void }
+interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 const beforeScores = { money_security: 55, work_life: 65, people_culture: 75, growth: 70, autonomy: 52, meaning: 65 }
 const afterScores = mockStudent.preferenceScores
@@ -60,7 +61,7 @@ export default function UpdatedResult({ navigate }: Props) {
         <div>
           <h3 className="text-sm font-bold text-gray-900 mb-3">次におすすめするMission</h3>
           {missions.slice(2, 3).map(m => (
-            <button key={m.id} onClick={() => navigate('missionDetail')}
+            <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
               className="w-full mission-card card-shadow text-left">
               <div className="flex items-start gap-3">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: m.color + '20' }}>
