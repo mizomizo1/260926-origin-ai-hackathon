@@ -57,21 +57,21 @@ export default function StudentProfile({ navigate }: Props) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto pb-24 px-5 py-4 space-y-3">
         {/* Value summary */}
-        <div className="bg-white rounded-3xl p-5 card-shadow">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-3xl p-4 card-shadow">
+          <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-bold text-gray-900">価値観サマリ</h3>
             <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">更新中</span>
           </div>
 
-          <div className="rounded-[28px] bg-[#F7F6FF] p-5 border-l-4 border-[#6C5CE7]">
+          <div className="rounded-3xl bg-[#F7F6FF] p-4 border-l-4 border-[#6C5CE7]">
             <p className="text-xs font-bold text-[#6C5CE7] mb-2">現在の仮説</p>
-            <p className="text-xl font-bold text-gray-900 leading-tight">{typeTitle}</p>
-            <p className="text-sm text-gray-600 leading-relaxed mt-3">{typeDescription}</p>
+            <p className="text-lg font-bold text-gray-900 leading-tight">{typeTitle}</p>
+            <p className="text-xs text-gray-600 leading-relaxed mt-2">{typeDescription}</p>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-3">
             <p className="text-xs font-bold text-gray-500 mb-2">そう見ている理由</p>
             <div className="space-y-2">
               {analysisEvidence.map(item => (
@@ -83,14 +83,14 @@ export default function StudentProfile({ navigate }: Props) {
             </div>
           </div>
 
-          <div className="mt-4 rounded-2xl bg-[#EEF0FF] px-4 py-3">
+          <div className="mt-3 rounded-2xl bg-[#EEF0FF] px-3 py-2.5">
             <p className="text-[11px] font-bold text-[#6C5CE7] mb-1">次に確かめること</p>
             <p className="text-xs text-gray-700 leading-relaxed">人と話しながら企画を作るMissionで、楽しさが続くかを見る。</p>
           </div>
         </div>
 
         {/* Company signals */}
-        <div className="bg-white rounded-3xl p-4 card-shadow">
+        <div className="bg-white rounded-3xl p-3.5 card-shadow">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-bold text-gray-900">企業からの反応</h3>
             <span className="text-xs text-gray-400">直近</span>
@@ -131,7 +131,7 @@ export default function StudentProfile({ navigate }: Props) {
         </div>
 
         {/* Passport summary */}
-        <div className="bg-white rounded-3xl p-4 card-shadow">
+        <div className="bg-white rounded-3xl p-3.5 card-shadow">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold text-gray-900">体験記録</h3>
             <span className="text-xs text-gray-400">Career Passport</span>

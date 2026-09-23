@@ -6,7 +6,7 @@ import BottomNav from '../components/BottomNav'
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function StudentHome({ navigate }: Props) {
-  const featured = missions[0]
+  const featured = missions.find(m => (m as any).source === 'core') ?? missions[0]
   const latestScout = scoutInvitations[0]
 
   return (
@@ -25,33 +25,33 @@ export default function StudentHome({ navigate }: Props) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-4">
+      <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-3">
         <button
           onClick={() => navigate('missionDetail', { missionId: featured.id })}
-          className="w-full text-left rounded-[28px] overflow-hidden card-shadow bg-white"
+          className="w-full text-left rounded-3xl overflow-hidden card-shadow bg-white"
         >
-          <div className="p-5 relative overflow-hidden" style={{ background: featured.color + '14' }}>
-            <div className="absolute -right-8 -bottom-8 text-8xl opacity-20">{featured.emoji}</div>
+          <div className="p-4 relative overflow-hidden min-h-[172px]" style={{ background: featured.color + '14' }}>
+            <div className="absolute -right-6 -bottom-7 text-7xl opacity-20">{featured.emoji}</div>
             <div className="relative">
               <div className="flex gap-2 mb-3">
-                <span className="chip text-white" style={{ background: featured.color }}>今日のおすすめ</span>
+                <span className="chip text-white" style={{ background: featured.color }}>基礎Mission</span>
                 <span className="chip bg-white text-gray-600">{featured.duration}</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 leading-tight">{featured.title}</h3>
+              <h3 className="text-lg font-bold text-gray-900 leading-tight">{featured.title}</h3>
               <p className="text-xs text-gray-500 mt-1">{featured.company}</p>
-              <p className="text-sm text-gray-600 mt-3 leading-relaxed line-clamp-2">{featured.summary}</p>
+              <p className="text-xs text-gray-600 mt-3 leading-relaxed line-clamp-3">{featured.summary}</p>
             </div>
           </div>
-          <div className="px-5 py-4 flex items-center justify-between">
-            <p className="text-xs text-gray-500">試すと、企業候補の精度が少し上がります</p>
-            <span className="px-4 py-2 rounded-full text-white text-sm font-bold flex-shrink-0" style={{ background: featured.color }}>試す</span>
+          <div className="px-4 py-3 flex items-center justify-between">
+            <p className="text-xs text-gray-500">まずは一般的な力を見ます</p>
+            <span className="px-3 py-1.5 rounded-full text-white text-xs font-bold flex-shrink-0" style={{ background: featured.color }}>試す</span>
           </div>
         </button>
 
         <button onClick={() => navigate('scoutInbox')}
-          className="w-full bg-white rounded-[28px] p-4 card-shadow text-left">
+          className="w-full bg-white rounded-3xl p-3.5 card-shadow text-left">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#FDF2F8] flex items-center justify-center text-xl flex-shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-[#FDF2F8] flex items-center justify-center text-lg flex-shrink-0">
               💌
             </div>
             <div className="flex-1 min-w-0">

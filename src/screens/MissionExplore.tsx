@@ -7,8 +7,9 @@ import BottomNav from '../components/BottomNav'
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 const shelves = [
-  { title: 'まずは軽く試す', hint: '15〜20分で終わる初級Mission', items: missions.filter(m => m.difficulty === '初級') },
-  { title: 'もう少し深く試す', hint: '考える量が少し増える中級Mission', items: missions.filter(m => m.difficulty === '中級') },
+  { title: 'まずは基礎Mission', hint: '企業に関係なく、一般的な力を見ます', items: missions.filter(m => (m as any).source === 'core') },
+  { title: '企業の仕事を軽く試す', hint: '15〜20分で終わる初級Mission', items: missions.filter(m => m.difficulty === '初級' && (m as any).source !== 'core') },
+  { title: 'もう少し深く試す', hint: '考える量が少し増える中級Mission', items: missions.filter(m => m.difficulty === '中級' && (m as any).source !== 'core') },
 ]
 
 export default function MissionExplore({ navigate }: Props) {
@@ -53,34 +54,34 @@ export default function MissionExplore({ navigate }: Props) {
           </div>
         )}
         {showShelves ? (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {shelves.map((section, sectionIndex) => (
               <div key={section.title}>
-                <div className="flex items-end justify-between px-5 mb-3">
+                <div className="flex items-end justify-between px-5 mb-2.5">
                   <div>
                     <h3 className="text-base font-bold text-gray-900">{section.title}</h3>
                     <p className="text-xs text-gray-500 mt-0.5">{section.hint}</p>
                   </div>
                   <span className="text-xs text-gray-400">横にスワイプ</span>
                 </div>
-                <div className={`flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-10' : 'pl-14 pr-5'}`}>
+                <div className={`flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-8' : 'pl-8 pr-5'}`}>
                   {section.items.map((m, itemIndex) => (
                     <button
                       key={m.id}
                       onClick={() => navigate('missionDetail', { missionId: m.id })}
-                      className={`snap-start shrink-0 rounded-3xl bg-white card-shadow text-left overflow-hidden ${itemIndex === 0 ? 'w-60' : sectionIndex % 2 === 0 ? 'w-48' : 'w-52'}`}
+                      className={`snap-start shrink-0 rounded-[22px] bg-white card-shadow text-left overflow-hidden ${itemIndex === 0 ? 'w-[216px]' : 'w-[184px]'}`}
                     >
-                      <div className={`${itemIndex === 0 ? 'h-36' : 'h-[120px]'} relative overflow-hidden p-4 text-white`} style={{ background: `linear-gradient(135deg, ${m.color}, #1F2937)` }}>
-                        <div className="absolute -right-5 -bottom-8 text-7xl opacity-25">{m.emoji}</div>
+                      <div className={`${itemIndex === 0 ? 'h-[120px]' : 'h-[104px]'} relative overflow-hidden p-3 text-white`} style={{ background: `linear-gradient(135deg, ${m.color}, #1F2937)` }}>
+                        <div className="absolute -right-4 -bottom-6 text-6xl opacity-25">{m.emoji}</div>
                         <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">{m.duration}</span>
-                        <div className="absolute left-4 bottom-4 text-4xl">{m.emoji}</div>
+                        <div className="absolute left-3 bottom-3 text-3xl">{m.emoji}</div>
                       </div>
-                      <div className="p-4">
-                        <p className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 min-h-9">{m.title}</p>
+                      <div className="p-3">
+                        <p className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 min-h-8">{m.title}</p>
                         <p className="text-xs text-gray-500 mt-1 truncate">{m.company}</p>
-                        <div className="flex gap-1.5 mt-3">
+                        <div className="flex gap-1.5 mt-2.5 flex-wrap">
+                          {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">共通</span>}
                           <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
-                          <span className="chip bg-gray-100 text-gray-600">{m.category}</span>
                         </div>
                       </div>
                     </button>
@@ -103,6 +104,7 @@ export default function MissionExplore({ navigate }: Props) {
                     <p className="text-sm font-bold text-gray-900 mb-1">{m.title}</p>
                     <p className="text-xs text-gray-500 mb-2">{m.company}</p>
                     <div className="flex gap-2 flex-wrap">
+                      {(m as any).source === 'core' && <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">共通Mission</span>}
                       <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
                       <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
                     </div>

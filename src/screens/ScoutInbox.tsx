@@ -24,23 +24,23 @@ export default function ScoutInbox({ navigate }: Props) {
         <h2 className="text-xl font-bold text-gray-900">Scout</h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-5">
-        <div className="bg-white rounded-[30px] p-5 card-shadow">
+      <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-4">
+        <div className="bg-white rounded-3xl p-4 card-shadow">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-bold text-[#6C5CE7] mb-1">企業の反応</p>
-              <h3 className="text-lg font-bold text-gray-900">{scoutInvitations.length} Scout / {profileViews.length} Views</h3>
+              <h3 className="text-base font-bold text-gray-900">{scoutInvitations.length} Scout / {profileViews.length} Views</h3>
             </div>
             <div className="flex -space-x-2 pt-1">
               {interestedCompanies.map(company => (
-                <div key={company.id} className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-base"
+                <div key={company.id} className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-sm"
                   style={{ background: company.color + '20' }}>
                   {company.emoji}
                 </div>
               ))}
             </div>
           </div>
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
             {interestedCompanies.map(company => (
               <span key={company.id} className="shrink-0 rounded-full bg-[#F7F6FF] px-3 py-1.5 text-xs font-bold text-gray-700">
                 {company.emoji} {company.name}
@@ -58,9 +58,9 @@ export default function ScoutInbox({ navigate }: Props) {
 
           <div className="space-y-3">
             {scouts.map(({ scout, company }) => (
-              <div key={scout.id} className="bg-white rounded-[28px] p-4 card-shadow">
+              <div key={scout.id} className="bg-white rounded-3xl p-3.5 card-shadow">
                 <div className="flex items-start gap-3">
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
                     style={{ background: company.color + '18' }}>
                     {company.emoji}
                   </div>
@@ -73,12 +73,12 @@ export default function ScoutInbox({ navigate }: Props) {
                     <p className="text-xs text-gray-500 truncate">{scout.role}</p>
                   </div>
                 </div>
-                <div className="rounded-2xl bg-[#F7F6FF] p-3 my-3">
+                <div className="rounded-2xl bg-[#F7F6FF] px-3 py-2.5 my-3">
                   <p className="text-xs font-bold text-[#6C5CE7]">{scout.signal}</p>
                 </div>
                 <div className="flex gap-2 mt-4">
-                  <button className="flex-1 py-2.5 rounded-full bg-[#6C5CE7] text-white text-xs font-bold">詳細を見る</button>
-                  <button className="flex-1 py-2.5 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">保存</button>
+                  <button className="flex-1 py-2 rounded-full bg-[#6C5CE7] text-white text-xs font-bold">詳細を見る</button>
+                  <button className="flex-1 py-2 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">保存</button>
                 </div>
               </div>
             ))}
@@ -91,7 +91,7 @@ export default function ScoutInbox({ navigate }: Props) {
               <h3 className="text-base font-bold text-gray-900">あなたをチェックした会社</h3>
             </div>
           </div>
-          <div className="bg-white rounded-3xl p-4 card-shadow">
+          <div className="bg-white rounded-3xl p-3.5 card-shadow">
             <div className="space-y-4">
               {views.map((view, index) => (
                 <div key={view.id} className="relative flex gap-3">
