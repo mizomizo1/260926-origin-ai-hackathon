@@ -54,7 +54,7 @@ export default function MissionExplore({ navigate }: Props) {
         )}
         {showShelves ? (
           <div className="space-y-6">
-            {shelves.map(section => (
+            {shelves.map((section, sectionIndex) => (
               <div key={section.title}>
                 <div className="flex items-end justify-between px-5 mb-3">
                   <div>
@@ -63,14 +63,14 @@ export default function MissionExplore({ navigate }: Props) {
                   </div>
                   <span className="text-xs text-gray-400">横にスワイプ</span>
                 </div>
-                <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pb-1">
-                  {section.items.map(m => (
+                <div className={`flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-10' : 'pl-14 pr-5'}`}>
+                  {section.items.map((m, itemIndex) => (
                     <button
                       key={m.id}
                       onClick={() => navigate('missionDetail', { missionId: m.id })}
-                      className="snap-start shrink-0 w-52 rounded-3xl bg-white card-shadow text-left overflow-hidden"
+                      className={`snap-start shrink-0 rounded-3xl bg-white card-shadow text-left overflow-hidden ${itemIndex === 0 ? 'w-60' : sectionIndex % 2 === 0 ? 'w-48' : 'w-52'}`}
                     >
-                      <div className="h-32 relative overflow-hidden p-4 text-white" style={{ background: `linear-gradient(135deg, ${m.color}, #1F2937)` }}>
+                      <div className={`${itemIndex === 0 ? 'h-36' : 'h-[120px]'} relative overflow-hidden p-4 text-white`} style={{ background: `linear-gradient(135deg, ${m.color}, #1F2937)` }}>
                         <div className="absolute -right-5 -bottom-8 text-7xl opacity-25">{m.emoji}</div>
                         <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">{m.duration}</span>
                         <div className="absolute left-4 bottom-4 text-4xl">{m.emoji}</div>
@@ -117,7 +117,7 @@ export default function MissionExplore({ navigate }: Props) {
         )}
       </div>
 
-      <BottomNav current="explore" navigate={navigate} />
+      <BottomNav current="mission" navigate={navigate} />
     </div>
   )
 }

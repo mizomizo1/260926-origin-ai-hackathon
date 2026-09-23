@@ -5,11 +5,7 @@ import BottomNav from '../components/BottomNav'
 interface Props { navigate: (s: Screen) => void }
 
 export default function StudentProfile({ navigate }: Props) {
-  const radarSize = 220
-  const center = radarSize / 2
-  const maxRadius = 72
-  const axes = preferenceLabels.map(({ key, label, shortLabel, icon }, index) => {
-    const angle = -Math.PI / 2 + (Math.PI * 2 * index) / preferenceLabels.length
+  const valueItems = preferenceLabels.map(({ key, label, shortLabel, icon }) => {
     const value = (mockStudent.preferenceScores as any)[key] as number
     return {
       key,
@@ -17,20 +13,9 @@ export default function StudentProfile({ navigate }: Props) {
       shortLabel,
       icon,
       value,
-      angle,
-      point: {
-        x: center + Math.cos(angle) * maxRadius * (value / 100),
-        y: center + Math.sin(angle) * maxRadius * (value / 100),
-      },
-      labelPoint: {
-        x: center + Math.cos(angle) * (maxRadius + 27),
-        y: center + Math.sin(angle) * (maxRadius + 27),
-      },
     }
   })
-  const polygonPoints = axes.map(axis => `${axis.point.x},${axis.point.y}`).join(' ')
-  const gridLevels = [0.33, 0.66, 1]
-  const sortedValues = [...axes].sort((a, b) => b.value - a.value)
+  const sortedValues = [...valueItems].sort((a, b) => b.value - a.value)
   const [topValue, secondValue] = sortedValues
   const typeTitle = (() => {
     if (topValue.key === 'people_culture') return secondValue.key === 'growth' ? '人と関わりながら伸びるタイプ' : 'チームの空気を大切にするタイプ'
@@ -40,7 +25,12 @@ export default function StudentProfile({ navigate }: Props) {
     if (topValue.key === 'work_life') return '無理なく続けられる環境を選ぶタイプ'
     return '安心できる土台を大切にするタイプ'
   })()
-  const typeDescription = `今は「${topValue.shortLabel}」と「${secondValue.shortLabel}」が強めです。人との相性や学べる環境を見ながら、小さく仕事を試していくと納得感のある選択につながりやすそうです。`
+  const typeDescription = '人との相性や学べる環境を見ながら、小さく仕事を試すと選びやすそうです。'
+  const analysisEvidence = [
+    'チームで相談する選択が多い',
+    '企画Missionの満足度が高い',
+    '企業からも対話型の職種で反応あり',
+  ]
   const weeklyGoal = 3
   const weeklyDone = 2
   const weeklyPct = Math.round((weeklyDone / weeklyGoal) * 100)
@@ -69,55 +59,33 @@ export default function StudentProfile({ navigate }: Props) {
 
       <div className="flex-1 overflow-y-auto pb-24 px-5 py-4 space-y-4">
         {/* Value summary */}
-        <div className="bg-white rounded-3xl p-4">
-          <h3 className="text-sm font-bold text-gray-900 mb-3">価値観サマリ</h3>
-          <div className="flex justify-center">
-            <svg width={radarSize} height={radarSize} viewBox={`0 0 ${radarSize} ${radarSize}`} role="img" aria-label="価値観サマリ">
-              {gridLevels.map(level => (
-                <polygon
-                  key={level}
-                  points={axes.map(axis => `${center + Math.cos(axis.angle) * maxRadius * level},${center + Math.sin(axis.angle) * maxRadius * level}`).join(' ')}
-                  className="radar-axis"
-                />
-              ))}
-              {axes.map(axis => (
-                <line
-                  key={axis.key}
-                  x1={center}
-                  y1={center}
-                  x2={center + Math.cos(axis.angle) * maxRadius}
-                  y2={center + Math.sin(axis.angle) * maxRadius}
-                  className="radar-axis"
-                />
-              ))}
-              <polygon points={polygonPoints} className="radar-polygon" />
-              {axes.map(axis => (
-                <g key={axis.key}>
-                  <circle cx={axis.point.x} cy={axis.point.y} r="3.5" fill="#6C5CE7" />
-                  <text
-                    x={axis.labelPoint.x}
-                    y={axis.labelPoint.y}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    className="fill-gray-600 text-[10px] font-semibold"
-                  >
-                    {axis.icon} {axis.shortLabel}
-                  </text>
-                </g>
-              ))}
-            </svg>
+        <div className="bg-white rounded-3xl p-5 card-shadow">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold text-gray-900">価値観サマリ</h3>
+            <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">更新中</span>
           </div>
-          <div className="rounded-2xl bg-[#F7F6FF] p-4 mt-1">
-            <p className="text-xs font-bold text-[#6C5CE7] mb-1">今のあなたは</p>
-            <p className="text-base font-bold text-gray-900">{typeTitle}</p>
-            <p className="text-xs text-gray-600 leading-relaxed mt-2">{typeDescription}</p>
-            <div className="flex gap-2 mt-3 flex-wrap">
-              {[topValue, secondValue].map(axis => (
-                <span key={axis.key} className="text-[11px] font-bold bg-white text-[#6C5CE7] rounded-full px-3 py-1">
-                  {axis.icon} {axis.label}
-                </span>
+
+          <div className="rounded-[28px] bg-[#F7F6FF] p-5 border-l-4 border-[#6C5CE7]">
+            <p className="text-xs font-bold text-[#6C5CE7] mb-2">現在の仮説</p>
+            <p className="text-xl font-bold text-gray-900 leading-tight">{typeTitle}</p>
+            <p className="text-sm text-gray-600 leading-relaxed mt-3">{typeDescription}</p>
+          </div>
+
+          <div className="mt-4">
+            <p className="text-xs font-bold text-gray-500 mb-2">そう見ている理由</p>
+            <div className="space-y-2">
+              {analysisEvidence.map(item => (
+                <div key={item} className="flex items-center gap-2 rounded-2xl bg-white border border-gray-100 px-3 py-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#6C5CE7] flex-shrink-0" />
+                  <span className="text-xs font-medium text-gray-700">{item}</span>
+                </div>
               ))}
             </div>
+          </div>
+
+          <div className="mt-4 rounded-2xl bg-[#EEF0FF] px-4 py-3">
+            <p className="text-[11px] font-bold text-[#6C5CE7] mb-1">次に確かめること</p>
+            <p className="text-xs text-gray-700 leading-relaxed">人と話しながら企画を作るMissionで、楽しさが続くかを見る。</p>
           </div>
         </div>
 

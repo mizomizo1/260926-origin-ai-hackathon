@@ -55,7 +55,7 @@ export default function CompanyMatch({ navigate }: Props) {
         {[
           { title: 'あなたに合いそうな企業', items: highFit, scores: [89, 86, 84, 81] },
           { title: '次に見ておきたい企業', items: growing, scores: [79, 77, 74, 71] },
-        ].map(section => (
+        ].map((section, sectionIndex) => (
           <div key={section.title}>
             <div className="flex items-end justify-between px-5 mb-3">
               <div>
@@ -65,9 +65,9 @@ export default function CompanyMatch({ navigate }: Props) {
               <span className="text-xs text-gray-400">横にスワイプ</span>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pb-1">
+            <div className={`flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 ${sectionIndex % 2 === 0 ? 'pl-5 pr-10' : 'pl-14 pr-5'}`}>
               {section.items.map((company, index) => (
-                <div key={company.id} className="snap-start shrink-0 w-64 bg-white rounded-3xl card-shadow p-4 border-t-4"
+                <div key={company.id} className={`snap-start shrink-0 bg-white rounded-3xl card-shadow p-4 border-t-4 ${index === 0 ? 'w-72' : sectionIndex % 2 === 0 ? 'w-56' : 'w-60'}`}
                   style={{ borderColor: company.color }}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3 min-w-0">
@@ -100,7 +100,7 @@ export default function CompanyMatch({ navigate }: Props) {
         </div>
       </div>
 
-      <BottomNav current="companies" navigate={navigate} />
+      <BottomNav current="company" navigate={navigate} />
     </div>
   )
 }

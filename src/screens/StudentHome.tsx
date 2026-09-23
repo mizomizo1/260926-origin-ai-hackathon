@@ -1,6 +1,6 @@
 import { Screen } from '../App'
 import type { NavParams } from '../App'
-import { companies, missions, mockStudent, preferenceLabels, scoutInvitations } from '../data/mock'
+import { missions, mockStudent, scoutInvitations } from '../data/mock'
 import BottomNav from '../components/BottomNav'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
@@ -8,9 +8,6 @@ interface Props { navigate: (s: Screen, p?: NavParams) => void }
 export default function StudentHome({ navigate }: Props) {
   const featured = missions[0]
   const latestScout = scoutInvitations[0]
-  const topValues = [...preferenceLabels]
-    .sort((a, b) => (mockStudent.preferenceScores as any)[b.key] - (mockStudent.preferenceScores as any)[a.key])
-    .slice(0, 2)
 
   return (
     <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
@@ -29,23 +26,6 @@ export default function StudentHome({ navigate }: Props) {
       </div>
 
       <div className="flex-1 overflow-y-auto pb-24 px-5 pt-4 space-y-4">
-        <div className="bg-white rounded-[28px] p-4 card-shadow">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs text-gray-500">今の仮説</p>
-              <p className="text-base font-bold text-gray-900 mt-0.5">人と話しながら考える仕事に向いているかも</p>
-            </div>
-            <button onClick={() => navigate('studentProfile')} className="text-xs text-[#6C5CE7] font-bold flex-shrink-0">詳しく</button>
-          </div>
-          <div className="flex gap-2 mt-3">
-            {topValues.map(({ key, shortLabel, icon }) => (
-              <span key={key} className="text-xs bg-[#EEF0FF] text-[#6C5CE7] rounded-full px-3 py-1">
-                {icon} {shortLabel}
-              </span>
-            ))}
-          </div>
-        </div>
-
         <button
           onClick={() => navigate('missionDetail', { missionId: featured.id })}
           className="w-full text-left rounded-[28px] overflow-hidden card-shadow bg-white"
