@@ -8,6 +8,7 @@ const items = [
   { icon: '✏️', label: 'Mission作成', screen: 'createMission' as Screen },
   { icon: '📈', label: '分析', screen: 'missionAnalytics' as Screen },
   { icon: '👥', label: '学生一覧', screen: 'studentList' as Screen },
+  { icon: '💌', label: 'スカウト', screen: 'companyScouts' as Screen },
 ]
 
 export default function CompanySidebar({ current, navigate }: Props) {

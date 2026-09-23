@@ -1,11 +1,13 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
-import { companyStudents, preferenceLabels, passportData } from '../../data/mock'
+import { companyScoutPipeline, companyStudents, passportData } from '../../data/mock'
 
 interface Props { navigate: (s: Screen) => void; studentId?: string }
 
 export default function StudentDetail({ navigate, studentId }: Props) {
   const s = companyStudents.find(x => x.id === studentId) ?? companyStudents[0]
+  const scout = companyScoutPipeline.find(item => item.studentId === s.id)
+  const topFit = s.fitTags.slice(0, 2).join('・')
 
   return (
     <div className="flex min-h-screen">
@@ -39,12 +41,12 @@ export default function StudentDetail({ navigate, studentId }: Props) {
             </div>
 
             <div className="bg-white rounded-2xl p-5">
-              <h3 className="text-sm font-bold text-gray-900 mb-3">スコア</h3>
+              <h3 className="text-sm font-bold text-gray-900 mb-3">確認ポイント</h3>
               <div className="space-y-2">
                 {[
                   { label: 'Mission完了', value: `${s.missionCompleted}個` },
                   { label: '興味度', value: s.interestLevel },
-                  { label: '平均満足度', value: `${s.satisfaction}⭐` },
+                  { label: '候補理由', value: topFit },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between text-sm py-1 border-b border-gray-50 last:border-0">
                     <span className="text-gray-500">{label}</span>
@@ -55,33 +57,34 @@ export default function StudentDetail({ navigate, studentId }: Props) {
             </div>
 
             {/* Scout CTA */}
-            <button className="w-full py-3.5 rounded-2xl text-white font-bold text-sm"
+            <button onClick={() => navigate('companyScouts')} className="w-full py-3.5 rounded-2xl text-white font-bold text-sm"
               style={{ background: 'linear-gradient(135deg, #6C5CE7, #A29BFE)', boxShadow: '0 8px 20px rgba(108,92,231,0.3)' }}>
-              ⭐ スカウト候補に追加
+              💌 スカウトを作成
             </button>
           </div>
 
           {/* Right: Details */}
           <div className="lg:col-span-2 space-y-5">
-            {/* Value profile */}
+            {/* Scout rationale */}
             <div className="bg-white rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-4">価値観プロフィール</h3>
-              <div className="space-y-3">
-                {preferenceLabels.map(({ key, label, icon }) => {
-                  const val = (s.preferenceScores as any)[key]
-                  return (
-                    <div key={key}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-700">{icon} {label}</span>
-                        <span className="font-mono text-gray-500">{val}</span>
-                      </div>
-                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full rounded-full transition-all duration-700"
-                          style={{ width: `${val}%`, background: 'linear-gradient(90deg, #6C5CE7, #A29BFE)' }} />
-                      </div>
-                    </div>
-                  )
-                })}
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-bold text-gray-900">スカウト判断</h3>
+                  <p className="text-xs text-gray-500 mt-1">学生側には「関心のきっかけ」として表示されます</p>
+                </div>
+                <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{scout?.status ?? '候補'}</span>
+              </div>
+              <div className="rounded-2xl bg-[#F7F6FF] p-4 mb-4">
+                <p className="text-xs font-bold text-[#6C5CE7] mb-1">候補理由</p>
+                <p className="text-sm text-gray-800 font-semibold">{scout?.fitReason ?? `${topFit}が自社Missionと近い`}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {(scout?.viewed ?? ['Mission履歴', '価値観サマリ']).map(item => (
+                  <div key={item} className="bg-gray-50 rounded-xl p-3">
+                    <p className="text-xs text-gray-500">確認済み</p>
+                    <p className="text-sm font-bold text-gray-800 mt-1">{item}</p>
+                  </div>
+                ))}
               </div>
             </div>
 

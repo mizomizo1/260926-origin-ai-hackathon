@@ -1,6 +1,6 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
-import { companyStudents, companyMissions } from '../../data/mock'
+import { companyStudents, companyMissions, companyScoutPipeline } from '../../data/mock'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -80,7 +80,7 @@ export default function CompanyDashboard({ navigate }: Props) {
             </div>
             <div className="space-y-3">
               {companyStudents.slice(0, 3).map(s => (
-                <button key={s.id} onClick={() => navigate('studentDetail')}
+                <button key={s.id} onClick={() => navigate('studentDetail', { studentId: s.id })}
                   className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-[#EEF0FF] transition-colors text-left">
                   <div className="w-9 h-9 rounded-full bg-[#6C5CE7] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">
                     {s.name[0]}
@@ -98,6 +98,29 @@ export default function CompanyDashboard({ navigate }: Props) {
                     }>
                     {s.interestLevel}
                   </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Scout queue */}
+          <div className="bg-white rounded-2xl p-6 lg:col-span-2">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-base font-bold text-gray-900">スカウト状況</h2>
+              <button onClick={() => navigate('companyScouts')} className="text-xs text-[#6C5CE7]">管理する</button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {companyScoutPipeline.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => navigate('studentDetail', { studentId: item.studentId })}
+                  className="text-left bg-gray-50 rounded-xl p-4 hover:bg-[#EEF0FF] transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-bold text-gray-900">{item.studentName}</p>
+                    <span className="text-[11px] text-gray-500">{item.status}</span>
+                  </div>
+                  <p className="text-xs text-gray-600 line-clamp-2">{item.fitReason}</p>
                 </button>
               ))}
             </div>

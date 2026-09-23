@@ -435,6 +435,39 @@ export const profileViews = [
   },
 ]
 
+export const companyScoutPipeline = [
+  {
+    id: 'pipe_001',
+    studentId: 'stu_001',
+    studentName: '佐藤 美咲',
+    role: '商品企画インターン',
+    status: '送信済み',
+    fitReason: '商品企画Missionの発想とチーム志向が近い',
+    viewed: ['商品企画Mission', '価値観サマリ'],
+    lastAction: '今日 10:20',
+  },
+  {
+    id: 'pipe_002',
+    studentId: 'stu_004',
+    studentName: '鈴木 大輝',
+    role: '企画アシスタント',
+    status: '下書き',
+    fitReason: '企画Missionの満足度が高く、成長志向も強い',
+    viewed: ['Mission履歴', '基礎Mission'],
+    lastAction: '昨日 16:10',
+  },
+  {
+    id: 'pipe_003',
+    studentId: 'stu_006',
+    studentName: '小林 莉子',
+    role: 'SNS企画サポート',
+    status: '候補',
+    fitReason: '言語化と相手視点の基礎Missionが良い',
+    viewed: ['基礎Mission', '価値観サマリ'],
+    lastAction: '2日前',
+  },
+]
+
 export const passportData = {
   completedMissions: 3,
   totalTime: '60分',
