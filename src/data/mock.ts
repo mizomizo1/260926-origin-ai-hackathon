@@ -597,10 +597,10 @@ export const companyMissions = [
 ]
 
 export const preferenceLabels = [
-  { key: 'money_security', label: 'お金・安定', icon: '💰' },
-  { key: 'work_life', label: '働きやすさ', icon: '☀️' },
-  { key: 'people_culture', label: '人・雰囲気', icon: '👥' },
-  { key: 'growth', label: '成長', icon: '📈' },
-  { key: 'autonomy', label: '自由度', icon: '🌀' },
-  { key: 'meaning', label: 'やりがい', icon: '✨' },
+  { key: 'money_security', label: '収入や安定を大事にしたい', shortLabel: '安定', icon: '💰' },
+  { key: 'work_life', label: '生活とのバランスを保ちたい', shortLabel: 'バランス', icon: '☀️' },
+  { key: 'people_culture', label: '一緒に働く人や雰囲気を大事にしたい', shortLabel: '人・雰囲気', icon: '👥' },
+  { key: 'growth', label: 'できることを増やして成長したい', shortLabel: '成長', icon: '📈' },
+  { key: 'autonomy', label: '自分で考えて進めたい', shortLabel: '自分で決める', icon: '🌀' },
+  { key: 'meaning', label: '誰かの役に立つ実感がほしい', shortLabel: '役に立つ実感', icon: '✨' },
 ]

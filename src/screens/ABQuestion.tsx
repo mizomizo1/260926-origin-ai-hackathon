@@ -16,6 +16,7 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
   const progress = ((questionIndex) / abQuestions.length) * 100
 
   const choose = (choice: 'a' | 'b') => {
+    if (selected) return
     setSelected(choice)
     setTimeout(() => {
       const newAnswers = [...answers, choice]
@@ -59,11 +60,13 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
             <button
               key={choice}
               onClick={() => choose(choice)}
-              className="w-full rounded-3xl p-5 text-left transition-all duration-200"
+              disabled={selected !== null}
+              className="w-full rounded-3xl p-5 text-left transition-all duration-200 active:scale-[0.98]"
               style={{
                 border: isSelected ? '2.5px solid #6C5CE7' : '2px solid #E8E6F5',
                 background: isSelected ? '#EEF0FF' : 'white',
                 transform: isSelected ? 'scale(0.98)' : 'scale(1)',
+                boxShadow: isSelected ? '0 14px 30px rgba(108,92,231,0.18)' : '0 2px 10px rgba(0,0,0,0.04)',
               }}
             >
               <div className="flex items-center gap-3 mb-3">
@@ -72,6 +75,9 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
                   {choice.toUpperCase()}
                 </div>
                 <span className="text-xs font-medium text-gray-400">{choice === 'a' ? 'タイプA' : 'タイプB'}</span>
+                {isSelected && (
+                  <span className="ml-auto text-xs font-bold text-[#6C5CE7]">選択中</span>
+                )}
               </div>
               <ul className="space-y-2">
                 {card.points.map((pt, i) => (
@@ -85,7 +91,11 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
           )
         })}
 
-        <button onClick={() => choose('a')} className="text-center text-sm text-gray-400 py-2">
+        <button
+          onClick={() => choose(Math.random() > 0.5 ? 'a' : 'b')}
+          disabled={selected !== null}
+          className="text-center text-sm text-gray-400 py-2 active:scale-95 transition-transform disabled:opacity-50"
+        >
           どちらも気になる（どちらかをランダム選択）
         </button>
       </div>

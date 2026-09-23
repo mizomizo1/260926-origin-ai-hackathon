@@ -6,44 +6,32 @@ import BottomNav from '../components/BottomNav'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
-const categories = ['すべて', '商品企画', 'マーケティング', 'データ分析', 'デザイン', 'カスタマーサクセス', '人事']
 const shelves = [
-  { title: '人気のMission', items: missions.slice(0, 6) },
-  { title: '企画・マーケティング', items: missions.filter(m => ['商品企画', 'マーケティング'].includes(m.category)) },
-  { title: '分析・改善に挑戦', items: missions.filter(m => ['データ分析', 'デザイン'].includes(m.category)) },
-  { title: '人と向き合う仕事', items: missions.filter(m => ['カスタマーサクセス', '人事'].includes(m.category)) },
+  { title: 'まずは軽く試す', hint: '15〜20分で終わる初級Mission', items: missions.filter(m => m.difficulty === '初級') },
+  { title: 'もう少し深く試す', hint: '考える量が少し増える中級Mission', items: missions.filter(m => m.difficulty === '中級') },
 ]
 
 export default function MissionExplore({ navigate }: Props) {
-  const [search, setSearch] = useState('')
   const [cat, setCat] = useState('すべて')
-  const showShelves = search.trim() === '' && cat === 'すべて'
+  const showShelves = cat === 'すべて'
 
   const filtered = missions.filter(m => {
-    const matchSearch = m.title.includes(search) || m.company.includes(search)
-    const matchCat = cat === 'すべて' || m.category === cat
-    return matchSearch && matchCat
+    const matchCat = cat === 'すべて' || m.difficulty === cat
+    return matchCat
   })
 
   return (
     <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
       {/* Header */}
       <div className="bg-white px-5 pt-8 pb-4">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Mission を探す</h2>
-        <div className="relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
-          <input
-            value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Missionや企業名で検索"
-            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-gray-50 border-2 border-gray-100 text-sm focus:outline-none focus:border-[#6C5CE7] transition-colors"
-          />
-        </div>
+        <h2 className="text-xl font-bold text-gray-900">Missionを選ぶ</h2>
+        <p className="text-sm text-gray-500 mt-1">難易度から選ぶと迷いにくくなります</p>
       </div>
 
       {/* Category filter */}
       <div className="px-5 py-3 bg-white border-b border-gray-50 overflow-x-auto">
         <div className="flex gap-2 min-w-max">
-          {categories.map(c => (
+          {['すべて', '初級', '中級'].map(c => (
             <button key={c} onClick={() => setCat(c)}
               className="px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap"
               style={cat === c
@@ -71,7 +59,7 @@ export default function MissionExplore({ navigate }: Props) {
                 <div className="flex items-end justify-between px-5 mb-3">
                   <div>
                     <h3 className="text-base font-bold text-gray-900">{section.title}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{section.items.length}件のTrial</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{section.hint}</p>
                   </div>
                   <span className="text-xs text-gray-400">横にスワイプ</span>
                 </div>
@@ -84,7 +72,7 @@ export default function MissionExplore({ navigate }: Props) {
                     >
                       <div className="h-32 relative overflow-hidden p-4 text-white" style={{ background: `linear-gradient(135deg, ${m.color}, #1F2937)` }}>
                         <div className="absolute -right-5 -bottom-8 text-7xl opacity-25">{m.emoji}</div>
-                        <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">{m.category}</span>
+                        <span className="text-[11px] bg-white/20 rounded-full px-2.5 py-1">{m.duration}</span>
                         <div className="absolute left-4 bottom-4 text-4xl">{m.emoji}</div>
                       </div>
                       <div className="p-4">
@@ -92,7 +80,7 @@ export default function MissionExplore({ navigate }: Props) {
                         <p className="text-xs text-gray-500 mt-1 truncate">{m.company}</p>
                         <div className="flex gap-1.5 mt-3">
                           <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
-                          <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
+                          <span className="chip bg-gray-100 text-gray-600">{m.category}</span>
                         </div>
                       </div>
                     </button>
@@ -117,17 +105,11 @@ export default function MissionExplore({ navigate }: Props) {
                     <div className="flex gap-2 flex-wrap">
                       <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{m.difficulty}</span>
                       <span className="chip bg-gray-100 text-gray-600">{m.duration}</span>
-                      <span className="chip bg-gray-100 text-gray-600">{m.style}</span>
                     </div>
                   </div>
                 </div>
                 <div className="mt-3 pt-3 border-t border-gray-50">
                   <p className="text-xs text-gray-500 line-clamp-2">{m.summary}</p>
-                  <div className="flex gap-1.5 mt-2 flex-wrap">
-                    {m.tags.map(t => (
-                      <span key={t} className="text-xs text-[#6C5CE7] bg-[#EEF0FF] px-2 py-0.5 rounded-full">#{t}</span>
-                    ))}
-                  </div>
                 </div>
               </button>
             ))}

@@ -8,12 +8,13 @@ export default function StudentProfile({ navigate }: Props) {
   const radarSize = 220
   const center = radarSize / 2
   const maxRadius = 72
-  const axes = preferenceLabels.map(({ key, label, icon }, index) => {
+  const axes = preferenceLabels.map(({ key, label, shortLabel, icon }, index) => {
     const angle = -Math.PI / 2 + (Math.PI * 2 * index) / preferenceLabels.length
     const value = (mockStudent.preferenceScores as any)[key] as number
     return {
       key,
       label,
+      shortLabel,
       icon,
       value,
       angle,
@@ -29,7 +30,22 @@ export default function StudentProfile({ navigate }: Props) {
   })
   const polygonPoints = axes.map(axis => `${axis.point.x},${axis.point.y}`).join(' ')
   const gridLevels = [0.33, 0.66, 1]
-  const topValues = [...axes].sort((a, b) => b.value - a.value).slice(0, 3)
+  const sortedValues = [...axes].sort((a, b) => b.value - a.value)
+  const [topValue, secondValue] = sortedValues
+  const typeTitle = (() => {
+    if (topValue.key === 'people_culture') return secondValue.key === 'growth' ? '人と関わりながら伸びるタイプ' : 'チームの空気を大切にするタイプ'
+    if (topValue.key === 'growth') return '学びながら可能性を広げるタイプ'
+    if (topValue.key === 'meaning') return '誰かの役に立つ実感で動けるタイプ'
+    if (topValue.key === 'autonomy') return '自分で考えて形にするタイプ'
+    if (topValue.key === 'work_life') return '無理なく続けられる環境を選ぶタイプ'
+    return '安心できる土台を大切にするタイプ'
+  })()
+  const typeDescription = `今は「${topValue.shortLabel}」と「${secondValue.shortLabel}」が強めです。人との相性や学べる環境を見ながら、小さく仕事を試していくと納得感のある選択につながりやすそうです。`
+  const weeklyGoal = 3
+  const weeklyDone = 2
+  const weeklyPct = Math.round((weeklyDone / weeklyGoal) * 100)
+  const circleRadius = 38
+  const circumference = 2 * Math.PI * circleRadius
 
   return (
     <div className="flex flex-col min-h-[780px] bg-[#F7F6FF]">
@@ -81,71 +97,98 @@ export default function StudentProfile({ navigate }: Props) {
                     dominantBaseline="middle"
                     className="fill-gray-600 text-[10px] font-semibold"
                   >
-                    {axis.icon} {axis.label.split('・')[0]}
+                    {axis.icon} {axis.shortLabel}
                   </text>
                 </g>
               ))}
             </svg>
           </div>
-          <div className="grid grid-cols-3 gap-2 mt-1">
-            {topValues.map(axis => (
-              <div key={axis.key} className="bg-[#F7F6FF] rounded-2xl p-2 text-center">
-                <p className="text-sm font-bold text-[#6C5CE7]">{axis.value}</p>
-                <p className="text-[11px] text-gray-500 mt-0.5 truncate">{axis.label}</p>
-              </div>
-            ))}
+          <div className="rounded-2xl bg-[#F7F6FF] p-4 mt-1">
+            <p className="text-xs font-bold text-[#6C5CE7] mb-1">今のあなたは</p>
+            <p className="text-base font-bold text-gray-900">{typeTitle}</p>
+            <p className="text-xs text-gray-600 leading-relaxed mt-2">{typeDescription}</p>
+            <div className="flex gap-2 mt-3 flex-wrap">
+              {[topValue, secondValue].map(axis => (
+                <span key={axis.key} className="text-[11px] font-bold bg-white text-[#6C5CE7] rounded-full px-3 py-1">
+                  {axis.icon} {axis.label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Passport summary */}
-        <div className="bg-white rounded-3xl p-4">
+        <div className="bg-white rounded-3xl p-4 card-shadow">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold text-gray-900">体験記録</h3>
             <span className="text-xs text-gray-400">Career Passport</span>
           </div>
-          <div className="flex gap-3">
-            {[
-              { label: 'Mission', value: `${passportData.completedMissions}個` },
-              { label: '得意', value: '企画・チーム' },
-              { label: '平均満足度', value: '4.4 ⭐' },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex-1 bg-[#F7F6FF] rounded-2xl p-3 text-center">
-                <p className="text-sm font-bold text-gray-800">{value}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+          <div className="flex items-center gap-4">
+            <div className="relative w-24 h-24 flex-shrink-0">
+              <svg width="96" height="96" viewBox="0 0 96 96" className="-rotate-90">
+                <circle cx="48" cy="48" r={circleRadius} stroke="#EEF0FF" strokeWidth="10" fill="none" />
+                <circle
+                  cx="48"
+                  cy="48"
+                  r={circleRadius}
+                  stroke="#6C5CE7"
+                  strokeWidth="10"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={circumference * (1 - weeklyDone / weeklyGoal)}
+                />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <p className="text-xl font-bold text-gray-900">{weeklyDone}/{weeklyGoal}</p>
+                <p className="text-[10px] text-gray-500">今週</p>
               </div>
-            ))}
+            </div>
+            <div className="flex-1">
+              <p className="text-base font-bold text-gray-900">今週はあと1つで目標達成</p>
+              <p className="text-xs text-gray-500 leading-relaxed mt-1">小さく試すほど、企業候補と価値観サマリが具体的になります。</p>
+              <div className="grid grid-cols-3 gap-2 mt-3">
+                {[
+                  { label: '累計', value: `${passportData.completedMissions}` },
+                  { label: '満足度', value: '4.4' },
+                  { label: '進捗', value: `${weeklyPct}%` },
+                ].map(({ label, value }) => (
+                  <div key={label} className="bg-[#F7F6FF] rounded-2xl p-2 text-center">
+                    <p className="text-sm font-bold text-[#6C5CE7]">{value}</p>
+                    <p className="text-[10px] text-gray-500">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Experience log */}
-        <div className="bg-white rounded-3xl p-4">
-          <h3 className="text-sm font-bold text-gray-900 mb-3">最近のログ</h3>
-          <div className="space-y-3">
+        <div className="bg-white/70 rounded-3xl p-4">
+          <h3 className="text-xs font-bold text-gray-500 mb-3">最近のログ</h3>
+          <div className="space-y-2">
             {passportData.experiences.slice(0, 3).map(exp => (
-              <div key={exp.id} className="flex items-start gap-3 pb-3 border-b border-gray-50 last:border-0 last:pb-0">
-                <div className="w-10 h-10 rounded-2xl bg-[#EEF0FF] flex items-center justify-center text-xl flex-shrink-0">
+              <div key={exp.id} className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-sm flex-shrink-0">
                   {exp.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{exp.mission}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{exp.company} · {exp.date}</p>
-                  <div className="flex gap-3 mt-1.5">
-                    <span className="text-xs text-[#F59E0B] font-bold">満足度 {exp.satisfaction}</span>
-                    <span className="text-xs text-[#6C5CE7] font-bold">意欲 {exp.willingness}</span>
-                  </div>
+                  <p className="text-xs font-medium text-gray-700 truncate">{exp.mission}</p>
+                  <p className="text-[11px] text-gray-400">{exp.date}</p>
                 </div>
+                <span className="text-[11px] text-[#F59E0B] font-bold">{exp.satisfaction}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Settings */}
-        <div className="bg-white rounded-3xl p-4">
-          <h3 className="text-sm font-bold text-gray-900 mb-3">設定</h3>
+        <div className="bg-white/70 rounded-3xl p-4">
+          <h3 className="text-xs font-bold text-gray-500 mb-2">設定</h3>
           <div className="space-y-1">
-            {['プロフィール編集', '通知設定', 'プライバシー', 'ヘルプ', 'ログアウト'].map(item => (
-              <div key={item} className="flex justify-between items-center py-3 border-b border-gray-50 last:border-0">
-                <span className="text-sm text-gray-700">{item}</span>
+            {['プロフィール編集', '通知設定', 'ヘルプ'].map(item => (
+              <div key={item} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
+                <span className="text-xs text-gray-600">{item}</span>
                 <span className="text-gray-400">›</span>
               </div>
             ))}
