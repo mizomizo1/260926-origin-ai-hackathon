@@ -37,46 +37,67 @@ export default function Onboarding({ navigate }: Props) {
   }
 
   return (
-    <div className="flex flex-col min-h-[780px]" style={{ background: slide.bg, transition: 'background 0.4s' }}>
-      {/* Skip */}
-      <div className="flex justify-end p-6">
-        <button onClick={() => navigate('roleSelect')} className="text-sm font-medium" style={{ color: slide.color }}>
-          スキップ →
+    <div className="min-h-screen" style={{ background: slide.bg, transition: 'background 0.4s' }}>
+      <header className="mx-auto flex h-16 max-w-[1180px] items-center justify-between px-6">
+        <button onClick={() => navigate('splash')} className="flex items-center gap-3 text-left">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#6C5CE7] text-sm font-bold text-white">CC</span>
+          <span className="text-sm font-bold text-gray-900">Career Compass Trial</span>
         </button>
-      </div>
-
-      {/* Illustration */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
-        <div className="w-32 h-32 rounded-[40px] flex items-center justify-center text-6xl mb-8 mx-auto"
-          style={{ background: slide.color, boxShadow: `0 12px 32px ${slide.color}40` }}>
-          {slide.emoji}
-        </div>
-
-        <h2 className="text-2xl font-bold text-gray-900 leading-tight mb-4" style={{ whiteSpace: 'pre-line' }}>
-          {slide.title}
-        </h2>
-        <p className="text-sm text-gray-600 leading-relaxed max-w-xs">
-          {slide.desc}
-        </p>
-      </div>
-
-      {/* Bottom */}
-      <div className="px-6 pb-10">
-        {/* Dots */}
-        <div className="flex justify-center gap-2 mb-6">
-          {slides.map((_, i) => (
-            <div key={i} className="rounded-full transition-all duration-300"
-              style={{
-                width: i === current ? 24 : 8, height: 8,
-                background: i === current ? slide.color : '#D1D5DB',
-              }} />
-          ))}
-        </div>
-
-        <button onClick={next} className="primary-btn" style={{ background: slide.color }}>
-          {current < slides.length - 1 ? '次へ' : 'はじめる'}
+        <button onClick={() => navigate('roleSelect')} className="text-sm font-bold" style={{ color: slide.color }}>
+          スキップ
         </button>
-      </div>
+      </header>
+
+      <main className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-[1180px] grid-cols-1 items-center gap-10 px-6 py-10 lg:grid-cols-[0.95fr_1.05fr]">
+        <section>
+          <p className="text-xs font-bold uppercase tracking-[0.16em]" style={{ color: slide.color }}>Onboarding</p>
+          <h1 className="mt-5 text-4xl font-bold leading-tight text-gray-900 lg:text-6xl" style={{ whiteSpace: 'pre-line' }}>
+            {slide.title}
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-8 text-gray-600">
+            {slide.desc}
+          </p>
+          <div className="mt-10 flex max-w-md items-center gap-3">
+            <button onClick={next} className="rounded-2xl px-8 py-4 text-sm font-bold text-white shadow-sm" style={{ background: slide.color }}>
+              {current < slides.length - 1 ? '次へ' : 'はじめる'}
+            </button>
+            <div className="flex gap-2">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  aria-label={`${i + 1}枚目`}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    width: i === current ? 28 : 9, height: 9,
+                    background: i === current ? slide.color : '#D1D5DB',
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-[32px] border border-white/70 bg-white/75 p-8 shadow-[0_24px_70px_rgba(31,41,55,0.12)] backdrop-blur">
+          <div className="grid gap-5">
+            <div className="flex min-h-[280px] items-center justify-center rounded-[28px]" style={{ background: slide.color }}>
+              <div className="text-[120px] leading-none drop-shadow-sm">{slide.emoji}</div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {slides.map((item, index) => (
+                <button
+                  key={item.title}
+                  onClick={() => setCurrent(index)}
+                  className={`rounded-2xl border p-4 text-left transition-all ${index === current ? 'border-transparent bg-white shadow-sm' : 'border-white/70 bg-white/45'}`}
+                >
+                  <div className="text-2xl">{item.emoji}</div>
+                  <p className="mt-2 text-xs font-bold leading-relaxed text-gray-700">{item.title.replace('\n', '')}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   )
 }

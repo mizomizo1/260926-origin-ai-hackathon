@@ -19,23 +19,25 @@ export default function ProfileSetup({ navigate }: Props) {
   const progress = ((step + 1) / 2) * 100
 
   if (step === 0) return (
-    <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
-      <div className="mb-2">
+    <div className="min-h-screen bg-white px-6 py-10">
+      <main className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-[1120px] grid-cols-1 items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <section>
         <div className="flex justify-between text-xs text-gray-400 mb-2">
           <span>プロフィール設定 · あと2ステップ(約1分)</span><span>1/2</span>
         </div>
         <div className="h-1.5 bg-gray-100 rounded-full">
           <div className="h-full rounded-full bg-[#6C5CE7] transition-all" style={{ width: `${progress}%` }} />
         </div>
-      </div>
 
-      <div className="mt-8 mb-6">
+      <div className="mt-10 mb-6">
         <div className="text-3xl mb-2">📝</div>
-        <h2 className="text-2xl font-bold text-gray-900">基本情報を教えてください</h2>
-        <p className="text-sm text-gray-500 mt-1">入力済みの内容のままで進めます。後から変更できます</p>
+        <h1 className="text-4xl font-bold text-gray-900">基本情報を教えてください</h1>
+        <p className="text-base leading-8 text-gray-500 mt-3">入力済みの内容のままで進めます。後から変更できます。</p>
       </div>
+      </section>
 
-      <div className="space-y-4 flex-1">
+      <section className="rounded-3xl border border-gray-100 bg-[#F7F8FB] p-7 shadow-sm">
+      <div className="grid grid-cols-1 gap-4">
         {[
           { label: '名前', value: name, onChange: setName, placeholder: '佐藤 美咲' },
           { label: '学年', value: year, onChange: setYear, placeholder: '大学3年' },
@@ -53,32 +55,36 @@ export default function ProfileSetup({ navigate }: Props) {
 
       <button onClick={() => setStep(1)} className="primary-btn mt-6">次へ</button>
       <button onClick={() => navigate('abQuestion')} className="text-center text-sm text-gray-400 mt-3 py-2">あとで設定する</button>
+      </section>
+      </main>
     </div>
   )
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
-      <div className="mb-2">
+    <div className="min-h-screen bg-white px-6 py-10">
+      <main className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-[1120px] grid-cols-1 items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <section>
         <div className="flex justify-between text-xs text-gray-400 mb-2">
           <span>プロフィール設定 · あと1ステップで完了</span><span>2/2</span>
         </div>
         <div className="h-1.5 bg-gray-100 rounded-full">
           <div className="h-full rounded-full bg-[#6C5CE7]" style={{ width: '100%' }} />
         </div>
-      </div>
 
-      <div className="mt-8 mb-6">
+      <div className="mt-10 mb-6">
         <div className="text-3xl mb-2">🎯</div>
-        <h2 className="text-2xl font-bold text-gray-900">興味のある職種を選んでください</h2>
-        <p className="text-sm text-gray-500 mt-1">複数選択可 · {interests.length}個選択中</p>
+        <h1 className="text-4xl font-bold text-gray-900">興味のある職種を選んでください</h1>
+        <p className="text-base text-gray-500 mt-3">複数選択可 · {interests.length}個選択中</p>
       </div>
+      </section>
 
-      <div className="flex-1 flex flex-wrap gap-2 content-start">
+      <section className="rounded-3xl border border-gray-100 bg-[#F7F8FB] p-7 shadow-sm">
+      <div className="flex flex-wrap gap-3 content-start">
         {interestOptions.map(i => (
           <button
             key={i}
             onClick={() => toggleInterest(i)}
-            className="px-4 py-2 rounded-full text-sm font-medium transition-all border-2"
+            className="px-5 py-3 rounded-full text-sm font-medium transition-all border-2"
             style={interests.includes(i)
               ? { background: '#6C5CE7', color: 'white', borderColor: '#6C5CE7' }
               : { background: 'white', color: '#374151', borderColor: '#E5E7EB' }
@@ -90,6 +96,8 @@ export default function ProfileSetup({ navigate }: Props) {
       </div>
 
       <button onClick={() => navigate('abQuestion')} className="primary-btn mt-6">次へ</button>
+      </section>
+      </main>
     </div>
   )
 }

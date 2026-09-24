@@ -30,7 +30,8 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
   }
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white px-5 py-6">
+    <div className="min-h-screen bg-white px-6 py-8">
+      <main className="mx-auto max-w-[1040px]">
       {/* Header */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-3">
@@ -48,14 +49,14 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
       </div>
 
       {/* Question */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <p className="text-xs font-medium text-[#6C5CE7] mb-2 uppercase tracking-wider">Q{questionIndex + 1}</p>
-        <h3 className="text-lg font-bold text-gray-900">{q.question}</h3>
+        <h1 className="text-3xl font-bold text-gray-900">{q.question}</h1>
       </div>
 
       {/* Cards */}
       <div className="flex-1 flex flex-col gap-4">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 sm:gap-3">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-4">
         {(['a', 'b'] as const).map(choice => {
           const card = q[choice]
           const isSelected = selected === choice
@@ -69,7 +70,7 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
               <button
                 onClick={() => choose(choice)}
                 disabled={selected !== null}
-                className="w-full rounded-3xl p-4 sm:p-5 text-left transition-all duration-200 active:scale-[0.98]"
+                className="min-h-[330px] w-full rounded-3xl p-6 text-left transition-all duration-200 active:scale-[0.98]"
                 style={{
                   border: isSelected ? `2.5px solid ${choice === 'a' ? '#6C5CE7' : '#00B894'}` : '2px solid #E8E6F5',
                   background: isSelected ? (choice === 'a' ? '#EEF0FF' : '#ECFDF7') : 'white',
@@ -91,7 +92,7 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
                 </div>
                 <ul className="space-y-3">
                   {card.points.map((pt, i) => (
-                    <li key={i} className="rounded-2xl bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700">
+                    <li key={i} className="rounded-2xl bg-gray-50 px-4 py-3 text-base font-medium text-gray-700">
                       {pt}
                     </li>
                   ))}
@@ -113,6 +114,7 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
           どちらも気になる（どちらかをランダム選択）
         </button>
       </div>
+      </main>
     </div>
   )
 }

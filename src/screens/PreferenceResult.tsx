@@ -20,17 +20,24 @@ export default function PreferenceResult({ navigate, answers }: Props) {
   const secondary = top2[1]
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white pb-6">
+    <div className="min-h-screen bg-white px-6 py-10">
+      <main className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-[1120px] grid-cols-1 items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
       {/* Header */}
-      <div className="px-6 pt-8 pb-4 text-center" style={{ background: 'linear-gradient(180deg, #EEF0FF 0%, white 100%)' }}>
+      <section className="rounded-3xl p-8" style={{ background: 'linear-gradient(180deg, #EEF0FF 0%, white 100%)' }}>
         <div className="text-3xl mb-2">🔮</div>
-        <h2 className="text-xl font-bold text-gray-900">あなたの価値観の仮説</h2>
-        <p className="text-xs text-gray-500 mt-1">最初のTrial選びに使います</p>
-      </div>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#6C5CE7]">Preference Result</p>
+        <h1 className="mt-4 text-4xl font-bold text-gray-900">あなたの価値観の仮説</h1>
+        <p className="text-base text-gray-500 mt-3">最初のTrial選びに使います</p>
 
-      <div className="px-6">
-        {/* 最初のTrialへの道のり(1つ目は完了済みで見せる) */}
-        <div className="rounded-2xl border border-gray-100 bg-white p-4 mb-4">
+        <div className="rounded-[28px] p-5 mb-4 border-l-4 border-[#6C5CE7]" style={{ background: 'linear-gradient(135deg, #EEF0FF, #F7F6FF)' }}>
+          <p className="text-xs font-bold text-[#6C5CE7] mb-2">初期仮説</p>
+          <p className="text-xl font-bold text-gray-900 leading-tight">人と関わりながら伸びるタイプ</p>
+          <p className="text-sm text-gray-600 leading-relaxed mt-3">まずは、相談しながら考えるTrialから試してみましょう。</p>
+        </div>
+      </section>
+
+      <section>
+        <div className="rounded-2xl border border-gray-100 bg-white p-4 mb-4 shadow-sm">
           <p className="text-[11px] font-bold text-gray-500 mb-3">あと2ステップで、企業から反応が届きます</p>
           <div className="flex items-center gap-2">
             {[
@@ -39,7 +46,7 @@ export default function PreferenceResult({ navigate, answers }: Props) {
               { label: '企業からの反応', state: 'locked' },
             ].map((step, index) => (
               <div key={step.label} className="flex items-center gap-2 flex-1 min-w-0">
-                <div className={`flex-1 min-w-0 rounded-xl px-2 py-2 text-center ${step.state === 'next' ? 'bg-[#6C5CE7] text-white' : step.state === 'done' ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'bg-gray-50 text-gray-400'}`}>
+                <div className={`flex-1 min-w-0 rounded-xl px-2 py-3 text-center ${step.state === 'next' ? 'bg-[#6C5CE7] text-white' : step.state === 'done' ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'bg-gray-50 text-gray-400'}`}>
                   <p className="text-[11px] font-bold truncate">{step.state === 'done' ? '✓ ' : step.state === 'locked' ? '🔒 ' : '▶ '}{step.label}</p>
                   {step.sub && <p className="text-[10px] opacity-80">{step.sub}</p>}
                 </div>
@@ -47,13 +54,6 @@ export default function PreferenceResult({ navigate, answers }: Props) {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Insight */}
-        <div className="rounded-[28px] p-5 mb-4 border-l-4 border-[#6C5CE7]" style={{ background: 'linear-gradient(135deg, #EEF0FF, #F7F6FF)' }}>
-          <p className="text-xs font-bold text-[#6C5CE7] mb-2">初期仮説</p>
-          <p className="text-xl font-bold text-gray-900 leading-tight">人と関わりながら伸びるタイプ</p>
-          <p className="text-sm text-gray-600 leading-relaxed mt-3">まずは、相談しながら考えるTrialから試してみましょう。</p>
         </div>
 
         <div className="rounded-3xl bg-white border border-gray-100 p-4 mb-4">
@@ -83,7 +83,8 @@ export default function PreferenceResult({ navigate, answers }: Props) {
         <button onClick={() => navigate('studentHome')} className="w-full text-center text-xs text-gray-400 mt-4 py-2">
           あとでやる
         </button>
-      </div>
+      </section>
+      </main>
     </div>
   )
 }

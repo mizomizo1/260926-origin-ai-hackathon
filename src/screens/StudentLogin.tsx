@@ -8,9 +8,24 @@ export default function StudentLogin({ navigate }: Props) {
   const [password, setPassword] = useState('')
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
-      <button onClick={() => navigate('roleSelect')} className="text-left text-gray-400 mb-6 text-sm">← 戻る</button>
+    <div className="min-h-screen bg-[#F7F8FB] px-6 py-10">
+      <main className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-[1120px] grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_420px]">
+      <section>
+        <button onClick={() => navigate('roleSelect')} className="text-left text-gray-400 mb-8 text-sm">← 戻る</button>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#6C5CE7]">Student Account</p>
+        <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 lg:text-5xl">学生として始める</h1>
+        <p className="mt-4 max-w-xl text-base leading-8 text-gray-600">ログインしても、ゲストとして体験しても大丈夫です。次にプロフィールとA/B選択へ進みます。</p>
+        <div className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
+          {['価値観を選ぶ', 'Trialを試す', '企業の反応を見る'].map((item, index) => (
+            <div key={item} className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+              <span className="text-xs font-bold text-[#6C5CE7]">0{index + 1}</span>
+              <p className="mt-2 text-sm font-bold text-gray-800">{item}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
+      <section className="rounded-3xl border border-gray-100 bg-white p-7 shadow-[0_24px_70px_rgba(31,41,55,0.10)]">
       <div className="mb-8">
         <div className="text-4xl mb-3">👋</div>
         <h2 className="text-2xl font-bold text-gray-900">ログイン / 登録</h2>
@@ -62,6 +77,8 @@ export default function StudentLogin({ navigate }: Props) {
       >
         まずは体験してみる（ゲスト）→
       </button>
+      </section>
+      </main>
     </div>
   )
 }

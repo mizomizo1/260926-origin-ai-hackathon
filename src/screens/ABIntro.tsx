@@ -18,13 +18,17 @@ export default function ABIntro({ navigate }: Props) {
   }
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
-      <div className="flex-1 flex flex-col justify-center">
-        <div className="overflow-hidden rounded-3xl border border-[#E8E6F5] bg-[#F7F8FB] mb-6">
-          <img src={abIllustration} alt="" className="h-52 w-full object-cover object-center" />
+    <div className="min-h-screen bg-white px-6 py-10">
+      <main className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-[1120px] grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <section>
+        <div className="overflow-hidden rounded-3xl border border-[#E8E6F5] bg-[#F7F8FB]">
+          <img src={abIllustration} alt="" className="h-[360px] w-full object-cover object-center" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 leading-tight">5問だけ、直感で選ぶ</h2>
-        <p className="text-sm text-gray-500 leading-relaxed mt-3">
+      </section>
+      <section>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#6C5CE7]">A/B Test</p>
+        <h1 className="mt-4 text-4xl font-bold text-gray-900 leading-tight">5問だけ、直感で選ぶ</h1>
+        <p className="text-base text-gray-500 leading-8 mt-4">
           左右の選択肢を見比べて、今の自分に近い方を選んでください。正解はありません。
         </p>
 
@@ -62,9 +66,7 @@ export default function ABIntro({ navigate }: Props) {
             ))}
           </div>
         </div>
-      </div>
 
-      <div className="pb-4">
         <button
           onClick={start}
           onMouseDown={() => setStartPressed(true)}
@@ -75,7 +77,8 @@ export default function ABIntro({ navigate }: Props) {
         >
           5問だけ選ぶ
         </button>
-      </div>
+      </section>
+      </main>
     </div>
   )
 }
