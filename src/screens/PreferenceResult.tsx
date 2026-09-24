@@ -1,7 +1,8 @@
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { abQuestions, preferenceLabels } from '../data/mock'
 
-interface Props { navigate: (s: Screen) => void; answers: ('a' | 'b')[] }
+interface Props { navigate: (s: Screen, p?: NavParams) => void; answers: ('a' | 'b')[] }
 
 export default function PreferenceResult({ navigate, answers }: Props) {
   // Compute scores from answers
@@ -53,8 +54,8 @@ export default function PreferenceResult({ navigate, answers }: Props) {
           <p className="text-xs text-gray-700 leading-relaxed">チームで考えるTrialを試して、納得感があるかを見る。</p>
         </div>
 
-        <button onClick={() => navigate('studentHome')} className="primary-btn">
-          おすすめの仕事を試す
+        <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="primary-btn">
+          最初のTrialを試す(12分)
         </button>
         <button onClick={() => navigate('studentHome')} className="ghost-btn mt-3">
           後で見る

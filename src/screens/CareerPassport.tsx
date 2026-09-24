@@ -31,6 +31,25 @@ export default function CareerPassport({ navigate }: Props) {
           ))}
         </div>
 
+        {/* 次の目標(目標勾配効果 + ナッジ) */}
+        {(() => {
+          const goal = 5
+          const done = Number(passportData.completedMissions)
+          const remain = Math.max(goal - done, 0)
+          return (
+            <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm mb-8 max-w-lg">
+              <p className="text-sm font-bold text-gray-900">{remain > 0 ? `目標まであと${remain}個` : '目標を達成しました'}</p>
+              <p className="text-xs text-gray-500 mt-1">{goal}個のTrialを終えると、キャリアの仮説がぐっと具体的になります。</p>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden mt-3">
+                <div className="h-full rounded-full bg-[#6C5CE7] transition-all duration-700" style={{ width: `${Math.min(done / goal, 1) * 100}%` }} />
+              </div>
+              <button onClick={() => navigate('missionExplore')} className="mt-4 w-full py-2.5 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
+                次のTrialを試す →
+              </button>
+            </div>
+          )
+        })()}
+
         <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
         {/* Skills */}
         <div className="bg-[#17152B] rounded-3xl p-6 shadow-sm h-fit text-white">
@@ -54,7 +73,7 @@ export default function CareerPassport({ navigate }: Props) {
 
         {/* Experience cards */}
         <div>
-          <div className="flex items-end justify-between mb-4"><div><p className="text-xs font-bold text-[#6C5CE7]">これまでの歩み</p><h3 className="text-xl font-bold text-gray-900 mt-1">体験ログ</h3></div><span className="text-xs text-gray-400">3 experiences</span></div>
+          <div className="flex items-end justify-between mb-4"><div><p className="text-xs font-bold text-[#6C5CE7]">これまでの歩み</p><h3 className="text-xl font-bold text-gray-900 mt-1">体験ログ</h3></div><span className="text-xs text-gray-400">{passportData.experiences.length}件の体験</span></div>
           <div className="space-y-4 border-l-2 border-[#EEF0FF] pl-5">
             {passportData.experiences.map(exp => (
               <div key={exp.id} className="relative bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

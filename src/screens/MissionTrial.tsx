@@ -14,6 +14,8 @@ export default function MissionTrial({ navigate, missionId }: Props) {
 
   const save = () => { setSaved(true); setTimeout(() => setSaved(false), 2000) }
   const tasks = ['課題確認', '調査', '分析', '提案', '提出']
+  const done = [true, memo.length > 0, memo.length >= 30, answer.length > 0, answer.length >= 10]
+  const doneCount = done.filter(Boolean).length
 
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
@@ -27,8 +29,8 @@ export default function MissionTrial({ navigate, missionId }: Props) {
             <p className="text-sm font-bold text-gray-900 mb-4">進め方</p>
             <div className="space-y-2">
               {tasks.map((task, index) => (
-                <button key={task} className={`w-full flex items-center gap-3 rounded-xl px-3 py-2 text-left ${index <= 2 ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'text-gray-500 hover:bg-gray-50'}`}>
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${index <= 2 ? 'bg-[#6C5CE7] text-white' : 'bg-gray-100 text-gray-400'}`}>
+                <button key={task} className={`w-full flex items-center gap-3 rounded-xl px-3 py-2 text-left ${done[index] ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'text-gray-500 hover:bg-gray-50'}`}>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${done[index] ? 'bg-[#6C5CE7] text-white' : 'bg-gray-100 text-gray-400'}`}>
                     {index + 1}
                   </span>
                   <span className="text-sm font-medium">{task}</span>
@@ -91,11 +93,12 @@ export default function MissionTrial({ navigate, missionId }: Props) {
           <aside className="bg-white border border-gray-100 rounded-2xl p-4 h-fit shadow-sm">
             <p className="text-sm font-bold text-gray-900 mb-4">進捗</p>
             <div className="rounded-xl bg-gray-50 p-4 mb-4">
-              <p className="text-2xl font-bold text-gray-900">3 / 5</p>
+              <p className="text-2xl font-bold text-gray-900">{doneCount} / {tasks.length}</p>
               <p className="text-xs text-gray-500">タスク</p>
               <div className="h-2 bg-gray-200 rounded-full overflow-hidden mt-3">
-                <div className="h-full w-3/5 rounded-full" style={{ background: m.color }} />
+                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(doneCount / tasks.length) * 100}%`, background: m.color }} />
               </div>
+              <p className="text-xs font-bold mt-2" style={{ color: m.color }}>{doneCount === tasks.length ? '準備完了です。提出できます' : `あと${tasks.length - doneCount}ステップ`}</p>
             </div>
             <div className="space-y-3 text-sm mb-5">
               <div className="flex justify-between"><span className="text-gray-500">残り目安</span><span className="font-bold text-gray-900">{m.duration}</span></div>
@@ -114,6 +117,7 @@ export default function MissionTrial({ navigate, missionId }: Props) {
                 style={{ background: answer.length >= 10 ? '#6C5CE7' : '#D1D5DB' }}>
                 提出して振り返る
               </button>
+              {answer.length < 10 && <p className="text-xs text-gray-400 text-center">あと{10 - answer.length}文字で提出できます</p>}
             </div>
           </aside>
         </div>

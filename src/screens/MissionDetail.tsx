@@ -13,7 +13,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="explore" navigate={navigate} />
 
-      <main className="mx-auto max-w-[1200px] px-6 py-8">
+      <main className="mx-auto max-w-[1200px] px-6 py-8 pb-24 lg:pb-8">
         <button onClick={() => navigate('missionExplore')} className="text-gray-500 text-sm mb-5 block">← Trialを探す</button>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
@@ -102,8 +102,13 @@ export default function MissionDetail({ navigate, missionId }: Props) {
                 </div>
               ))}
             </div>
+            <div className="rounded-xl bg-[#EEF0FF] p-3 mb-3 space-y-1.5 text-xs text-gray-700">
+              <p><span className="text-[#6C5CE7] font-bold">✓</span> 正解はありません</p>
+              <p><span className="text-[#6C5CE7] font-bold">✓</span> 途中で保存できます</p>
+              <p><span className="text-[#6C5CE7] font-bold">✓</span> 目安は{m.duration}です</p>
+            </div>
             <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
-              このJob Trialを開始
+              {m.duration}だけ試してみる
             </button>
             <div className="flex gap-2 flex-wrap mt-4">
               {m.tags.map(t => (
@@ -113,6 +118,12 @@ export default function MissionDetail({ navigate, missionId }: Props) {
           </aside>
         </div>
       </main>
+
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-gray-100 bg-white/95 backdrop-blur px-4 py-3">
+        <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
+          {m.duration}だけ試してみる
+        </button>
+      </div>
     </div>
   )
 }

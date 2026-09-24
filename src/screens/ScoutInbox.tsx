@@ -62,6 +62,16 @@ export default function ScoutInbox({ navigate }: Props) {
           </div>
         </div>
 
+        <div className="rounded-2xl bg-[#FDF2F8] border border-[#FBCFE8] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-bold text-gray-900">Trialを増やすと、企業に見つけてもらいやすくなります</p>
+            <p className="text-xs text-gray-600 mt-1">体験の記録が増えるほど、あなたの関心や強みが企業に伝わります。</p>
+          </div>
+          <button onClick={() => navigate('missionExplore')} className="shrink-0 rounded-xl bg-[#EC4899] px-5 py-2.5 text-sm font-bold text-white">
+            Trialを探す →
+          </button>
+        </div>
+
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>

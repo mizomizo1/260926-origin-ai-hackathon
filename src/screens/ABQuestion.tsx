@@ -43,6 +43,9 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
           <div className="h-full rounded-full transition-all duration-500"
             style={{ width: `${((questionIndex + 1) / abQuestions.length) * 100}%`, background: '#6C5CE7' }} />
         </div>
+        <p className="text-xs text-gray-400 mt-2 text-right">
+          {questionIndex < abQuestions.length - 1 ? `あと${abQuestions.length - questionIndex - 1}問で結果が見られます` : 'これが最後の質問です'}
+        </p>
       </div>
 
       {/* Question */}

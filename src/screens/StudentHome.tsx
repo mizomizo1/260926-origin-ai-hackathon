@@ -25,7 +25,7 @@ export default function StudentHome({ navigate }: Props) {
               <p className="text-sm text-white/55 mt-4 max-w-xl leading-relaxed">
                 次のJob Trialで、仮説が本当に合っているかを確かめましょう。
               </p>
-              <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="mt-7 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">次のTrialを見る →</button>
+              <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="mt-7 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">{featured.duration}で次のTrialを試す →</button>
           </div>
           <div className="absolute right-8 bottom-[-32px] text-[190px] opacity-15">{featured.emoji}</div>
         </section>
@@ -35,7 +35,7 @@ export default function StudentHome({ navigate }: Props) {
             { label: '完了したTrial', value: passportData.completedMissions, suffix: '個', color: '#6C5CE7' },
             { label: '体験時間', value: passportData.totalTime, suffix: '', color: '#00B894' },
             { label: '届いたスカウト', value: scoutInvitations.length, suffix: '件', color: '#EC4899' },
-            { label: '今週の進捗', value: '2/3', suffix: '', color: '#F59E0B' },
+            { label: '今週の進捗(あと1つで達成)', value: '2/3', suffix: '', color: '#F59E0B' },
           ].map(item => (
             <div key={item.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
               <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}{item.suffix}</p>
@@ -59,12 +59,13 @@ export default function StudentHome({ navigate }: Props) {
                   <p className="text-sm text-gray-600">{currentTrial.company} · {currentTrial.duration}</p>
                   <div className="h-2 bg-white rounded-full overflow-hidden mt-3"><div className="h-full w-2/5 rounded-full bg-[#6C5CE7]" /></div>
                 </div>
-                <button onClick={() => navigate('missionTrial', { missionId: currentTrial.id })} className="px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-bold">再開</button>
+                <button onClick={() => navigate('missionTrial', { missionId: currentTrial.id })} className="px-4 py-2.5 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">続きから再開</button>
               </div>
             </div>
           </section>
 
           <aside className="space-y-4">
+            {/* 重複のため非表示: 「続きから再開」カードと同内容
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <p className="text-sm font-bold text-gray-900">進行中のTrial</p>
               <p className="text-xs text-gray-500 mt-1">{currentTrial.title}</p>
@@ -76,6 +77,7 @@ export default function StudentHome({ navigate }: Props) {
                 再開する
               </button>
             </div>
+            */}
 
             <button onClick={() => navigate('scoutInbox')} className="w-full text-left bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <p className="text-sm font-bold text-gray-900">スカウト</p>
@@ -85,6 +87,7 @@ export default function StudentHome({ navigate }: Props) {
               </span>
             </button>
 
+            {/* 重複のため非表示: 上部の数値タイルと同内容
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <p className="text-sm font-bold text-gray-900">キャリアパスポート</p>
               <div className="grid grid-cols-2 gap-3 mt-4">
@@ -98,28 +101,9 @@ export default function StudentHome({ navigate }: Props) {
                 </div>
               </div>
             </div>
+            */}
           </aside>
         </div>
-
-        <section className="mt-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">最近終えたTrial</h2>
-              <p className="text-sm text-gray-500">体験から仮説を更新していきます</p>
-            </div>
-            <button onClick={() => navigate('careerPassport')} className="text-sm font-bold text-[#6C5CE7]">Passportを見る</button>
-          </div>
-          <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
-            {passportData.experiences.slice(0, 3).map(exp => (
-              <div key={exp.id} className="snap-start shrink-0 w-[300px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <p className="text-2xl mb-3">{exp.emoji}</p>
-                <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
-                <p className="text-xs text-gray-500 mt-1">{exp.company} · {exp.date}</p>
-                <p className="text-xs text-gray-600 mt-3 line-clamp-2">{exp.memo}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         <section className="mt-8">
           <div className="flex items-center justify-between mb-4">
@@ -139,6 +123,26 @@ export default function StudentHome({ navigate }: Props) {
                 </div>
                 <p className="text-xs text-gray-600 line-clamp-2">{trial.summary}</p>
               </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">最近終えたTrial</h2>
+              <p className="text-sm text-gray-500">体験から仮説を更新していきます</p>
+            </div>
+            <button onClick={() => navigate('careerPassport')} className="text-sm font-bold text-[#6C5CE7]">キャリアパスポートを見る</button>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+            {passportData.experiences.slice(0, 3).map(exp => (
+              <div key={exp.id} className="snap-start shrink-0 w-[300px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <p className="text-2xl mb-3">{exp.emoji}</p>
+                <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
+                <p className="text-xs text-gray-500 mt-1">{exp.company} · {exp.date}</p>
+                <p className="text-xs text-gray-600 mt-3 line-clamp-2">{exp.memo}</p>
+              </div>
             ))}
           </div>
         </section>

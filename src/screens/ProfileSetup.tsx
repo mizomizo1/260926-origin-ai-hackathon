@@ -22,7 +22,7 @@ export default function ProfileSetup({ navigate }: Props) {
     <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
       <div className="mb-2">
         <div className="flex justify-between text-xs text-gray-400 mb-2">
-          <span>プロフィール設定</span><span>1/2</span>
+          <span>プロフィール設定 · あと2ステップ(約1分)</span><span>1/2</span>
         </div>
         <div className="h-1.5 bg-gray-100 rounded-full">
           <div className="h-full rounded-full bg-[#6C5CE7] transition-all" style={{ width: `${progress}%` }} />
@@ -32,7 +32,7 @@ export default function ProfileSetup({ navigate }: Props) {
       <div className="mt-8 mb-6">
         <div className="text-3xl mb-2">📝</div>
         <h2 className="text-2xl font-bold text-gray-900">基本情報を教えてください</h2>
-        <p className="text-sm text-gray-500 mt-1">後から変更できます</p>
+        <p className="text-sm text-gray-500 mt-1">入力済みの内容のままで進めます。後から変更できます</p>
       </div>
 
       <div className="space-y-4 flex-1">
@@ -60,7 +60,7 @@ export default function ProfileSetup({ navigate }: Props) {
     <div className="flex flex-col min-h-[780px] bg-white px-6 py-8">
       <div className="mb-2">
         <div className="flex justify-between text-xs text-gray-400 mb-2">
-          <span>プロフィール設定</span><span>2/2</span>
+          <span>プロフィール設定 · あと1ステップで完了</span><span>2/2</span>
         </div>
         <div className="h-1.5 bg-gray-100 rounded-full">
           <div className="h-full rounded-full bg-[#6C5CE7]" style={{ width: '100%' }} />

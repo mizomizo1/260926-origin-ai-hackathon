@@ -20,11 +20,19 @@ export default function UpdatedResult({ navigate }: Props) {
           🗺️
         </div>
         <h2 className="text-xl font-bold text-gray-900">キャリア地図を更新しました！</h2>
-        <p className="text-sm text-gray-500 mt-1">体験の結果を反映しました</p>
+        <p className="text-sm text-gray-500 mt-1">お疲れさまでした。この体験はキャリアパスポートに記録されました</p>
       </div>
       </div>
 
       <main className="mx-auto max-w-[760px] px-6 py-8 space-y-5">
+        {/* Insight */}
+        <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #00B894, #00CCA3)' }}>
+          <p className="text-xs text-white/80 mb-1">体験からの気づき</p>
+          <p className="text-sm font-semibold text-white leading-relaxed">
+            商品企画の体験を通じて、「人・雰囲気」と「やりがい」のスコアが上昇しました。チームで考える仕事があなたに合っているかもしれません。
+          </p>
+        </div>
+
         {/* Before/After comparison */}
         <div className="bg-[#F7F6FF] rounded-3xl p-4">
           <h3 className="text-sm font-bold text-gray-700 mb-4">価値観の変化</h3>
@@ -51,14 +59,6 @@ export default function UpdatedResult({ navigate }: Props) {
               )
             })}
           </div>
-        </div>
-
-        {/* Insight */}
-        <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #00B894, #00CCA3)' }}>
-          <p className="text-xs text-white/80 mb-1">体験からの気づき</p>
-          <p className="text-sm font-semibold text-white leading-relaxed">
-            商品企画の体験を通じて、「人・雰囲気」と「やりがい」のスコアが上昇しました。チームで考える仕事があなたに合っているかもしれません。
-          </p>
         </div>
 
         {/* Next recommended */}
@@ -95,7 +95,10 @@ export default function UpdatedResult({ navigate }: Props) {
       </main>
 
       <div className="mx-auto max-w-[760px] px-6 pb-10">
-        <button onClick={() => navigate('studentHome')} className="primary-btn">
+        <button onClick={() => navigate('missionDetail', { missionId: missions[2].id })} className="primary-btn">
+          次のTrialを試す
+        </button>
+        <button onClick={() => navigate('studentHome')} className="ghost-btn mt-3">
           ホームに戻る
         </button>
       </div>

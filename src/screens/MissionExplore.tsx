@@ -14,6 +14,7 @@ const shelves = [
 
 export default function MissionExplore({ navigate }: Props) {
   const [cat, setCat] = useState('すべて')
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const showShelves = cat === 'すべて'
 
   const filtered = missions.filter(m => {
@@ -49,23 +50,27 @@ export default function MissionExplore({ navigate }: Props) {
               <span className="chip bg-white/10 text-[#A29BFE]">まずはここから</span>
               <h2 className="text-2xl lg:text-3xl font-bold mt-4">まずは、あなたの仮説を<br />ひとつ試してみよう。</h2>
               <p className="text-sm text-white/60 mt-3 leading-relaxed">初めてなら基礎Trialがおすすめ。正解ではなく、考え方のクセを知るための12分です。</p>
-              <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="mt-6 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">おすすめを開く →</button>
+              <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="mt-6 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">12分で最初のTrialを試す →</button>
             </div>
             <div className="absolute -right-8 -bottom-16 text-[180px] opacity-20">🧩</div>
           </section>
         )}
 
         <section className="space-y-10">
-          {(showShelves ? shelves : [{ title: `${cat}のTrial`, hint: '条件に合うTrial', items: catalogItems }]).map(section => (
+          {(showShelves ? shelves : [{ title: `${cat}のTrial`, hint: '条件に合うTrial', items: catalogItems }]).map(section => {
+            const limit = 3
+            const collapsed = showShelves && !expanded[section.title] && section.items.length > limit
+            const visibleItems = collapsed ? section.items.slice(0, limit) : section.items
+            return (
             <div key={section.title}>
               <div className="flex items-end justify-between mb-4">
                 <div><h2 className="text-lg font-bold text-gray-900">{section.title}</h2><p className="text-xs text-gray-500 mt-1">{section.hint}</p></div>
                 <span className="text-xs text-gray-400">{section.items.length} trials <span className="hidden sm:inline">· 横にスクロール</span></span>
               </div>
               <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
-                {section.items.map(m => (
+                {visibleItems.map(m => (
                   <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
-                    className="group text-left snap-start shrink-0 w-[280px] bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:border-[#6C5CE7] transition-all">
+                    className={`group text-left snap-start shrink-0 w-[280px] bg-white border rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:border-[#6C5CE7] transition-all ${(m as any).source === 'core' ? 'border-[#6C5CE7]/40' : 'border-gray-100'}`}>
                     <div className="flex items-start justify-between gap-3 mb-7">
                       <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: m.color + '18' }}>{m.emoji}</div>
                       <span className="text-gray-300 group-hover:text-[#6C5CE7] text-xl">↗</span>
@@ -80,8 +85,14 @@ export default function MissionExplore({ navigate }: Props) {
                   </button>
                 ))}
               </div>
+              {collapsed && (
+                <button onClick={() => setExpanded(prev => ({ ...prev, [section.title]: true }))} className="mt-2 text-sm font-bold text-[#6C5CE7]">
+                  もっと見る(あと{section.items.length - limit}件)
+                </button>
+              )}
             </div>
-          ))}
+            )
+          })}
         </section>
       </main>
     </div>
