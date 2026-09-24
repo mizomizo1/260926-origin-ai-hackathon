@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Screen } from '../App'
-import { companies } from '../data/mock'
+import { companies, profileViews, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { demoTrialScout } from '../data/demoTrial'
 import { markDemoMatchSeen, useDemoTrial } from '../state/demoTrial'
 
 interface Props { navigate: (s: Screen) => void }
 
 export default function CompanyMatch({ navigate }: Props) {
+  const [filter, setFilter] = useState<'all' | 'scout' | 'viewed' | 'planning'>('all')
   const { notified } = useDemoTrial()
   const featured = companies.find(company => company.id === 'com_003') ?? companies[0]
   const remaining = companies.filter(company => company.id !== featured.id)
@@ -18,6 +20,28 @@ export default function CompanyMatch({ navigate }: Props) {
     { label: '価値観傾向', value: '人・雰囲気 / 成長を重視', color: '#00B894' },
     { label: '行動傾向', value: '相談しながら企画する場面で強み', color: '#F59E0B' },
   ]
+  const fitMap = [
+    { company: featured, score: 92, trial: 91, values: 88, x: 72, y: 18, note: 'イベント企画・集客と相性高' },
+    { company: companies.find(c => c.id === 'com_001') ?? companies[0], score: 89, trial: 78, values: 86, x: 54, y: 34, note: '商品企画への関心が近い' },
+    { company: companies.find(c => c.id === 'com_004') ?? companies[0], score: 86, trial: 84, values: 72, x: 31, y: 26, note: '改善提案・UX思考が近い' },
+    { company: companies.find(c => c.id === 'com_006') ?? companies[0], score: 84, trial: 70, values: 90, x: 73, y: 52, note: '人や成長への関心が近い' },
+    { company: companies.find(c => c.id === 'com_010') ?? companies[0], score: 81, trial: 74, values: 80, x: 49, y: 61, note: '教育・相手視点に接点' },
+    { company: companies.find(c => c.id === 'com_012') ?? companies[0], score: 77, trial: 80, values: 64, x: 23, y: 54, note: '整理力・改善思考に接点' },
+  ]
+  const scoutCompanyIds = new Set([demoTrialScout, ...scoutInvitations].map(scout => scout.companyId))
+  const viewedCompanyIds = new Set(profileViews.map(view => view.companyId))
+  const filterItems = [
+    { key: 'all' as const, label: 'すべて', count: fitMap.length },
+    { key: 'scout' as const, label: 'スカウトあり', count: fitMap.filter(item => scoutCompanyIds.has(item.company.id)).length },
+    { key: 'viewed' as const, label: '足跡あり', count: fitMap.filter(item => viewedCompanyIds.has(item.company.id)).length },
+    { key: 'planning' as const, label: '企画・イベント', count: fitMap.filter(item => /イベント|消費財|教育/.test(item.company.industry)).length },
+  ]
+  const visibleFitMap = fitMap.filter(item => {
+    if (filter === 'scout') return scoutCompanyIds.has(item.company.id)
+    if (filter === 'viewed') return viewedCompanyIds.has(item.company.id)
+    if (filter === 'planning') return /イベント|消費財|教育/.test(item.company.industry)
+    return true
+  })
 
   useEffect(() => {
     if (notified) markDemoMatchSeen()
@@ -70,6 +94,80 @@ export default function CompanyMatch({ navigate }: Props) {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-bold text-[#6C5CE7]">Fit Map</p>
+              <h2 className="mt-1 text-xl font-bold text-gray-900">相性を俯瞰する</h2>
+              <p className="mt-1 text-xs text-gray-500">右に行くほど価値観相性が高く、上に行くほどTrial結果との相性が高い企業です。</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {filterItems.map(item => (
+                <button
+                  key={item.key}
+                  onClick={() => setFilter(item.key)}
+                  className={`rounded-full px-3 py-1.5 text-[11px] font-bold transition-colors ${filter === item.key ? 'bg-[#17152B] text-white' : 'bg-[#F7F6FF] text-gray-500 hover:bg-[#EEF0FF]'}`}
+                >
+                  {item.label} <span className={filter === item.key ? 'text-white/55' : 'text-gray-400'}>{item.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative min-h-[560px] overflow-hidden rounded-3xl border border-gray-100 bg-[#F7F8FB] p-6">
+              <div className="absolute inset-6 rounded-2xl bg-white" />
+              <div className="absolute inset-x-6 top-[25%] h-px bg-gray-100" />
+              <div className="absolute inset-x-6 top-[50%] h-px bg-gray-100" />
+              <div className="absolute inset-x-6 top-[75%] h-px bg-gray-100" />
+              <div className="absolute inset-y-6 left-[25%] w-px bg-gray-100" />
+              <div className="absolute inset-y-6 left-[50%] w-px bg-gray-100" />
+              <div className="absolute inset-y-6 left-[75%] w-px bg-gray-100" />
+              <div className="absolute left-8 top-8 z-10 rounded-full bg-[#EEF0FF] px-3 py-1 text-[11px] font-bold text-[#6C5CE7]">Trial相性 100</div>
+              <div className="absolute bottom-8 right-8 z-10 rounded-full bg-[#E8FBF5] px-3 py-1 text-[11px] font-bold text-[#00B894]">価値観相性 100</div>
+              <div className="absolute bottom-8 left-8 z-10 text-[11px] font-bold text-gray-300">0</div>
+              <div className="absolute right-8 top-8 z-10 text-[11px] font-bold text-gray-300">100</div>
+              <div className="absolute right-10 top-12 z-0 rounded-2xl bg-[#F7F6FF] px-4 py-3 text-right">
+                <p className="text-xs font-bold text-[#6C5CE7]">高相性ゾーン</p>
+                <p className="mt-1 text-[11px] text-gray-400">Trialも価値観も近い</p>
+              </div>
+              <div className="absolute left-10 top-24 z-0 rounded-2xl bg-white/80 px-4 py-3">
+                <p className="text-xs font-bold text-gray-500">仕事相性型</p>
+                <p className="mt-1 text-[11px] text-gray-400">Trial結果が近い</p>
+              </div>
+              <div className="absolute bottom-14 right-16 z-0 rounded-2xl bg-white/80 px-4 py-3 text-right">
+                <p className="text-xs font-bold text-gray-500">価値観先行型</p>
+                <p className="mt-1 text-[11px] text-gray-400">文化・人が近い</p>
+              </div>
+
+              {visibleFitMap.map((item) => (
+                <button
+                  key={item.company.id}
+                  className="absolute z-20 w-[168px] rounded-2xl border border-white bg-white p-3 text-left shadow-md transition-transform hover:scale-[1.03]"
+                  style={{
+                    left: `calc(${item.x}% - 84px)`,
+                    top: `calc(${item.y}% - 42px)`,
+                    boxShadow: `0 14px 34px ${item.company.color}22`,
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-lg" style={{ background: item.company.color + '18' }}>{item.company.emoji}</span>
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-bold text-gray-900">{item.company.name}</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="text-[11px] font-bold" style={{ color: item.company.color }}>{item.score}%</span>
+                        <span className="text-[10px] text-gray-400">match</span>
+                      </div>
+                      <div className="mt-1 flex gap-1">
+                        {scoutCompanyIds.has(item.company.id) && <span className="rounded-full bg-[#FDF2F8] px-1.5 py-0.5 text-[9px] font-bold text-[#EC4899]">Scout</span>}
+                        {viewedCompanyIds.has(item.company.id) && <span className="rounded-full bg-[#EEF0FF] px-1.5 py-0.5 text-[9px] font-bold text-[#6C5CE7]">View</span>}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+        </section>
+
         {[
           { title: 'あなたに合いそうな企業', items: highFit, baseScore: 89 },
           { title: '次に見ておきたい企業', items: growing, baseScore: 78 },
@@ -92,14 +190,6 @@ export default function CompanyMatch({ navigate }: Props) {
           </section>
         ))}
 
-        <section className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100"><div><h2 className="text-base font-bold text-gray-900">企業を比べる</h2><p className="text-xs text-gray-500 mt-1">気になる企業の違いをざっくり確認</p></div><button onClick={() => navigate('missionExplore')} className="rounded-xl bg-[#6C5CE7] px-4 py-2 text-xs font-bold text-white">Trialを探す</button></div>
-          <div className="overflow-x-auto"><div className="min-w-[680px]">
-            {companies.slice(0, 5).map((company, index) => (
-              <div key={company.id} className="grid grid-cols-[1.5fr_1fr_0.8fr_0.8fr] items-center gap-4 px-5 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50"><div className="flex items-center gap-3"><span className="text-xs text-gray-400 w-4">0{index + 1}</span><span className="text-xl">{company.emoji}</span><span className="text-sm font-bold text-gray-800">{company.name}</span></div><span className="text-xs text-gray-500">{company.industry}</span><span className="text-xs text-gray-500">{company.location}</span><span className="text-xs font-bold" style={{ color: company.color }}>{[92, 89, 86, 84, 81][index]}% match</span></div>
-            ))}
-          </div></div>
-        </section>
       </main>
     </div>
   )
