@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions, mockStudent, passportData, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
 import { demoTrialScout } from '../data/demoTrial'
-import { useDemoTrial } from '../state/demoTrial'
+import { markDemoNotified, useDemoTrial } from '../state/demoTrial'
+import GuideRing from '../components/GuideRing'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -11,13 +13,45 @@ export default function StudentHome({ navigate }: Props) {
   const featured = missions.find(m => (m as any).source === 'core') ?? missions[0]
   const currentTrial = missions[1]
   const nextTrials = missions.filter(m => m.id !== featured.id).slice(0, 3)
-  const { notified } = useDemoTrial()
-  const latestScout = notified ? demoTrialScout : scoutInvitations[0]
-  const scoutCount = notified ? scoutInvitations.length + 1 : 0
+  const { evaluationComplete, notified, matchSeen } = useDemoTrial()
+  const [noticeStage, setNoticeStage] = useState(0)
+  const showDemoNotifications = notified || noticeStage > 0
+  const latestScout = showDemoNotifications ? demoTrialScout : scoutInvitations[0]
+  const scoutCount = showDemoNotifications ? scoutInvitations.length + 1 : 0
+
+  useEffect(() => {
+    if (!evaluationComplete || notified) return
+    const first = window.setTimeout(() => setNoticeStage(1), 500)
+    const second = window.setTimeout(() => {
+      setNoticeStage(2)
+      markDemoNotified()
+    }, 1300)
+    return () => {
+      window.clearTimeout(first)
+      window.clearTimeout(second)
+    }
+  }, [evaluationComplete, notified])
+
+  const spotlight = showDemoNotifications ? (matchSeen ? 'scout' : 'companies') : undefined
 
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
-      <StudentTopNav current="home" navigate={navigate} />
+      <StudentTopNav current="home" navigate={navigate} spotlight={spotlight} />
+
+      {noticeStage > 0 && (
+        <div className="fixed right-6 top-20 z-50 w-[340px] space-y-2">
+          <div className="rounded-2xl border border-[#C7D2FE] bg-white p-4 shadow-xl">
+            <p className="text-xs font-bold text-[#6C5CE7]">新しい通知</p>
+            <p className="mt-1 text-sm font-bold text-gray-900">マッチする企業が見つかりました</p>
+          </div>
+          {noticeStage > 1 && (
+            <div className="rounded-2xl border border-[#FBCFE8] bg-white p-4 shadow-xl">
+              <p className="text-xs font-bold text-[#EC4899]">新しい通知</p>
+              <p className="mt-1 text-sm font-bold text-gray-900">{demoTrialScout.companyName}からスカウトが届きました</p>
+            </div>
+          )}
+        </div>
+      )}
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
         <section className="relative overflow-hidden rounded-3xl bg-[#17152B] text-white p-7 lg:p-10 mb-6">
@@ -83,14 +117,27 @@ export default function StudentHome({ navigate }: Props) {
             </div>
             */}
 
-            {notified ? (
-            <button onClick={() => navigate('scoutInbox')} className="w-full text-left bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">スカウト</p>
-              <p className="text-xs text-gray-500 mt-1">{latestScout.companyName} · {latestScout.signal}</p>
-              <span className="inline-flex mt-3 text-xs font-bold text-[#EC4899] bg-[#FDF2F8] rounded-full px-2.5 py-1">
-                {scoutCount}件
-              </span>
-            </button>
+            {showDemoNotifications ? (
+            <div className="space-y-3">
+              <GuideRing active={!matchSeen} label="まずはこちら">
+                <button onClick={() => navigate('companyMatch')} className="w-full text-left bg-white rounded-2xl border border-[#C7D2FE] p-5 shadow-sm">
+                  <p className="text-sm font-bold text-gray-900">マッチする企業が見つかりました</p>
+                  <p className="text-xs text-gray-500 mt-1">提出結果をもとに、関心が近い企業を並べました。</p>
+                  <span className="inline-flex mt-3 text-xs font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">
+                    企業を確認
+                  </span>
+                </button>
+              </GuideRing>
+              <GuideRing active={matchSeen} label="次に確認">
+                <button onClick={() => navigate('scoutInbox')} className="w-full text-left bg-white rounded-2xl border border-[#FBCFE8] p-5 shadow-sm">
+                  <p className="text-sm font-bold text-gray-900">スカウト</p>
+                  <p className="text-xs text-gray-500 mt-1">{latestScout.companyName} · {latestScout.signal}</p>
+                  <span className="inline-flex mt-3 text-xs font-bold text-[#EC4899] bg-[#FDF2F8] rounded-full px-2.5 py-1">
+                    {scoutCount}件
+                  </span>
+                </button>
+              </GuideRing>
+            </div>
             ) : (
             <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="w-full text-left bg-[#FDF2F8] rounded-2xl border border-[#FBCFE8] p-5 shadow-sm">
               <p className="text-sm font-bold text-gray-900">💌 スカウトはまだ届いていません</p>

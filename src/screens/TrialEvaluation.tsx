@@ -1,40 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
-import { companies, missions } from '../data/mock'
-import { demoTrial, demoTrialScout } from '../data/demoTrial'
-import { markDemoNotified } from '../state/demoTrial'
+import { missions } from '../data/mock'
+import { demoTrial } from '../data/demoTrial'
+import { completeDemoEvaluation } from '../state/demoTrial'
 import StudentTopNav from '../components/StudentTopNav'
-import GuideRing from '../components/GuideRing'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
-// 提出後の流れ: 評価中 → 評価結果 → スカウト通知 → マッチ企業のレコメンド
-// phase: 0-2 評価チェック中 / 3 評価結果 / 4 スカウト到着 / 5 マッチ到着
-const timeline = [600, 1100, 1600, 2200, 5000, 7000]
+const timeline = [600, 1100, 1600, 2200]
 
 export default function TrialEvaluation({ navigate }: Props) {
   const m = missions.find(x => x.id === demoTrial.missionId) ?? missions[0]
   const [phase, setPhase] = useState(-1)
-  const [toast, setToast] = useState(false)
-  const scoutRef = useRef<HTMLDivElement>(null)
-  const matchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const timers = timeline.map((ms, i) => window.setTimeout(() => setPhase(i), ms))
     return () => timers.forEach(t => window.clearTimeout(t))
   }, [])
-
-  useEffect(() => {
-    // 届いた通知が画面外で見逃されないよう、自動でスクロールする
-    if (phase === 5) matchRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    if (phase !== 4) return
-    scoutRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    markDemoNotified()
-    setToast(true)
-    const t = window.setTimeout(() => setToast(false), 4000)
-    return () => window.clearTimeout(t)
-  }, [phase])
 
   const evaluated = phase >= 3
   const [filled, setFilled] = useState(false)
@@ -43,20 +26,27 @@ export default function TrialEvaluation({ navigate }: Props) {
     const t = window.setTimeout(() => setFilled(true), 100)
     return () => window.clearTimeout(t)
   }, [evaluated])
-  const recommended = companies.slice(0, 3)
-  const matchRates = [92, 89, 86]
-  const reveal = (visible: boolean) =>
-    `transition-all duration-500 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`
+  const chartSize = 260
+  const center = chartSize / 2
+  const maxRadius = 96
+  const angleFor = (index: number) => (Math.PI * 2 * index) / demoTrial.scores.length - Math.PI / 2
+  const point = (index: number, radius: number) => {
+    const angle = angleFor(index)
+    return `${center + Math.cos(angle) * radius},${center + Math.sin(angle) * radius}`
+  }
+  const polygon = demoTrial.scores.map((score, index) => point(index, maxRadius * (filled ? score.value : 0) / 100)).join(' ')
+  const grid = [0.25, 0.5, 0.75, 1].map(scale =>
+    demoTrial.scores.map((_, index) => point(index, maxRadius * scale)).join(' ')
+  )
+
+  const backHome = () => {
+    completeDemoEvaluation()
+    navigate('studentHome')
+  }
 
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="explore" navigate={navigate} />
-
-      {/* 通知(トースト) */}
-      <div className={`fixed top-20 right-6 z-50 w-[320px] rounded-2xl bg-white border border-[#FBCFE8] p-4 shadow-xl ${reveal(toast)}`}>
-        <p className="text-xs font-bold text-[#EC4899]">💌 新しい通知</p>
-        <p className="text-sm font-bold text-gray-900 mt-1">{demoTrialScout.companyName}からスカウトが届きました</p>
-      </div>
 
       <main className="mx-auto max-w-[760px] px-6 py-10 pb-20">
         {/* 評価中 */}
@@ -87,9 +77,40 @@ export default function TrialEvaluation({ navigate }: Props) {
 
             <section className="mt-8 rounded-2xl bg-white border border-gray-100 p-6 shadow-sm">
               <p className="text-xs font-bold text-[#6C5CE7]">「{m.title}」の評価</p>
-              <div className="mt-4 space-y-4">
+              <div className="mt-5 grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 items-center">
+                <div className="relative mx-auto">
+                  <svg width={chartSize} height={chartSize} viewBox={`0 0 ${chartSize} ${chartSize}`} role="img" aria-label="評価レーダーチャート">
+                    {grid.map((points, index) => (
+                      <polygon key={index} points={points} fill="none" stroke="#E8E6F5" strokeWidth="1" />
+                    ))}
+                    {demoTrial.scores.map((score, index) => (
+                      <g key={score.label}>
+                        <line x1={center} y1={center} x2={point(index, maxRadius).split(',')[0]} y2={point(index, maxRadius).split(',')[1]} stroke="#EEF0FF" strokeWidth="1" />
+                        <text
+                          x={center + Math.cos(angleFor(index)) * 121}
+                          y={center + Math.sin(angleFor(index)) * 121}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="fill-gray-500 text-[10px] font-bold"
+                        >
+                          {score.label}
+                        </text>
+                      </g>
+                    ))}
+                    <polygon points={polygon} fill="rgba(108,92,231,0.2)" stroke="#6C5CE7" strokeWidth="3" strokeLinejoin="round" />
+                    {demoTrial.scores.map((score, index) => {
+                      const [x, y] = point(index, maxRadius * (filled ? score.value : 0) / 100).split(',').map(Number)
+                      return <circle key={score.label} cx={x} cy={y} r="4" fill="#6C5CE7" />
+                    })}
+                  </svg>
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <p className="text-3xl font-bold text-gray-900">82</p>
+                    <p className="text-[11px] font-bold text-gray-400">総合</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
                 {demoTrial.scores.map(score => (
-                  <div key={score.label}>
+                  <div key={score.label} className="rounded-2xl bg-gray-50 px-4 py-3">
                     <div className="flex justify-between text-sm">
                       <span className="font-bold text-gray-800">{score.label}</span>
                       <span className="font-bold text-[#6C5CE7]">{score.value}</span>
@@ -100,6 +121,7 @@ export default function TrialEvaluation({ navigate }: Props) {
                     <p className="text-xs text-gray-500 mt-1.5">{score.comment}</p>
                   </div>
                 ))}
+                </div>
               </div>
               <div className="mt-5 pt-4 border-t border-gray-100">
                 <p className="text-xs font-bold text-gray-500">見えてきた強み</p>
@@ -116,48 +138,9 @@ export default function TrialEvaluation({ navigate }: Props) {
               <p className="text-sm leading-relaxed mt-2">{demoTrial.hypothesis}</p>
             </section>
 
-            {/* 通知 → レコメンド */}
-            <div className="mt-8 space-y-4">
-              <div ref={scoutRef} className={reveal(phase >= 4)}>
-                <GuideRing active={phase === 4} label="あなたの回答に企業が反応しました">
-                  <div className="rounded-2xl bg-white border-2 border-[#EC4899]/30 p-5 shadow-sm">
-                    <p className="text-xs font-bold text-[#EC4899]">💌 スカウトが届きました</p>
-                    <p className="text-base font-bold text-gray-900 mt-1">{demoTrialScout.companyName} · {demoTrialScout.role}</p>
-                    <p className="text-sm text-gray-600 mt-2 leading-relaxed">{demoTrialScout.message}</p>
-                    <button onClick={() => navigate('scoutInbox')} className="mt-4 w-full py-3 rounded-xl bg-[#EC4899] text-white text-sm font-bold">
-                      スカウトを見る →
-                    </button>
-                  </div>
-                </GuideRing>
-              </div>
-
-              <div ref={matchRef} className={reveal(phase >= 5)}>
-                <GuideRing active={phase === 5} label="評価をもとにおすすめしています">
-                  <div className="rounded-2xl bg-white border-2 border-[#6C5CE7]/30 p-5 shadow-sm">
-                    <p className="text-xs font-bold text-[#6C5CE7]">🤝 あなたにマッチする企業</p>
-                    <div className="mt-3 space-y-2">
-                      {recommended.map((company, i) => (
-                        <div key={company.id} className="flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-2.5">
-                          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: company.color + '20' }}>{company.emoji}</div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-gray-900 truncate">{company.name}</p>
-                            <p className="text-xs text-gray-500 truncate">{company.whyFit[0]}</p>
-                          </div>
-                          <span className="text-sm font-bold text-[#6C5CE7]">{matchRates[i]}%</span>
-                        </div>
-                      ))}
-                    </div>
-                    <button onClick={() => navigate('companyMatch')} className="mt-4 w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
-                      マッチした企業を見る →
-                    </button>
-                  </div>
-                </GuideRing>
-              </div>
-
-              <div className={`text-center ${reveal(phase >= 5)}`}>
-                <button onClick={() => navigate('studentHome')} className="text-sm text-gray-400">ホームへ</button>
-              </div>
-            </div>
+            <button onClick={backHome} className="mt-8 w-full rounded-2xl bg-[#6C5CE7] py-3.5 text-sm font-bold text-white shadow-sm">
+              ホームに戻る
+            </button>
           </>
         )}
       </main>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions } from '../data/mock'
@@ -7,14 +7,13 @@ import GuideRing from '../components/GuideRing'
 import { demoTrial } from '../data/demoTrial'
 import { submitDemoTrial } from '../state/demoTrial'
 
-const wait = (ms: number) => new Promise(resolve => window.setTimeout(resolve, ms))
-
 interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
 export default function MissionTrial({ navigate, missionId }: Props) {
   const m = missions.find(x => x.id === missionId) ?? missions[0]
-  const [answer, setAnswer] = useState('')
-  const [memo, setMemo] = useState('')
+  const isDemo = m.id === demoTrial.missionId
+  const [answer, setAnswer] = useState(isDemo ? demoTrial.answer : '')
+  const [memo, setMemo] = useState(isDemo ? demoTrial.memo : '')
   const [saved, setSaved] = useState(false)
 
   const save = () => { setSaved(true); setTimeout(() => setSaved(false), 2000) }
@@ -22,50 +21,10 @@ export default function MissionTrial({ navigate, missionId }: Props) {
   const done = [true, memo.length > 0, memo.length >= 30, answer.length > 0, answer.length >= 10]
   const doneCount = done.filter(Boolean).length
 
-  // 光る輪のガイド: メモ → 提出内容 → 提出ボタン の順に「次にやる場所」を示す
-  const [typingField, setTypingField] = useState<'memo' | 'answer' | null>(null)
-  // デモ入力中は、今記入している欄を光らせる
-  const guideTarget = typingField ?? (memo.length < 30 ? 'memo' : answer.length < 10 ? 'answer' : 'submit')
-
-  // デモ用 Trial: 提出物を自動で記入するモーション(発表での説明用)
-  const isDemo = m.id === demoTrial.missionId
-  const [typing, setTyping] = useState(false)
-  const typingTimer = useRef<number | undefined>(undefined)
+  const guideTarget = memo.length < 30 ? 'memo' : answer.length < 10 ? 'answer' : 'submit'
   const memoRef = useRef<HTMLTextAreaElement>(null)
   const answerRef = useRef<HTMLTextAreaElement>(null)
   const submitRef = useRef<HTMLDivElement>(null)
-  useEffect(() => () => window.clearInterval(typingTimer.current), [])
-
-  const typeInto = (text: string, set: (v: string) => void, el: HTMLTextAreaElement | null, step: number, speed: number) =>
-    new Promise<void>(resolve => {
-      let i = 0
-      typingTimer.current = window.setInterval(() => {
-        i = Math.min(i + step, text.length)
-        set(text.slice(0, i))
-        if (el) el.scrollTop = el.scrollHeight
-        if (i >= text.length) { window.clearInterval(typingTimer.current); resolve() }
-      }, speed)
-    })
-
-  const playDemo = async () => {
-    if (typing) return
-    setTyping(true)
-    setMemo('')
-    setAnswer('')
-    memoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    setTypingField('memo')
-    await wait(700)
-    await typeInto(demoTrial.memo, setMemo, memoRef.current, 1, 40)
-    await wait(500)
-    answerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    setTypingField('answer')
-    await wait(700)
-    await typeInto(demoTrial.answer, setAnswer, answerRef.current, 2, 35)
-    await wait(400)
-    submitRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    setTypingField(null)
-    setTyping(false)
-  }
 
   const submit = () => {
     if (isDemo) {
@@ -84,11 +43,9 @@ export default function MissionTrial({ navigate, missionId }: Props) {
         <button onClick={() => navigate('missionDetail', { missionId: m.id })} className="text-gray-500 text-sm mb-5 block">← Trialの詳細</button>
 
         {isDemo && (
-          <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-dashed border-[#6C5CE7]/40 bg-[#F7F6FF] px-5 py-3">
-            <p className="text-xs text-gray-600"><span className="font-bold text-[#6C5CE7]">デモ用</span> · 回答を自動で記入し、提出から評価までの流れを再生します</p>
-            <button onClick={playDemo} disabled={typing} className="shrink-0 rounded-xl bg-[#6C5CE7] px-4 py-2 text-xs font-bold text-white disabled:opacity-50">
-              {typing ? '記入中…' : '▶ デモ入力を再生'}
-            </button>
+          <div className="mb-5 rounded-2xl border border-[#C7D2FE] bg-[#EEF0FF] px-5 py-4">
+            <p className="text-xs font-bold text-[#4F46E5]">提出前の確認</p>
+            <p className="mt-1 text-sm text-gray-700">作業メモと提出内容は入力済みです。内容を確認して、そのまま提出できます。</p>
           </div>
         )}
 
@@ -124,21 +81,36 @@ export default function MissionTrial({ navigate, missionId }: Props) {
 
               <div>
                 <p className="text-sm font-bold text-gray-900 mb-3">参考資料</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {['背景メモ', '参考データ', '提出例'].map(card => (
-                    <div key={card} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
-                      <div className="text-xl mb-2">📄</div>
-                      <p className="text-sm font-bold text-gray-700">{card}</p>
-                      <p className="text-xs text-gray-400 mt-1">確認用資料</p>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                  <div className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                    <p className="text-sm font-bold text-gray-800">背景メモ</p>
+                    <p className="text-xs text-gray-600 leading-relaxed mt-2 line-clamp-6">{isDemo ? demoTrial.backgroundMemo : 'イベントの背景、参加者の声、直近の状況を確認します。'}</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                    <p className="text-sm font-bold text-gray-800">参考データ</p>
+                    <div className="mt-3 space-y-2">
+                      {(isDemo ? demoTrial.referenceData : []).map(row => (
+                        <div key={row.label} className="grid grid-cols-[44px_1fr_auto] items-center gap-2 text-xs">
+                          <span className="font-bold text-gray-700">{row.label}</span>
+                          <span className="h-2 rounded-full bg-white overflow-hidden">
+                            <span className="block h-full rounded-full bg-[#6C5CE7]" style={{ width: `${row.snsReactions}%` }} />
+                          </span>
+                          <span className="text-gray-500">新規{row.firstTimers}名</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                  <div className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                    <p className="text-sm font-bold text-gray-800">提出データ例</p>
+                    <pre className="mt-2 max-h-40 overflow-y-auto whitespace-pre-wrap font-sans text-xs leading-relaxed text-gray-600">{isDemo ? demoTrial.sampleSubmission : '提出例を確認します。'}</pre>
+                  </div>
                 </div>
               </div>
 
               <GuideRing active={guideTarget === 'memo'} label="まずは気づいたことをメモ" radius="12px">
                 <label className="text-sm font-bold text-gray-900 block mb-2">作業メモ</label>
                 <textarea
-                  ref={memoRef} readOnly={typing}
+                  ref={memoRef}
                   value={memo} onChange={e => setMemo(e.target.value)}
                   placeholder="考えをメモしておこう..."
                   rows={4}
@@ -149,7 +121,7 @@ export default function MissionTrial({ navigate, missionId }: Props) {
               <GuideRing active={guideTarget === 'answer'} label="課題の①〜④に答えよう" radius="12px">
                 <label className="text-sm font-bold text-gray-900 block mb-2">提出内容 <span className="text-red-400">*</span></label>
                 <textarea
-                  ref={answerRef} readOnly={typing}
+                  ref={answerRef}
                   value={answer} onChange={e => setAnswer(e.target.value)}
                   placeholder="ここに回答を入力してください..."
                   rows={9}
@@ -181,12 +153,12 @@ export default function MissionTrial({ navigate, missionId }: Props) {
                 {saved ? '✓ 保存済み' : '保存する'}
               </button>
               <div ref={submitRef} className="pt-2">
-                <GuideRing active={guideTarget === 'submit' && !typing} label="準備完了！提出しよう" radius="12px">
+                <GuideRing active={guideTarget === 'submit'} label="準備完了！提出しよう" radius="12px">
                   <button
                     onClick={submit}
-                    disabled={answer.length < 10 || typing}
+                    disabled={answer.length < 10}
                     className="w-full py-2.5 rounded-xl text-white text-sm font-bold transition-all"
-                    style={{ background: answer.length >= 10 && !typing ? '#6C5CE7' : '#D1D5DB' }}>
+                    style={{ background: answer.length >= 10 ? '#6C5CE7' : '#D1D5DB' }}>
                     {isDemo ? '提出して評価を見る' : '提出して振り返る'}
                   </button>
                 </GuideRing>

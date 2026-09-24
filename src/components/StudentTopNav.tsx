@@ -1,10 +1,12 @@
 import { Screen } from '../App'
 import { mockStudent, scoutInvitations } from '../data/mock'
 import { useDemoTrial } from '../state/demoTrial'
+import GuideRing from './GuideRing'
 
 interface Props {
   current: 'home' | 'explore' | 'passport' | 'companies' | 'scout' | 'profile'
   navigate: (s: Screen) => void
+  spotlight?: 'companies' | 'scout'
 }
 
 const navItems: { key: Props['current']; label: string; screen: Screen }[] = [
@@ -15,7 +17,7 @@ const navItems: { key: Props['current']; label: string; screen: Screen }[] = [
   { key: 'scout', label: 'スカウト', screen: 'scoutInbox' },
 ]
 
-export default function StudentTopNav({ current, navigate }: Props) {
+export default function StudentTopNav({ current, navigate, spotlight }: Props) {
   // 通知は Trial を提出して評価が届いた後に来る
   const { notified } = useDemoTrial()
   return (
@@ -30,15 +32,25 @@ export default function StudentTopNav({ current, navigate }: Props) {
         </button>
 
         <nav className="hidden md:flex items-center gap-1">
-          {navItems.map(item => (
-            <button
-              key={item.key}
-              onClick={() => navigate(item.screen)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${current === item.key ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map(item => {
+            const button = (
+              <button
+                onClick={() => navigate(item.screen)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${current === item.key ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
+              >
+                {item.label}
+              </button>
+            )
+            return (
+              <div key={item.key}>
+                {spotlight === item.key ? (
+                  <GuideRing active label={item.key === 'companies' ? 'まずマッチ企業を確認' : '次にスカウトを確認'} radius="10px">
+                    {button}
+                  </GuideRing>
+                ) : button}
+              </div>
+            )
+          })}
         </nav>
 
         <div className="flex items-center gap-3">

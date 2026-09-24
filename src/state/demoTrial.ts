@@ -4,10 +4,12 @@ import { useSyncExternalStore } from 'react'
 // 再読み込みでリセットされる(デモを毎回最初からやり直せるようにするため)。
 type DemoTrialState = {
   answer: string
-  notified: boolean // 評価が終わり、スカウト・マッチの通知が届いたか
+  evaluationComplete: boolean
+  notified: boolean // 評価後、ホームでスカウト・マッチの通知が届いたか
+  matchSeen: boolean
 }
 
-let state: DemoTrialState = { answer: '', notified: false }
+let state: DemoTrialState = { answer: '', evaluationComplete: false, notified: false, matchSeen: false }
 const listeners = new Set<() => void>()
 
 const subscribe = (listener: () => void) => {
@@ -20,8 +22,10 @@ const update = (next: Partial<DemoTrialState>) => {
   listeners.forEach(listener => listener())
 }
 
-export const submitDemoTrial = (answer: string) => update({ answer })
+export const submitDemoTrial = (answer: string) => update({ answer, evaluationComplete: false, notified: false, matchSeen: false })
+export const completeDemoEvaluation = () => update({ evaluationComplete: true })
 export const markDemoNotified = () => { if (!state.notified) update({ notified: true }) }
+export const markDemoMatchSeen = () => { if (!state.matchSeen) update({ matchSeen: true }) }
 
 export function useDemoTrial() {
   return useSyncExternalStore(subscribe, () => state)

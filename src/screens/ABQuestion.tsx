@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Screen } from '../App'
 import { abQuestions } from '../data/mock'
 
@@ -13,7 +13,6 @@ interface Props {
 export default function ABQuestion({ navigate, questionIndex, answers, setAnswers, setQuestionIndex }: Props) {
   const [selected, setSelected] = useState<'a' | 'b' | null>(null)
   const q = abQuestions[questionIndex]
-  const progress = ((questionIndex) / abQuestions.length) * 100
 
   const choose = (choice: 'a' | 'b') => {
     if (selected) return
@@ -56,43 +55,55 @@ export default function ABQuestion({ navigate, questionIndex, answers, setAnswer
 
       {/* Cards */}
       <div className="flex-1 flex flex-col gap-4">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 sm:gap-3">
         {(['a', 'b'] as const).map(choice => {
           const card = q[choice]
           const isSelected = selected === choice
           return (
-            <button
-              key={choice}
-              onClick={() => choose(choice)}
-              disabled={selected !== null}
-              className="w-full rounded-3xl p-5 text-left transition-all duration-200 active:scale-[0.98]"
-              style={{
-                border: isSelected ? '2.5px solid #6C5CE7' : '2px solid #E8E6F5',
-                background: isSelected ? '#EEF0FF' : 'white',
-                transform: isSelected ? 'scale(0.98)' : 'scale(1)',
-                boxShadow: isSelected ? '0 14px 30px rgba(108,92,231,0.18)' : '0 2px 10px rgba(0,0,0,0.04)',
-              }}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
-                  style={{ background: choice === 'a' ? '#6C5CE7' : '#00B894' }}>
-                  {choice.toUpperCase()}
+            <Fragment key={choice}>
+              {choice === 'b' && (
+                <div className="flex items-center justify-center" aria-hidden="true">
+                  <span className="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-bold text-gray-400">or</span>
                 </div>
-                <span className="text-xs font-medium text-gray-400">{choice === 'a' ? 'タイプA' : 'タイプB'}</span>
+              )}
+              <button
+                onClick={() => choose(choice)}
+                disabled={selected !== null}
+                className="w-full rounded-3xl p-4 sm:p-5 text-left transition-all duration-200 active:scale-[0.98]"
+                style={{
+                  border: isSelected ? `2.5px solid ${choice === 'a' ? '#6C5CE7' : '#00B894'}` : '2px solid #E8E6F5',
+                  background: isSelected ? (choice === 'a' ? '#EEF0FF' : '#ECFDF7') : 'white',
+                  transform: isSelected ? 'scale(0.98)' : 'scale(1)',
+                  boxShadow: isSelected ? '0 14px 30px rgba(108,92,231,0.18)' : '0 2px 10px rgba(0,0,0,0.04)',
+                }}
+              >
+                <div className="mb-4 flex items-center justify-between gap-2">
+                  <div>
+                    <div className="text-[11px] font-bold text-gray-400">{choice === 'a' ? '選択肢 A' : '選択肢 B'}</div>
+                    <div className="mt-1 text-sm font-bold" style={{ color: choice === 'a' ? '#6C5CE7' : '#00B894' }}>
+                      {choice === 'a' ? 'Aに近い' : 'Bに近い'}
+                    </div>
+                  </div>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white"
+                    style={{ background: choice === 'a' ? '#6C5CE7' : '#00B894' }}>
+                    {choice.toUpperCase()}
+                  </div>
+                </div>
+                <ul className="space-y-3">
+                  {card.points.map((pt, i) => (
+                    <li key={i} className="rounded-2xl bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700">
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
                 {isSelected && (
-                  <span className="ml-auto text-xs font-bold text-[#6C5CE7]">選択中</span>
+                  <p className="mt-4 text-center text-xs font-bold" style={{ color: choice === 'a' ? '#6C5CE7' : '#00B894' }}>選択中</p>
                 )}
-              </div>
-              <ul className="space-y-2">
-                {card.points.map((pt, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="text-[#6C5CE7] mt-0.5">•</span>
-                    <span>{pt}</span>
-                  </li>
-                ))}
-              </ul>
-            </button>
+              </button>
+            </Fragment>
           )
         })}
+        </div>
 
         <button
           onClick={() => choose(Math.random() > 0.5 ? 'a' : 'b')}

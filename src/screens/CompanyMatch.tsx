@@ -1,17 +1,26 @@
+import { useEffect } from 'react'
 import { Screen } from '../App'
 import { companies } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { markDemoMatchSeen, useDemoTrial } from '../state/demoTrial'
 
 interface Props { navigate: (s: Screen) => void }
 
 export default function CompanyMatch({ navigate }: Props) {
-  const featured = companies[0]
-  const highFit = companies.slice(1, 5)
-  const growing = companies.slice(4)
+  const { notified } = useDemoTrial()
+  const featured = companies.find(company => company.id === 'com_003') ?? companies[0]
+  const remaining = companies.filter(company => company.id !== featured.id)
+  const highFit = remaining.slice(0, 5)
+  const growing = remaining.slice(5)
+  const scoreFor = (index: number, base: number) => Math.max(base - index * 3, 68)
+
+  useEffect(() => {
+    if (notified) markDemoMatchSeen()
+  }, [notified])
 
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
-      <StudentTopNav current="companies" navigate={navigate} />
+      <StudentTopNav current="companies" navigate={navigate} spotlight={notified ? 'scout' : undefined} />
       {/* Header */}
       <div className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-[1200px] px-6 py-8">
@@ -47,15 +56,15 @@ export default function CompanyMatch({ navigate }: Props) {
         </section>
 
         {[
-          { title: 'あなたに合いそうな企業', items: highFit, scores: [89, 86, 84, 81] },
-          { title: '次に見ておきたい企業', items: growing, scores: [79, 77, 74, 71] },
+          { title: 'あなたに合いそうな企業', items: highFit, baseScore: 89 },
+          { title: '次に見ておきたい企業', items: growing, baseScore: 78 },
         ].map(section => (
           <section key={section.title}>
             <div className="flex items-end justify-between mb-4"><div><h2 className="text-lg font-bold text-gray-900">{section.title}</h2><p className="text-xs text-gray-500 mt-1">体験結果から優先表示しています</p></div><span className="text-xs text-gray-400">横にスクロール →</span></div>
             <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
               {section.items.map((company, index) => (
                 <div key={company.id} className="snap-start shrink-0 w-[280px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:-translate-y-1 transition-transform" style={{ borderTop: `4px solid ${company.color}` }}>
-                  <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-3 min-w-0"><div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shrink-0" style={{ background: company.color + '18' }}>{company.emoji}</div><div className="min-w-0"><p className="font-bold text-gray-900 truncate">{company.name}</p><p className="text-xs text-gray-500 truncate">{company.industry}</p></div></div><span className="text-sm font-bold" style={{ color: company.color }}>{section.scores[index]}%</span></div>
+                  <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-3 min-w-0"><div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shrink-0" style={{ background: company.color + '18' }}>{company.emoji}</div><div className="min-w-0"><p className="font-bold text-gray-900 truncate">{company.name}</p><p className="text-xs text-gray-500 truncate">{company.industry}</p></div></div><span className="text-sm font-bold" style={{ color: company.color }}>{scoreFor(index, section.baseScore)}%</span></div>
                   <p className="text-sm text-gray-600 leading-relaxed mt-6 line-clamp-2 min-h-[42px]">{company.whyFit[0]}</p>
                   <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400"><span>{company.location}</span><span>{company.openMissions} Trial</span></div>
                 </div>
