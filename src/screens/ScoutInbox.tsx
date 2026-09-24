@@ -106,6 +106,9 @@ export default function ScoutInbox({ navigate }: Props) {
                 <p className="text-xs font-bold text-[#F9A8D4]">企業からの反応が増えています</p>
                 <h2 className="mt-2 text-2xl font-bold">あなたのTrialを見た企業が動き始めました</h2>
                 <p className="mt-3 max-w-xl text-sm leading-7 text-white/55">提出内容やプロフィールを見た企業が、スカウトや閲覧として反応しています。</p>
+                <button onClick={() => navigate('missionExplore')} className="mt-5 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-bold text-white hover:bg-white/15">
+                  Trialを増やして見つけてもらう →
+                </button>
               </div>
               <div className="flex min-w-[170px] justify-end -space-x-4 overflow-visible pr-1">
                 {interestedCompanies.map((company, index) => (
@@ -154,70 +157,62 @@ export default function ScoutInbox({ navigate }: Props) {
           </aside>
         </section>
 
-        <div className="rounded-2xl bg-[#FDF2F8] border border-[#FBCFE8] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <section className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_340px]">
           <div>
-            <p className="text-sm font-bold text-gray-900">Trialを増やすと、企業に見つけてもらいやすくなります</p>
-            <p className="text-xs text-gray-600 mt-1">体験の記録が増えるほど、あなたの関心や強みが企業に伝わります。</p>
-          </div>
-          <button onClick={() => navigate('missionExplore')} className="shrink-0 rounded-xl bg-[#EC4899] px-5 py-2.5 text-sm font-bold text-white">
-            Trialを探す →
-          </button>
-        </div>
-
-        <section>
-          <div className="flex items-end justify-between mb-3">
-            <div>
-              <p className="text-xs font-bold text-[#EC4899]">新着のスカウト</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {scouts.map(({ scout, company }) => (
-              <div key={scout.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:-translate-y-1 transition-transform">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
-                    style={{ background: company.color + '18' }}>
-                    {company.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-bold text-[#EC4899] bg-[#FDF2F8] rounded-full px-2 py-0.5">{scout.status}</span>
-                      <span className="text-[10px] text-gray-400">{scout.receivedAt}</span>
-                    </div>
-                    <p className="text-sm font-bold text-gray-900 truncate">{scout.companyName}</p>
-                    <p className="text-xs text-gray-500 truncate">{scout.role}</p>
-                  </div>
-                </div>
-                <div className="rounded-2xl bg-[#F7F6FF] px-3 py-2.5 my-3">
-                  <p className="text-xs font-bold text-[#6C5CE7]">{scout.signal}</p>
-                </div>
-                <div className="flex gap-2 mt-4">
-                  <button className="flex-1 py-2 rounded-full bg-[#6C5CE7] text-white text-xs font-bold">詳細を見る</button>
-                  <button className="flex-1 py-2 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">保存</button>
-                </div>
+            <div className="mb-3 flex items-end justify-between">
+              <div>
+                <p className="text-xs font-bold text-[#EC4899]">新着のスカウト</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
               </div>
-            ))}
-          </div>
-        </section>
+              <span className="text-xs font-bold text-gray-400">{scouts.length}件</span>
+            </div>
 
-        <section>
-          <div className="flex items-end justify-between mb-3">
-            <div>
-              <p className="text-xs font-bold text-[#6C5CE7]">最近の動き</p><h3 className="text-xl font-bold text-gray-900 mt-1">あなたをチェックした会社</h3>
+            <div className="space-y-4">
+              {scouts.map(({ scout, company }, index) => (
+                <div key={scout.id} className={`bg-white rounded-3xl border p-5 shadow-sm hover:-translate-y-1 transition-transform ${index === 0 ? 'border-[#FBCFE8]' : 'border-gray-100'}`}>
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+                        style={{ background: company.color + '18' }}>
+                        {company.emoji}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-bold text-[#EC4899] bg-[#FDF2F8] rounded-full px-2 py-0.5">{scout.status}</span>
+                          {index === 0 && <span className="text-[10px] font-bold text-white bg-[#EC4899] rounded-full px-2 py-0.5">NEW</span>}
+                          <span className="text-[10px] text-gray-400">{scout.receivedAt}</span>
+                        </div>
+                        <p className="text-base font-bold text-gray-900 truncate">{scout.companyName}</p>
+                        <p className="text-xs text-gray-500 truncate">{scout.role}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 sm:shrink-0">
+                      <button className="rounded-xl bg-[#6C5CE7] px-4 py-2 text-xs font-bold text-white">詳細</button>
+                      <button className="rounded-xl bg-gray-100 px-4 py-2 text-xs font-bold text-gray-600">保存</button>
+                    </div>
+                  </div>
+                  <div className="mt-4 rounded-2xl bg-[#F7F6FF] px-4 py-3">
+                    <p className="text-xs font-bold text-[#6C5CE7]">{scout.signal}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-gray-600">{scout.message}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-            <div className="space-y-4">
+
+          <aside>
+            <div className="mb-3">
+              <p className="text-xs font-bold text-[#6C5CE7]">足跡</p>
+              <h3 className="mt-1 text-lg font-bold text-gray-900">あなたをチェックした会社</h3>
+            </div>
+            <div className="rounded-3xl border border-gray-100 bg-white p-4 shadow-sm">
+            <div className="space-y-3">
               {views.map((view, index) => (
-                <div key={view.id} className="relative flex gap-3">
-                  {index < views.length - 1 && (
-                    <div className="absolute left-[17px] top-9 bottom-[-16px] w-px bg-gray-100" />
-                  )}
+                <div key={view.id} className="flex gap-3 rounded-2xl bg-gray-50 px-3 py-2.5">
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0 z-10"
                     style={{ background: view.company.color + '18' }}>
                     {view.company.emoji}
                   </div>
-                  <div className="flex-1 min-w-0 pb-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-sm font-bold text-gray-800 truncate">{view.companyName}</p>
                       <span className="text-[11px] text-gray-400 flex-shrink-0">{view.viewedAt}</span>
@@ -228,6 +223,7 @@ export default function ScoutInbox({ navigate }: Props) {
               ))}
             </div>
           </div>
+          </aside>
         </section>
       </main>
     </div>
