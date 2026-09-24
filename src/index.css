@@ -123,9 +123,9 @@ input, textarea, select {
 }
 
 .company-sidebar {
-  width: 240px;
+  width: 260px;
   min-height: 100vh;
-  background: #1A1A2E;
+  background: #17152B;
   color: white;
   flex-shrink: 0;
 }
@@ -135,7 +135,7 @@ input, textarea, select {
   align-items: center;
   gap: 10px;
   padding: 12px 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   color: rgba(255,255,255,0.6);
   font-weight: 500;
@@ -147,7 +147,7 @@ input, textarea, select {
   text-align: left;
 }
 .company-sidebar-item:hover { color: white; background: rgba(255,255,255,0.08); }
-.company-sidebar-item.active { color: white; background: #6C5CE7; }
+.company-sidebar-item.active { color: #17152B; background: white; }
 
 .kpi-card {
   background: white;

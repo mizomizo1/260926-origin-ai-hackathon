@@ -16,16 +16,16 @@ export default function CompanySidebar({ current, navigate }: Props) {
     <div className="company-sidebar flex flex-col p-4">
       {/* Logo */}
       <div className="flex items-center gap-3 px-2 py-4 mb-6">
-        <div className="w-8 h-8 rounded-lg bg-[#6C5CE7] flex items-center justify-center text-lg">🧭</div>
+        <div className="w-9 h-9 rounded-xl bg-[#6C5CE7] flex items-center justify-center text-sm font-bold text-white">CC</div>
         <div>
-          <p className="text-white text-sm font-bold leading-tight">Career Compass</p>
+          <p className="text-white text-sm font-bold leading-tight">Career Compass Trial</p>
           <p className="text-white/50 text-xs">企業ダッシュボード</p>
         </div>
       </div>
 
       {/* Company */}
       <div className="flex items-center gap-2 px-2 mb-6 pb-6 border-b border-white/10">
-        <div className="w-8 h-8 rounded-full bg-[#6C5CE7] flex items-center justify-center text-sm">✨</div>
+        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-lg">✨</div>
         <div>
           <p className="text-white text-xs font-semibold">株式会社Lumo</p>
           <p className="text-white/40 text-xs">消費財 · 東京</p>

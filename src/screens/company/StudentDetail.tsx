@@ -1,119 +1,135 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
-import { companyScoutPipeline, companyStudents, passportData } from '../../data/mock'
+import { companyCoreTrialInsights, companyScoutPipeline, companyStudents, passportData, preferenceLabels } from '../../data/mock'
 
 interface Props { navigate: (s: Screen) => void; studentId?: string }
 
 export default function StudentDetail({ navigate, studentId }: Props) {
-  const s = companyStudents.find(x => x.id === studentId) ?? companyStudents[0]
-  const scout = companyScoutPipeline.find(item => item.studentId === s.id)
-  const topFit = s.fitTags.slice(0, 2).join('・')
+  const student = companyStudents.find(item => item.id === studentId) ?? companyStudents[0]
+  const scout = companyScoutPipeline.find(item => item.studentId === student.id)
+  const values = preferenceLabels.map(label => ({
+    ...label,
+    value: (student.preferenceScores as any)[label.key] as number,
+  })).sort((a, b) => b.value - a.value)
+  const topValue = values[0]
+  const experiences = passportData.experiences.slice(0, Math.min(student.missionCompleted, passportData.experiences.length))
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#F7F8FB]">
       <CompanySidebar current="studentList" navigate={navigate} />
 
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="mb-6">
-          <button onClick={() => navigate('studentList')} className="text-gray-400 text-sm mb-4 block">← 学生一覧</button>
-        </div>
+      <main className="flex-1 overflow-y-auto px-8 py-8">
+        <button onClick={() => navigate('studentList')} className="mb-5 text-sm font-bold text-gray-400 hover:text-gray-600">← 学生一覧</button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Profile */}
-          <div className="space-y-5">
-            <div className="bg-white rounded-2xl p-6 text-center">
-              <div className="w-20 h-20 rounded-full bg-[#6C5CE7] text-white text-2xl font-bold flex items-center justify-center mx-auto mb-3">
-                {s.name[0]}
-              </div>
-              <h2 className="text-xl font-bold text-gray-900">{s.name}</h2>
-              <p className="text-sm text-gray-500">{s.schoolYear}</p>
-              <div className="mt-3">
-                <span className="chip text-sm px-3 py-1"
-                  style={s.status === 'スカウト候補' ? { background: '#EEF0FF', color: '#6C5CE7' } : { background: '#F3F4F6', color: '#6B7280' }}>
-                  {s.status}
-                </span>
-              </div>
-              <div className="flex gap-2 justify-center mt-3 flex-wrap">
-                {s.fitTags.map(t => (
-                  <span key={t} className="text-xs bg-gray-100 text-gray-600 rounded-full px-2 py-0.5">{t}</span>
-                ))}
+        <section className="mb-6 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-4">
+              <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#6C5CE7] text-2xl font-bold text-white">{student.name[0]}</span>
+              <div>
+                <p className="text-sm font-bold text-[#6C5CE7]">Student Analysis</p>
+                <h1 className="mt-1 text-3xl font-bold text-gray-900">{student.name}</h1>
+                <p className="mt-1 text-sm text-gray-500">{student.schoolYear} · {student.faculty}</p>
               </div>
             </div>
+            <div className="grid grid-cols-3 gap-2 lg:w-[420px]">
+              {[
+                { label: '完了Trial', value: student.missionCompleted },
+                { label: '満足度', value: student.satisfaction },
+                { label: '興味度', value: student.interestLevel },
+              ].map(item => (
+                <div key={item.label} className="rounded-2xl bg-[#F7F8FB] px-3 py-3 text-center">
+                  <p className="text-lg font-bold text-gray-900">{item.value}</p>
+                  <p className="mt-0.5 text-[11px] font-bold text-gray-400">{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-            <div className="bg-white rounded-2xl p-5">
-              <h3 className="text-sm font-bold text-gray-900 mb-3">確認ポイント</h3>
-              <div className="space-y-2">
-                {[
-                  { label: 'Mission完了', value: `${s.missionCompleted}個` },
-                  { label: '興味度', value: s.interestLevel },
-                  { label: '候補理由', value: topFit },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between text-sm py-1 border-b border-gray-50 last:border-0">
-                    <span className="text-gray-500">{label}</span>
-                    <span className="font-semibold text-gray-800">{value}</span>
+        <section className="grid grid-cols-1 gap-5 xl:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-5">
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+              <p className="text-xs font-bold text-[#6C5CE7]">価値観サマリ</p>
+              <h2 className="mt-2 text-xl font-bold text-gray-900">{topValue.shortLabel}を重視する傾向</h2>
+              <div className="mt-5 space-y-3">
+                {values.map(item => (
+                  <div key={item.key}>
+                    <div className="mb-1 flex items-center justify-between text-xs">
+                      <span className="font-bold text-gray-700">{item.shortLabel}</span>
+                      <span className="font-mono font-bold text-[#6C5CE7]">{item.value}</span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-[#EEF0FF]">
+                      <div className="h-full rounded-full bg-[#6C5CE7]" style={{ width: `${item.value}%` }} />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Scout CTA */}
-            <button onClick={() => navigate('companyScouts')} className="w-full py-3.5 rounded-2xl text-white font-bold text-sm"
-              style={{ background: 'linear-gradient(135deg, #6C5CE7, #A29BFE)', boxShadow: '0 8px 20px rgba(108,92,231,0.3)' }}>
-              💌 スカウトを作成
-            </button>
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+              <p className="text-xs font-bold text-[#EC4899]">Scout Reason</p>
+              <h2 className="mt-2 text-xl font-bold text-gray-900">スカウト判断</h2>
+              <div className="mt-4 rounded-2xl bg-[#FDF2F8] p-4">
+                <p className="text-sm font-bold text-gray-900">{scout?.fitReason ?? `${student.fitTags.slice(0, 2).join('・')}が自社Missionに近い`}</p>
+                <p className="mt-2 text-xs leading-relaxed text-gray-500">学生側には「企業がどこを見たか」として自然に伝わる情報です。</p>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {(scout?.viewed ?? ['Mission履歴', '価値観サマリ']).map(item => (
+                  <span key={item} className="rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-bold text-gray-500">{item}</span>
+                ))}
+              </div>
+              <button onClick={() => navigate('companyScouts')} className="mt-5 w-full rounded-xl bg-[#17152B] py-3 text-sm font-bold text-white hover:bg-[#24213A]">
+                スカウト管理で確認
+              </button>
+            </div>
           </div>
 
-          {/* Right: Details */}
-          <div className="lg:col-span-2 space-y-5">
-            {/* Scout rationale */}
-            <div className="bg-white rounded-2xl p-6">
-              <div className="flex items-start justify-between mb-4">
+          <div className="space-y-5">
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex items-end justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-gray-900">スカウト判断</h3>
-                  <p className="text-xs text-gray-500 mt-1">学生側には「関心のきっかけ」として表示されます</p>
+                  <p className="text-xs font-bold text-[#6C5CE7]">Trial Log</p>
+                  <h2 className="mt-1 text-xl font-bold text-gray-900">体験履歴と提出の手がかり</h2>
                 </div>
-                <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{scout?.status ?? '候補'}</span>
+                <span className="rounded-full bg-[#EEF0FF] px-2.5 py-1 text-xs font-bold text-[#6C5CE7]">{student.status}</span>
               </div>
-              <div className="rounded-2xl bg-[#F7F6FF] p-4 mb-4">
-                <p className="text-xs font-bold text-[#6C5CE7] mb-1">候補理由</p>
-                <p className="text-sm text-gray-800 font-semibold">{scout?.fitReason ?? `${topFit}が自社Missionと近い`}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {(scout?.viewed ?? ['Mission履歴', '価値観サマリ']).map(item => (
-                  <div key={item} className="bg-gray-50 rounded-xl p-3">
-                    <p className="text-xs text-gray-500">確認済み</p>
-                    <p className="text-sm font-bold text-gray-800 mt-1">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Mission history */}
-            <div className="bg-white rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-4">完了Mission</h3>
               <div className="space-y-3">
-                {passportData.experiences.slice(0, s.missionCompleted).map(exp => (
-                  <div key={exp.id} className="bg-gray-50 rounded-xl p-4">
+                {experiences.map(exp => (
+                  <div key={exp.id} className="rounded-2xl bg-[#F7F8FB] p-4">
                     <div className="flex items-start gap-3">
-                      <span className="text-2xl">{exp.emoji}</span>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900">{exp.mission}</p>
-                        <p className="text-xs text-gray-500">{exp.company} · {exp.date}</p>
-                        <div className="flex gap-3 mt-1">
-                          <span className="text-xs text-[#F59E0B]">満足度 {exp.satisfaction}</span>
-                          <span className="text-xs text-[#6C5CE7]">継続意欲 {exp.willingness}</span>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xl">{exp.emoji}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
+                        <p className="mt-0.5 text-xs text-gray-500">{exp.company} · {exp.date}</p>
+                        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-600">{exp.memo}</p>
+                        <div className="mt-3 flex gap-2">
+                          <span className="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-[#F59E0B]">満足度 {exp.satisfaction}</span>
+                          <span className="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-[#6C5CE7]">継続 {exp.willingness}</span>
                         </div>
-                        {exp.memo && (
-                          <p className="text-xs text-gray-500 italic mt-2">"{exp.memo}"</p>
-                        )}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+              <p className="text-xs font-bold text-[#F59E0B]">Core Trial Signals</p>
+              <h2 className="mt-1 text-xl font-bold text-gray-900">基礎Trialで見る補助シグナル</h2>
+              <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+                {companyCoreTrialInsights.map(trial => (
+                  <div key={trial.id} className="rounded-2xl bg-[#F7F8FB] p-4">
+                    <p className="min-h-[38px] text-sm font-bold leading-snug text-gray-900">{trial.title}</p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {trial.strongSignals.slice(0, 2).map(signal => <span key={signal} className="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-gray-500">{signal}</span>)}
+                    </div>
+                    <p className="mt-3 text-xs font-bold text-[#F59E0B]">候補接点 {trial.scoutFit}人</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
     </div>
   )

@@ -1,157 +1,143 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
-import { companyStudents, companyMissions, companyScoutPipeline } from '../../data/mock'
+import { companyCoreTrialInsights, companyMissions, companyScoutPipeline, companyStudents } from '../../data/mock'
 
 interface Props { navigate: (s: Screen) => void }
 
-const kpis = [
-  { label: '公開中Mission', value: 2, delta: '+1', color: '#6C5CE7', bg: '#EEF0FF', icon: '📋' },
-  { label: '試行数（今月）', value: 124, delta: '+18%', color: '#00B894', bg: '#E8FBF5', icon: '▶️' },
-  { label: '完了数', value: 97, delta: '+12%', color: '#F59E0B', bg: '#FEF3C7', icon: '✅' },
-  { label: '興味あり数', value: 26, delta: '+5', color: '#EC4899', bg: '#FDF2F8', icon: '❤️' },
-  { label: 'スカウト候補', value: 8, delta: '+2', color: '#3B82F6', bg: '#EFF6FF', icon: '⭐' },
-]
-
 export default function CompanyDashboard({ navigate }: Props) {
+  const published = companyMissions.filter(mission => mission.status === '公開中')
+  const totalParticipants = companyMissions.reduce((sum, mission) => sum + mission.participants, 0)
+  const scoutCandidates = companyStudents.filter(student => student.status === 'スカウト候補')
+  const topStudents = [...companyStudents].sort((a, b) => b.satisfaction - a.satisfaction).slice(0, 4)
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#F7F8FB]">
       <CompanySidebar current="companyDashboard" navigate={navigate} />
 
-      <main className="flex-1 p-8 overflow-y-auto">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <p className="text-sm text-gray-500">2025年4月14日 月曜日</p>
-            <h1 className="text-2xl font-bold text-gray-900">ダッシュボード</h1>
+      <main className="flex-1 overflow-y-auto px-8 py-8">
+        <section className="mb-6 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-sm font-bold text-[#6C5CE7]">企業ホーム</p>
+              <h1 className="mt-1 text-3xl font-bold text-gray-900">株式会社Lumoの採用Trial</h1>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">自社Mission、基礎Trialの反応、学生の価値観・提出記録を見ながら候補者を見つけます。</p>
+            </div>
+            <button onClick={() => navigate('createMission')} className="rounded-xl bg-[#17152B] px-5 py-3 text-sm font-bold text-white hover:bg-[#24213A]">
+              Mission作成
+            </button>
           </div>
-          <button onClick={() => navigate('createMission')}
-            className="px-5 py-2.5 rounded-xl text-white text-sm font-semibold"
-            style={{ background: '#6C5CE7' }}>
-            + Mission作成
-          </button>
-        </div>
+        </section>
 
-        {/* KPIs */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          {kpis.map(({ label, value, delta, color, bg, icon }) => (
-            <div key={label} className="kpi-card">
-              <div className="flex justify-between items-start mb-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style={{ background: bg }}>
-                  {icon}
-                </div>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: bg, color }}>
-                  {delta}
-                </span>
+        <section className="mb-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
+          {[
+            { label: '公開中Mission', value: published.length, note: `${companyMissions.length}件を管理`, color: '#6C5CE7', bg: '#EEF0FF' },
+            { label: '体験した学生', value: totalParticipants, note: '自社Mission累計', color: '#00B894', bg: '#E8FBF5' },
+            { label: 'スカウト候補', value: scoutCandidates.length, note: '高相性の学生', color: '#EC4899', bg: '#FDF2F8' },
+            { label: '基礎Trial接点', value: companyCoreTrialInsights.reduce((sum, trial) => sum + trial.scoutFit, 0), note: '自社候補に近い反応', color: '#F59E0B', bg: '#FEF3C7' },
+          ].map(item => (
+            <div key={item.label} className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
+              <div className="mb-4 flex items-center justify-between">
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-bold" style={{ background: item.bg, color: item.color }}>{item.value}</span>
+                <span className="text-[11px] font-bold text-gray-400">{item.note}</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{value}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+              <p className="text-sm font-bold text-gray-900">{item.label}</p>
             </div>
           ))}
-        </div>
+        </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Popular missions */}
-          <div className="bg-white rounded-2xl p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold text-gray-900">人気Mission</h2>
-              <button onClick={() => navigate('missionList')} className="text-xs text-[#6C5CE7]">全て見る</button>
-            </div>
-            <div className="space-y-3">
-              {companyMissions.filter(m => m.status === '公開中').map(m => (
-                <div key={m.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{m.title}</p>
-                    <p className="text-xs text-gray-500">{m.participants}名参加</p>
+        <section className="mb-6 grid grid-cols-1 gap-5 xl:grid-cols-[1.25fr_0.75fr]">
+          <div className="overflow-hidden rounded-3xl bg-[#17152B] p-7 text-white shadow-sm">
+            <p className="text-xs font-bold text-[#A29BFE]">Mission Health</p>
+            <h2 className="mt-2 text-2xl font-bold">公開中の自社Missionを管理</h2>
+            <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
+              {published.map(mission => (
+                <button key={mission.id} onClick={() => navigate('missionAnalytics')} className="rounded-2xl bg-white/10 p-4 text-left transition-colors hover:bg-white/15">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <span className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white/75">{mission.category}</span>
+                    <span className="text-xs font-bold text-[#A29BFE]">{mission.completionRate}%</span>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-gray-800">{m.completionRate}%</p>
-                    <p className="text-xs text-gray-400">完了率</p>
+                  <p className="min-h-[40px] text-sm font-bold leading-snug">{mission.title}</p>
+                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/50">{mission.summary}</p>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs text-white/45">
+                    <span>{mission.participants}名</span>
+                    <span>興味あり {mission.interestRate}%</span>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Recent students */}
-          <div className="bg-white rounded-2xl p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold text-gray-900">最近の学生</h2>
-              <button onClick={() => navigate('studentList')} className="text-xs text-[#6C5CE7]">全て見る</button>
-            </div>
-            <div className="space-y-3">
-              {companyStudents.slice(0, 3).map(s => (
-                <button key={s.id} onClick={() => navigate('studentDetail', { studentId: s.id })}
-                  className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-[#EEF0FF] transition-colors text-left">
-                  <div className="w-9 h-9 rounded-full bg-[#6C5CE7] text-white text-sm font-bold flex items-center justify-center flex-shrink-0">
-                    {s.name[0]}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800">{s.name}</p>
-                    <p className="text-xs text-gray-500">{s.schoolYear} · {s.missionCompleted}Mission完了</p>
-                  </div>
-                  <span className="text-xs font-medium px-2 py-1 rounded-full flex-shrink-0"
-                    style={s.interestLevel === '高'
-                      ? { background: '#EEF0FF', color: '#6C5CE7' }
-                      : s.interestLevel === '中'
-                        ? { background: '#FEF3C7', color: '#D97706' }
-                        : { background: '#F3F4F6', color: '#9CA3AF' }
-                    }>
-                    {s.interestLevel}
-                  </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Scout queue */}
-          <div className="bg-white rounded-2xl p-6 lg:col-span-2">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold text-gray-900">スカウト状況</h2>
-              <button onClick={() => navigate('companyScouts')} className="text-xs text-[#6C5CE7]">管理する</button>
+          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+            <p className="text-xs font-bold text-[#6C5CE7]">基礎Trialから見る候補</p>
+            <h2 className="mt-2 text-xl font-bold text-gray-900">自社Mission前のシグナル</h2>
+            <div className="mt-5 space-y-3">
+              {companyCoreTrialInsights.map(trial => (
+                <div key={trial.id} className="rounded-2xl bg-[#F7F8FB] p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">{trial.title}</p>
+                      <p className="mt-1 text-xs text-gray-500">{trial.note}</p>
+                    </div>
+                    <span className="rounded-full bg-[#EEF0FF] px-2.5 py-1 text-xs font-bold text-[#6C5CE7]">{trial.scoutFit}人</span>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {trial.strongSignals.map(signal => <span key={signal} className="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-gray-500">{signal}</span>)}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          </div>
+        </section>
+
+        <section className="grid grid-cols-1 gap-5 xl:grid-cols-[0.85fr_1.15fr]">
+          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="mb-4 flex items-end justify-between">
+              <div>
+                <p className="text-xs font-bold text-[#EC4899]">Scout Queue</p>
+                <h2 className="mt-1 text-xl font-bold text-gray-900">次に見る学生</h2>
+              </div>
+              <button onClick={() => navigate('studentList')} className="text-xs font-bold text-[#6C5CE7]">学生一覧</button>
+            </div>
+            <div className="space-y-3">
+              {topStudents.map(student => (
+                <button key={student.id} onClick={() => navigate('studentDetail', { studentId: student.id })} className="w-full rounded-2xl bg-[#F7F8FB] p-4 text-left hover:bg-[#EEF0FF]">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#6C5CE7] text-sm font-bold text-white">{student.name[0]}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-bold text-gray-900">{student.name}</p>
+                      <p className="truncate text-xs text-gray-500">{student.schoolYear} · {student.fitTags.join('・')}</p>
+                    </div>
+                    <span className="text-sm font-bold text-[#6C5CE7]">{student.satisfaction}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="mb-4 flex items-end justify-between">
+              <div>
+                <p className="text-xs font-bold text-[#6C5CE7]">学生分析</p>
+                <h2 className="mt-1 text-xl font-bold text-gray-900">反応している学生の傾向</h2>
+              </div>
+              <button onClick={() => navigate('companyScouts')} className="text-xs font-bold text-[#6C5CE7]">スカウト管理</button>
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
               {companyScoutPipeline.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => navigate('studentDetail', { studentId: item.studentId })}
-                  className="text-left bg-gray-50 rounded-xl p-4 hover:bg-[#EEF0FF] transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-2">
+                <button key={item.id} onClick={() => navigate('studentDetail', { studentId: item.studentId })} className="rounded-2xl border border-gray-100 p-4 text-left hover:border-[#6C5CE7]/40">
+                  <div className="mb-3 flex items-center justify-between gap-2">
                     <p className="text-sm font-bold text-gray-900">{item.studentName}</p>
-                    <span className="text-[11px] text-gray-500">{item.status}</span>
+                    <span className="rounded-full bg-[#EEF0FF] px-2 py-0.5 text-[11px] font-bold text-[#6C5CE7]">{item.status}</span>
                   </div>
-                  <p className="text-xs text-gray-600 line-clamp-2">{item.fitReason}</p>
+                  <p className="line-clamp-2 text-xs leading-relaxed text-gray-600">{item.fitReason}</p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {item.viewed.map(view => <span key={view} className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500">{view}</span>)}
+                  </div>
                 </button>
               ))}
             </div>
           </div>
-
-          {/* Quick analytics */}
-          <div className="bg-white rounded-2xl p-6 lg:col-span-2">
-            <h2 className="text-base font-bold text-gray-900 mb-4">価値観別の反応 (今月)</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                { label: '人・雰囲気重視', count: 38, pct: 78 },
-                { label: '成長重視', count: 29, pct: 65 },
-                { label: 'やりがい重視', count: 24, pct: 58 },
-                { label: '働きやすさ重視', count: 18, pct: 42 },
-                { label: 'お金・安定重視', count: 12, pct: 31 },
-                { label: '自由度重視', count: 9, pct: 24 },
-              ].map(({ label, count, pct }) => (
-                <div key={label} className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-xs text-gray-600 mb-2">{label}</p>
-                  <div className="h-1.5 bg-gray-200 rounded-full mb-1">
-                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: '#6C5CE7' }} />
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-500">{count}人</span>
-                    <span className="font-mono text-gray-700">{pct}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        </section>
       </main>
     </div>
   )
