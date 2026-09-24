@@ -8,6 +8,7 @@ interface Props { navigate: (s: Screen, p?: { studentId?: string }) => void }
 export default function StudentList({ navigate }: Props) {
   const [filter, setFilter] = useState('全員')
   const [search, setSearch] = useState('')
+  const [mapFilter, setMapFilter] = useState('すべて')
 
   const filtered = companyStudents.filter(student => {
     const matchFilter = filter === '全員' || student.interestLevel === filter || student.status === filter
@@ -19,6 +20,38 @@ export default function StudentList({ navigate }: Props) {
     const [key] = Object.entries(student.preferenceScores).sort((a, b) => b[1] - a[1])[0]
     return preferenceLabels.find(label => label.key === key)?.shortLabel ?? '価値観'
   }
+
+  const companyProfile = {
+    people_culture: 84,
+    growth: 78,
+    autonomy: 68,
+    meaning: 76,
+  }
+  const profileKeys = ['people_culture', 'growth', 'autonomy', 'meaning'] as const
+  const mapStudents = companyStudents.map((student, index) => {
+    const personalityFit = Math.round(profileKeys.reduce((sum, key) => sum + (100 - Math.abs(student.preferenceScores[key] - companyProfile[key])), 0) / profileKeys.length)
+    const missionFit = Math.min(98, Math.round(54 + student.missionCompleted * 4 + student.satisfaction * 4 + (student.fitTags.some(tag => /企画|改善|UX|アイデア/.test(tag)) ? 10 : 0)))
+    return {
+    student,
+    x: Math.max(12, Math.min(88, 10 + ((personalityFit - 65) / 35) * 80 + (index % 3) * 2)),
+    y: Math.max(14, Math.min(88, 90 - ((missionFit - 60) / 40) * 80 + (index % 2) * 3)),
+    missionFit,
+    personalityFit,
+    }
+  })
+  const visibleMapStudents = mapStudents.filter(({ student }) => {
+    if (mapFilter.startsWith('大学')) return student.schoolYear === mapFilter
+    if (mapFilter === 'スカウト候補') return student.status === 'スカウト候補'
+    return true
+  })
+  const mapFilters = [
+    { label: 'すべて', count: mapStudents.length },
+    { label: '大学1年', count: mapStudents.filter(({ student }) => student.schoolYear === '大学1年').length },
+    { label: '大学2年', count: mapStudents.filter(({ student }) => student.schoolYear === '大学2年').length },
+    { label: '大学3年', count: mapStudents.filter(({ student }) => student.schoolYear === '大学3年').length },
+    { label: '大学4年', count: mapStudents.filter(({ student }) => student.schoolYear === '大学4年').length },
+    { label: 'スカウト候補', count: mapStudents.filter(({ student }) => student.status === 'スカウト候補').length },
+  ]
 
   return (
     <div className="flex min-h-screen bg-[#F7F8FB]">
@@ -42,6 +75,52 @@ export default function StudentList({ navigate }: Props) {
               <button key={item} onClick={() => setFilter(item)}
                 className={`rounded-full px-3 py-1.5 text-xs font-bold ${filter === item ? 'bg-[#17152B] text-white' : 'bg-[#F7F8FB] text-gray-500 hover:bg-[#EEF0FF]'}`}>
                 {item}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-8 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-bold text-[#6C5CE7]">Student Fit Map</p>
+              <h2 className="mt-1 text-xl font-bold text-gray-900">学生の分布を俯瞰する</h2>
+              <p className="mt-1 text-xs text-gray-500">自社Missionと企業プロフィールとの相性を、学生ごとに比較できます。</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {mapFilters.map(item => (
+                <button key={item.label} onClick={() => setMapFilter(item.label)} className={`rounded-full px-3 py-1.5 text-[11px] font-bold ${mapFilter === item.label ? 'bg-[#17152B] text-white' : 'bg-[#F7F8FB] text-gray-500 hover:bg-[#EEF0FF]'}`}>
+                  {item.label} <span className={mapFilter === item.label ? 'text-white/55' : 'text-gray-400'}>{item.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative min-h-[500px] overflow-hidden rounded-3xl border border-gray-100 bg-[#F7F8FB] p-6">
+            <div className="absolute inset-6 rounded-2xl bg-white" />
+            <div className="absolute inset-x-6 top-[25%] h-px bg-gray-100" />
+            <div className="absolute inset-x-6 top-[50%] h-px bg-gray-100" />
+            <div className="absolute inset-x-6 top-[75%] h-px bg-gray-100" />
+            <div className="absolute inset-y-6 left-[25%] w-px bg-gray-100" />
+            <div className="absolute inset-y-6 left-[50%] w-px bg-gray-100" />
+            <div className="absolute inset-y-6 left-[75%] w-px bg-gray-100" />
+            <div className="absolute left-1/2 top-8 z-10 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-[#6C5CE7] shadow-sm">Mission相性 ↑</div>
+            <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-[#00B894] shadow-sm">性格相性 →</div>
+            <div className="absolute bottom-8 left-9 z-10 text-[11px] font-bold text-gray-300">0</div>
+            <div className="absolute right-9 top-8 z-10 text-[11px] font-bold text-gray-300">100</div>
+
+            {visibleMapStudents.map(({ student, x, y, missionFit, personalityFit }) => (
+              <button key={student.id} type="button" onClick={() => navigate('studentDetail', { studentId: student.id })}
+                title={`${student.name}｜Mission相性 ${missionFit}%・性格相性 ${personalityFit}%`}
+                aria-label={`${student.name}、Mission相性 ${missionFit}%、性格相性 ${personalityFit}%`}
+                className="group absolute z-20 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-[#17152B] text-xs font-bold text-white shadow-md transition-transform hover:z-30 hover:scale-125 focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
+                style={{ left: `${x}%`, top: `${y}%` }}>
+                {student.name[0]}
+                <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 w-[174px] -translate-x-1/2 rounded-xl border border-gray-100 bg-white p-3 text-left opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus:opacity-100">
+                  <span className="block truncate text-xs font-bold text-gray-900">{student.name}</span>
+                  <span className="mt-1 block text-[10px] text-gray-500">Mission相性 {missionFit}% · 性格相性 {personalityFit}%</span>
+                  <span className="mt-1 block truncate text-[10px] text-gray-400">{student.fitTags.slice(0, 2).join('・')}</span>
+                </span>
               </button>
             ))}
           </div>
