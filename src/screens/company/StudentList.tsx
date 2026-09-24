@@ -28,17 +28,23 @@ export default function StudentList({ navigate }: Props) {
     meaning: 76,
   }
   const profileKeys = ['people_culture', 'growth', 'autonomy', 'meaning'] as const
-  const mapStudents = companyStudents.map((student, index) => {
+  const mapScores = companyStudents.map((student, index) => {
     const personalityFit = Math.round(profileKeys.reduce((sum, key) => sum + (100 - Math.abs(student.preferenceScores[key] - companyProfile[key])), 0) / profileKeys.length)
     const missionFit = Math.min(98, Math.round(54 + student.missionCompleted * 4 + student.satisfaction * 4 + (student.fitTags.some(tag => /企画|改善|UX|アイデア/.test(tag)) ? 10 : 0)))
     return {
-    student,
-    x: Math.max(12, Math.min(88, 10 + ((personalityFit - 65) / 35) * 80 + (index % 3) * 2)),
-    y: Math.max(14, Math.min(88, 90 - ((missionFit - 60) / 40) * 80 + (index % 2) * 3)),
-    missionFit,
-    personalityFit,
+      student,
+      index,
+      missionFit,
+      personalityFit,
     }
   })
+  const personalityRange = Math.max(...mapScores.map(item => item.personalityFit)) - Math.min(...mapScores.map(item => item.personalityFit)) || 1
+  const missionRange = Math.max(...mapScores.map(item => item.missionFit)) - Math.min(...mapScores.map(item => item.missionFit)) || 1
+  const mapStudents = mapScores.map(item => ({
+    ...item,
+    x: 14 + ((item.personalityFit - Math.min(...mapScores.map(score => score.personalityFit))) / personalityRange) * 72 + (item.index % 3) * 2,
+    y: 86 - ((item.missionFit - Math.min(...mapScores.map(score => score.missionFit))) / missionRange) * 72 + (item.index % 2) * 3,
+  }))
   const visibleMapStudents = mapStudents.filter(({ student }) => {
     if (mapFilter.startsWith('大学')) return student.schoolYear === mapFilter
     if (mapFilter === 'スカウト候補') return student.status === 'スカウト候補'
@@ -85,7 +91,7 @@ export default function StudentList({ navigate }: Props) {
             <div>
               <p className="text-xs font-bold text-[#6C5CE7]">Student Fit Map</p>
               <h2 className="mt-1 text-xl font-bold text-gray-900">学生の分布を俯瞰する</h2>
-              <p className="mt-1 text-xs text-gray-500">自社Missionと企業プロフィールとの相性を、学生ごとに比較できます。</p>
+              <p className="mt-1 text-xs text-gray-500">上に行くほど自社Mission向き、右に行くほどLumoの働き方との相性が高い学生です。</p>
             </div>
             <div className="flex flex-wrap gap-2">
               {mapFilters.map(item => (
@@ -96,20 +102,25 @@ export default function StudentList({ navigate }: Props) {
             </div>
           </div>
 
-          <div className="relative min-h-[500px] overflow-hidden rounded-3xl border border-gray-100 bg-[#F7F8FB] p-6">
-            <div className="absolute inset-6 rounded-2xl bg-white" />
-            <div className="absolute inset-x-6 top-[25%] h-px bg-gray-100" />
-            <div className="absolute inset-x-6 top-[50%] h-px bg-gray-100" />
-            <div className="absolute inset-x-6 top-[75%] h-px bg-gray-100" />
-            <div className="absolute inset-y-6 left-[25%] w-px bg-gray-100" />
-            <div className="absolute inset-y-6 left-[50%] w-px bg-gray-100" />
-            <div className="absolute inset-y-6 left-[75%] w-px bg-gray-100" />
-            <div className="absolute left-1/2 top-8 z-10 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-[#6C5CE7] shadow-sm">Mission相性 ↑</div>
-            <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-[#00B894] shadow-sm">性格相性 →</div>
-            <div className="absolute bottom-8 left-9 z-10 text-[11px] font-bold text-gray-300">0</div>
-            <div className="absolute right-9 top-8 z-10 text-[11px] font-bold text-gray-300">100</div>
+          <div className="mx-auto grid min-h-[500px] max-w-[960px] grid-cols-[52px_minmax(0,1fr)] grid-rows-[minmax(420px,1fr)_52px] rounded-3xl border border-gray-100 bg-[#F7F8FB] p-6">
+            <div className="col-start-1 row-start-1 flex flex-col items-center justify-between py-2 text-xs font-bold text-gray-400">
+              <span>高</span>
+              <span className="-rotate-90 whitespace-nowrap text-sm tracking-wide text-gray-500">Mission相性</span>
+              <span>低</span>
+            </div>
 
-            {visibleMapStudents.map(({ student, x, y, missionFit, personalityFit }) => (
+            <div className="relative col-start-2 row-start-1 min-h-0 overflow-visible rounded-2xl bg-white">
+              <div className="absolute inset-0 rounded-2xl border border-gray-100" />
+              <div className="absolute inset-x-0 top-[25%] h-px bg-gray-100" />
+              <div className="absolute inset-x-0 top-[50%] h-px bg-gray-100" />
+              <div className="absolute inset-x-0 top-[75%] h-px bg-gray-100" />
+              <div className="absolute inset-y-0 left-[25%] w-px bg-gray-100" />
+              <div className="absolute inset-y-0 left-[50%] w-px bg-gray-100" />
+              <div className="absolute inset-y-0 left-[75%] w-px bg-gray-100" />
+              <div className="absolute inset-y-0 left-0 z-10 w-px bg-gray-300" />
+              <div className="absolute inset-x-0 bottom-0 z-10 h-px bg-gray-300" />
+
+              {visibleMapStudents.map(({ student, x, y, missionFit, personalityFit }) => (
               <button key={student.id} type="button" onClick={() => navigate('studentDetail', { studentId: student.id })}
                 title={`${student.name}｜Mission相性 ${missionFit}%・性格相性 ${personalityFit}%`}
                 aria-label={`${student.name}、Mission相性 ${missionFit}%、性格相性 ${personalityFit}%`}
@@ -123,6 +134,13 @@ export default function StudentList({ navigate }: Props) {
                 </span>
               </button>
             ))}
+            </div>
+
+            <div className="col-start-2 row-start-2 flex items-center justify-between px-1 text-xs font-bold text-gray-400">
+              <span>低</span>
+              <span className="text-sm tracking-wide text-gray-500">企業プロフィールとの性格相性　→</span>
+              <span>高</span>
+            </div>
           </div>
         </section>
 
