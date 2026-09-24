@@ -22,6 +22,16 @@ export default function ScoutInbox({ navigate }: Props) {
   const interestedCompanies = [...scouts.map(({ company }) => company), ...views.map(view => view.company)]
     .filter((company, index, list) => list.findIndex(item => item.id === company.id) === index)
     .slice(0, 4)
+  const interestStats = [
+    { label: 'スカウト', value: allScouts.length, color: '#EC4899', bg: '#FDF2F8', note: 'あなた宛てのオファー' },
+    { label: 'プロフィール閲覧', value: profileViews.length, color: '#6C5CE7', bg: '#EEF0FF', note: '企業が確認した回数' },
+    { label: '企業', value: interestedCompanies.length, color: '#00B894', bg: '#E8FBF5', note: '関心を持った会社' },
+  ]
+  const liveActivities = [
+    `${demoTrialScout.companyName}がTrial回答を確認`,
+    `${views[0]?.companyName}がプロフィールを閲覧`,
+    `${scouts[1]?.scout.companyName}から新しいスカウト`,
+  ].filter(Boolean)
 
   // 提出前は通知を出さない(答えたから届いた、という体験にするため)
   if (!notified) return (
@@ -49,39 +59,56 @@ export default function ScoutInbox({ navigate }: Props) {
       </div>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { label: 'スカウト', value: allScouts.length, color: '#EC4899' },
-            { label: 'プロフィール閲覧', value: profileViews.length, color: '#6C5CE7' },
-            { label: '企業', value: interestedCompanies.length, color: '#00B894' },
-          ].map(item => (
-            <div key={item.label} className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm"><p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}</p><p className="text-xs text-gray-500 mt-1">{item.label}</p></div>
-          ))}
-        </div>
-        <div className="bg-[#17152B] rounded-3xl p-6 text-white shadow-sm">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold text-[#F9A8D4] mb-1">あなたの傾向</p>
-              <h3 className="text-xl font-bold">あなたに関心を持つ企業</h3>
-              <p className="text-sm text-white/55 mt-2">Trialと価値観の記録を見て、企業があなたを見つけています。</p>
+        <section className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_380px]">
+          <div className="overflow-hidden rounded-3xl bg-[#17152B] text-white shadow-sm">
+            <div className="flex flex-col gap-6 p-6 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="text-xs font-bold text-[#F9A8D4]">企業からの反応が増えています</p>
+                <h2 className="mt-2 text-2xl font-bold">あなたのTrialを見た企業が動き始めました</h2>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-white/55">提出内容やプロフィールを見た企業が、スカウトや閲覧として反応しています。</p>
+              </div>
+              <div className="flex -space-x-3">
+                {interestedCompanies.map(company => (
+                  <div key={company.id} className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[#17152B] text-xl"
+                    style={{ background: company.color }}>
+                    {company.emoji}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex -space-x-2 pt-1">
-              {interestedCompanies.map(company => (
-                <div key={company.id} className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-sm"
-                  style={{ background: company.color + '20' }}>
-                  {company.emoji}
+
+            <div className="grid grid-cols-1 border-t border-white/10 sm:grid-cols-3">
+              {interestStats.map(item => (
+                <div key={item.label} className="border-white/10 px-6 py-5 sm:border-r sm:last:border-r-0">
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-4xl font-bold" style={{ color: item.color }}>{item.value}</p>
+                    <p className="text-sm font-bold text-white">{item.label}</p>
+                  </div>
+                  <p className="mt-2 text-xs text-white/45">{item.note}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-            {interestedCompanies.map(company => (
-                <span key={company.id} className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/80">
-                {company.emoji} {company.name}
-              </span>
-            ))}
-          </div>
-        </div>
+
+          <aside className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-bold text-gray-900">いまの動き</p>
+              <span className="rounded-full bg-[#E8FBF5] px-2.5 py-1 text-[11px] font-bold text-[#00B894]">Live</span>
+            </div>
+            <div className="mt-4 space-y-4">
+              {liveActivities.map((activity, index) => (
+                <div key={activity} className="relative flex gap-3">
+                  {index < liveActivities.length - 1 && <div className="absolute left-[13px] top-8 bottom-[-16px] w-px bg-gray-100" />}
+                  <span className="relative z-10 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#EEF0FF] text-[11px] font-bold text-[#6C5CE7]">{index + 1}</span>
+                  <div>
+                    <p className="text-sm font-bold text-gray-800">{activity}</p>
+                    <p className="mt-0.5 text-xs text-gray-400">{index === 0 ? 'たった今' : index === 1 ? '今日' : '昨日'}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </section>
 
         <div className="rounded-2xl bg-[#FDF2F8] border border-[#FBCFE8] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>

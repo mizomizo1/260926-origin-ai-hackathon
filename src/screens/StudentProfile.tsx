@@ -51,7 +51,7 @@ export default function StudentProfile({ navigate }: Props) {
           美
         </div>
         <div>
-        <p className="text-xs font-bold text-[#A29BFE] mb-1">あなたのプロフィール</p>
+        <p className="text-xs font-bold text-[#A29BFE] mb-1">プロフィール・体験ログ</p>
         <h1 className="text-2xl font-bold">{mockStudent.name}</h1>
         <p className="text-sm text-white/55 mt-1">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
         <div className="flex gap-2 mt-3 flex-wrap">
@@ -136,11 +136,14 @@ export default function StudentProfile({ navigate }: Props) {
           </div>
         </div>
 
-        {/* Passport summary */}
-        <div className="bg-white rounded-3xl p-3.5 card-shadow">
+        {/* Experience profile */}
+        <div className="bg-white rounded-3xl p-5 card-shadow">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-sm font-bold text-gray-900">体験記録</h3>
-            <span className="text-xs text-gray-400">キャリアパスポート</span>
+            <div>
+              <p className="text-xs font-bold text-[#6C5CE7]">体験から見えるプロフィール</p>
+              <h3 className="text-lg font-bold text-gray-900 mt-1">Trialの蓄積</h3>
+            </div>
+            <span className="text-xs text-gray-400">累計 {passportData.completedMissions}件</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="relative w-24 h-24 flex-shrink-0">
@@ -180,22 +183,48 @@ export default function StudentProfile({ navigate }: Props) {
               </div>
             </div>
           </div>
+
+          <div className="mt-5 border-t border-gray-100 pt-4">
+            <p className="text-xs font-bold text-gray-500 mb-3">スキル傾向</p>
+            <div className="space-y-3">
+              {passportData.skills.map(({ label, value }) => (
+                <div key={label}>
+                  <div className="mb-1 flex justify-between text-xs">
+                    <span className="font-bold text-gray-700">{label}</span>
+                    <span className="font-mono font-bold text-[#6C5CE7]">{value}</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-[#EEF0FF]">
+                    <div className="h-full rounded-full bg-[#6C5CE7]" style={{ width: `${value}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Experience log */}
-        <div className="bg-white/70 rounded-3xl p-4">
-          <h3 className="text-xs font-bold text-gray-500 mb-3">最近のログ</h3>
-          <div className="space-y-2">
+        <div className="bg-white rounded-3xl p-5 card-shadow">
+          <div className="mb-4 flex items-end justify-between">
+            <div>
+              <p className="text-xs font-bold text-[#6C5CE7]">これまでの歩み</p>
+              <h3 className="text-lg font-bold text-gray-900 mt-1">体験ログ</h3>
+            </div>
+            <button onClick={() => navigate('missionExplore')} className="rounded-xl bg-[#EEF0FF] px-3 py-2 text-xs font-bold text-[#6C5CE7]">Trialを探す</button>
+          </div>
+          <div className="space-y-3">
             {passportData.experiences.slice(0, 3).map(exp => (
-              <div key={exp.id} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-sm flex-shrink-0">
+              <div key={exp.id} className="rounded-2xl border border-gray-100 bg-[#F7F8FB] p-3">
+                <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-lg flex-shrink-0">
                   {exp.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-gray-700 truncate">{exp.mission}</p>
-                  <p className="text-[11px] text-gray-400">{exp.date}</p>
+                  <p className="text-sm font-bold text-gray-800 truncate">{exp.mission}</p>
+                  <p className="text-xs text-gray-400">{exp.company} · {exp.date}</p>
+                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-600">{exp.memo}</p>
                 </div>
-                <span className="text-[11px] text-[#F59E0B] font-bold">{exp.satisfaction}</span>
+                <span className="rounded-full bg-white px-2 py-1 text-[11px] text-[#F59E0B] font-bold">{exp.satisfaction}</span>
+                </div>
               </div>
             ))}
           </div>

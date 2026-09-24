@@ -194,7 +194,7 @@ export default function StudentHome({ navigate }: Props) {
               <h2 className="text-lg font-bold text-gray-900">最近終えたTrial</h2>
               <p className="text-sm text-gray-500">体験から仮説を更新していきます</p>
             </div>
-            <button onClick={() => navigate('careerPassport')} className="text-sm font-bold text-[#6C5CE7]">キャリアパスポートを見る</button>
+            <button onClick={() => navigate('studentProfile')} className="text-sm font-bold text-[#6C5CE7]">プロフィールで見る</button>
           </div>
           <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
             {passportData.experiences.slice(0, 3).map(exp => (

@@ -12,7 +12,6 @@ interface Props {
 const navItems: { key: Props['current']; label: string; screen: Screen }[] = [
   { key: 'home', label: 'ホーム', screen: 'studentHome' },
   { key: 'explore', label: 'Trialを探す', screen: 'missionExplore' },
-  { key: 'passport', label: 'キャリアパスポート', screen: 'careerPassport' },
   { key: 'companies', label: '企業', screen: 'companyMatch' },
   { key: 'scout', label: 'スカウト', screen: 'scoutInbox' },
 ]
