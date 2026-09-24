@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
-import { missions, mockStudent, passportData, scoutInvitations } from '../data/mock'
+import { missions, passportData, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
 import { demoTrialScout } from '../data/demoTrial'
 import { markDemoNotified, useDemoTrial } from '../state/demoTrial'
-import GuideRing from '../components/GuideRing'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function StudentHome({ navigate }: Props) {
   const featured = missions.find(m => (m as any).source === 'core') ?? missions[0]
-  const currentTrial = missions[1]
   const nextTrials = missions.filter(m => m.id !== featured.id).slice(0, 3)
   const { evaluationComplete, notified, matchSeen } = useDemoTrial()
   const [noticeStage, setNoticeStage] = useState(0)
@@ -54,72 +52,39 @@ export default function StudentHome({ navigate }: Props) {
       )}
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
-        <section className="relative overflow-hidden rounded-3xl bg-[#17152B] text-white p-7 lg:p-10 mb-6">
-          <div className="relative z-10 max-w-2xl">
-              <p className="text-sm font-semibold text-[#6C5CE7] mb-2">あなたの現在のキャリア仮説</p>
-              <h1 className="text-3xl lg:text-4xl font-bold leading-tight">
-                人と関わりながら、企画を考える仕事への関心が高いようです。
-              </h1>
-              <p className="text-sm text-white/55 mt-4 max-w-xl leading-relaxed">
-                次のJob Trialで、仮説が本当に合っているかを確かめましょう。
-              </p>
-              <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="mt-7 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">{featured.duration}で次のTrialを試す →</button>
+        <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_360px]">
+          <div className="rounded-3xl bg-[#17152B] p-7 text-white lg:p-9">
+            <p className="text-sm font-semibold text-[#A29BFE] mb-2">あなたの現在のキャリア仮説</p>
+            <h1 className="text-3xl lg:text-4xl font-bold leading-tight">人と関わりながら、企画を考える仕事への関心が高いようです。</h1>
+            <p className="text-sm text-white/55 mt-4 max-w-2xl leading-relaxed">Trialの回答と価値観から見えた仮説です。次は企業の仕事を試すと、相性の輪郭がもう少しはっきりします。</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <button onClick={() => navigate('missionExplore')} className="rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#17152B]">Trialを探す</button>
+              <button onClick={() => navigate('studentProfile')} className="rounded-xl bg-white/10 px-5 py-3 text-sm font-bold text-white">プロフィールを見る</button>
+            </div>
           </div>
-          <div className="absolute right-8 bottom-[-32px] text-[190px] opacity-15">{featured.emoji}</div>
+          <aside className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
+            <p className="text-xs font-bold text-[#6C5CE7]">次におすすめ</p>
+            <div className="mt-4 rounded-2xl bg-[#F7F6FF] p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ background: featured.color + '18' }}>{featured.emoji}</div>
+                <div>
+                <p className="text-sm font-bold text-gray-900">{featured.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-gray-500">{featured.duration} · {featured.category}</p>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                {featured.tags.slice(0, 3).map(tag => (
+                  <span key={tag} className="rounded-xl bg-white px-2 py-2 text-center text-[11px] font-bold text-gray-500">{tag}</span>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="mt-5 w-full rounded-xl bg-[#6C5CE7] px-4 py-3 text-sm font-bold text-white">詳しく見る</button>
+          </aside>
         </section>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          {[
-            { label: '完了したTrial', value: passportData.completedMissions, suffix: '個', color: '#6C5CE7' },
-            { label: '体験時間', value: passportData.totalTime, suffix: '', color: '#00B894' },
-            { label: '届いたスカウト', value: scoutCount, suffix: '件', color: '#EC4899' },
-            { label: '今週の進捗(あと1つで達成)', value: '2/3', suffix: '', color: '#F59E0B' },
-          ].map(item => (
-            <div key={item.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-              <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}{item.suffix}</p>
-              <p className="text-xs text-gray-500 mt-1">{item.label}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
-          <section className="rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-              <div><p className="text-xs font-bold text-[#6C5CE7]">続きから再開</p><h2 className="text-xl font-bold text-gray-900 mt-1">{currentTrial.title}</h2></div>
-              <span className="text-2xl">{currentTrial.emoji}</span>
-            </div>
-            <div className="p-6 bg-[#F7F6FF]">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0" style={{ background: featured.color + '20' }}>
-                  {currentTrial.emoji}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-600">{currentTrial.company} · {currentTrial.duration}</p>
-                  <div className="h-2 bg-white rounded-full overflow-hidden mt-3"><div className="h-full w-2/5 rounded-full bg-[#6C5CE7]" /></div>
-                </div>
-                <button onClick={() => navigate('missionTrial', { missionId: currentTrial.id })} className="px-4 py-2.5 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">続きから再開</button>
-              </div>
-            </div>
-          </section>
-
-          <aside className="space-y-4">
-            {/* 重複のため非表示: 「続きから再開」カードと同内容
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">進行中のTrial</p>
-              <p className="text-xs text-gray-500 mt-1">{currentTrial.title}</p>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden mt-4">
-                <div className="h-full w-2/5 rounded-full bg-[#6C5CE7]" />
-              </div>
-              <button onClick={() => navigate('missionTrial', { missionId: currentTrial.id })}
-                className="mt-4 w-full py-2.5 rounded-xl bg-gray-900 text-white text-sm font-bold">
-                再開する
-              </button>
-            </div>
-            */}
-
+        <section className="mb-8">
             {showDemoNotifications ? (
-            <div className="space-y-3">
-              <GuideRing active={!matchSeen} label="まずはこちら">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <button onClick={() => navigate('companyMatch')} className="w-full text-left bg-white rounded-2xl border border-[#C7D2FE] p-5 shadow-sm">
                   <p className="text-sm font-bold text-gray-900">マッチする企業が見つかりました</p>
                   <p className="text-xs text-gray-500 mt-1">提出結果をもとに、関心が近い企業を並べました。</p>
@@ -127,8 +92,6 @@ export default function StudentHome({ navigate }: Props) {
                     企業を確認
                   </span>
                 </button>
-              </GuideRing>
-              <GuideRing active={matchSeen} label="次に確認">
                 <button onClick={() => navigate('scoutInbox')} className="w-full text-left bg-white rounded-2xl border border-[#FBCFE8] p-5 shadow-sm">
                   <p className="text-sm font-bold text-gray-900">スカウト</p>
                   <p className="text-xs text-gray-500 mt-1">{latestScout.companyName} · {latestScout.signal}</p>
@@ -136,7 +99,6 @@ export default function StudentHome({ navigate }: Props) {
                     {scoutCount}件
                   </span>
                 </button>
-              </GuideRing>
             </div>
             ) : (
             <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="w-full text-left bg-[#FDF2F8] rounded-2xl border border-[#FBCFE8] p-5 shadow-sm">
@@ -147,26 +109,9 @@ export default function StudentHome({ navigate }: Props) {
               </span>
             </button>
             )}
+        </section>
 
-            {/* 重複のため非表示: 上部の数値タイルと同内容
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">キャリアパスポート</p>
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">{passportData.completedMissions}</p>
-                  <p className="text-xs text-gray-500">完了</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">{passportData.totalTime}</p>
-                  <p className="text-xs text-gray-500">体験時間</p>
-                </div>
-              </div>
-            </div>
-            */}
-          </aside>
-        </div>
-
-        <section className="mt-8">
+        <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-gray-900">次のTrial</h2>
             <button onClick={() => navigate('missionExplore')} className="text-sm font-bold text-[#6C5CE7]">Trialを探す</button>
