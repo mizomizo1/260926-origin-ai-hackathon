@@ -2,6 +2,8 @@ import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions, mockStudent, passportData, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { demoTrialScout } from '../data/demoTrial'
+import { useDemoTrial } from '../state/demoTrial'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -9,7 +11,9 @@ export default function StudentHome({ navigate }: Props) {
   const featured = missions.find(m => (m as any).source === 'core') ?? missions[0]
   const currentTrial = missions[1]
   const nextTrials = missions.filter(m => m.id !== featured.id).slice(0, 3)
-  const latestScout = scoutInvitations[0]
+  const { notified } = useDemoTrial()
+  const latestScout = notified ? demoTrialScout : scoutInvitations[0]
+  const scoutCount = notified ? scoutInvitations.length + 1 : 0
 
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
@@ -34,7 +38,7 @@ export default function StudentHome({ navigate }: Props) {
           {[
             { label: '完了したTrial', value: passportData.completedMissions, suffix: '個', color: '#6C5CE7' },
             { label: '体験時間', value: passportData.totalTime, suffix: '', color: '#00B894' },
-            { label: '届いたスカウト', value: scoutInvitations.length, suffix: '件', color: '#EC4899' },
+            { label: '届いたスカウト', value: scoutCount, suffix: '件', color: '#EC4899' },
             { label: '今週の進捗(あと1つで達成)', value: '2/3', suffix: '', color: '#F59E0B' },
           ].map(item => (
             <div key={item.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
@@ -79,13 +83,23 @@ export default function StudentHome({ navigate }: Props) {
             </div>
             */}
 
+            {notified ? (
             <button onClick={() => navigate('scoutInbox')} className="w-full text-left bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <p className="text-sm font-bold text-gray-900">スカウト</p>
               <p className="text-xs text-gray-500 mt-1">{latestScout.companyName} · {latestScout.signal}</p>
               <span className="inline-flex mt-3 text-xs font-bold text-[#EC4899] bg-[#FDF2F8] rounded-full px-2.5 py-1">
-                {scoutInvitations.length}件
+                {scoutCount}件
               </span>
             </button>
+            ) : (
+            <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="w-full text-left bg-[#FDF2F8] rounded-2xl border border-[#FBCFE8] p-5 shadow-sm">
+              <p className="text-sm font-bold text-gray-900">💌 スカウトはまだ届いていません</p>
+              <p className="text-xs text-gray-600 mt-1 leading-relaxed">最初のTrial(12分)を提出すると、あなたの回答を見た企業から反応が届きます。</p>
+              <span className="inline-flex mt-3 text-xs font-bold text-white bg-[#EC4899] rounded-full px-3 py-1.5">
+                最初のTrialを始める →
+              </span>
+            </button>
+            )}
 
             {/* 重複のため非表示: 上部の数値タイルと同内容
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

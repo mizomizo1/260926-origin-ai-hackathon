@@ -2,6 +2,7 @@ import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import GuideRing from '../components/GuideRing'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
@@ -107,9 +108,11 @@ export default function MissionDetail({ navigate, missionId }: Props) {
               <p><span className="text-[#6C5CE7] font-bold">✓</span> 途中で保存できます</p>
               <p><span className="text-[#6C5CE7] font-bold">✓</span> 目安は{m.duration}です</p>
             </div>
-            <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
-              {m.duration}だけ試してみる
-            </button>
+            <GuideRing active label="ここから始めよう" radius="12px" className="mt-5">
+              <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
+                {m.duration}だけ試してみる
+              </button>
+            </GuideRing>
             <div className="flex gap-2 flex-wrap mt-4">
               {m.tags.map(t => (
                 <span key={t} className="text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">{t}</span>

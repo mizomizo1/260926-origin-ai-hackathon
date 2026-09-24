@@ -1,11 +1,17 @@
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { companies, profileViews, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { demoTrialScout } from '../data/demoTrial'
+import { useDemoTrial } from '../state/demoTrial'
 
-interface Props { navigate: (s: Screen) => void }
+interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function ScoutInbox({ navigate }: Props) {
-  const scouts = scoutInvitations.map(scout => ({
+  const { notified } = useDemoTrial()
+  // Trial の提出・評価で届いたスカウトを先頭に出す
+  const allScouts = [demoTrialScout, ...scoutInvitations]
+  const scouts = allScouts.map(scout => ({
     scout,
     company: companies.find(company => company.id === scout.companyId) ?? companies[0],
   }))
@@ -16,6 +22,21 @@ export default function ScoutInbox({ navigate }: Props) {
   const interestedCompanies = [...scouts.map(({ company }) => company), ...views.map(view => view.company)]
     .filter((company, index, list) => list.findIndex(item => item.id === company.id) === index)
     .slice(0, 4)
+
+  // 提出前は通知を出さない(答えたから届いた、という体験にするため)
+  if (!notified) return (
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="scout" navigate={navigate} />
+      <main className="mx-auto max-w-[640px] px-6 py-16 text-center">
+        <div className="w-16 h-16 rounded-full bg-[#FDF2F8] text-3xl flex items-center justify-center mx-auto">💌</div>
+        <h1 className="text-2xl font-bold text-gray-900 mt-5">スカウトはまだ届いていません</h1>
+        <p className="text-sm text-gray-500 mt-2 leading-relaxed">最初のTrial(12分)を提出すると、<br />あなたの回答を見た企業から反応が届きます。</p>
+        <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="mt-6 rounded-xl bg-[#EC4899] px-6 py-3 text-sm font-bold text-white">
+          最初のTrialを始める →
+        </button>
+      </main>
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
@@ -30,7 +51,7 @@ export default function ScoutInbox({ navigate }: Props) {
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'スカウト', value: scoutInvitations.length, color: '#EC4899' },
+            { label: 'スカウト', value: allScouts.length, color: '#EC4899' },
             { label: 'プロフィール閲覧', value: profileViews.length, color: '#6C5CE7' },
             { label: '企業', value: interestedCompanies.length, color: '#00B894' },
           ].map(item => (

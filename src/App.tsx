@@ -17,6 +17,7 @@ import CompanyMatch from './screens/CompanyMatch'
 import StudentProfile from './screens/StudentProfile'
 import ScoutInbox from './screens/ScoutInbox'
 import CareerPassport from './screens/CareerPassport'
+import TrialEvaluation from './screens/TrialEvaluation'
 import CompanyLogin from './screens/company/CompanyLogin'
 import CompanyDashboard from './screens/company/CompanyDashboard'
 import MissionList from './screens/company/MissionList'
@@ -31,6 +32,7 @@ export type Screen =
   | 'studentLogin' | 'profileSetup' | 'abIntro' | 'abQuestion' | 'preferenceResult'
   | 'studentHome' | 'missionExplore' | 'missionDetail' | 'missionTrial'
   | 'reflection' | 'updatedResult' | 'companyMatch' | 'scoutInbox' | 'studentProfile' | 'careerPassport'
+  | 'trialEvaluation'
   | 'companyLogin' | 'companyDashboard' | 'missionList' | 'createMission'
   | 'missionAnalytics' | 'studentList' | 'studentDetail' | 'companyScouts'
 
@@ -79,6 +81,7 @@ export default function App() {
       case 'scoutInbox': return <ScoutInbox navigate={navigate} />
       case 'studentProfile': return <StudentProfile navigate={navigate} />
       case 'careerPassport': return <CareerPassport navigate={navigate} />
+      case 'trialEvaluation': return <TrialEvaluation navigate={navigate} />
       case 'companyLogin': return <CompanyLogin navigate={navigate} />
       case 'companyDashboard': return <CompanyDashboard navigate={navigate} />
       case 'missionList': return <MissionList navigate={navigate} />

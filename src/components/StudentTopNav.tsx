@@ -1,5 +1,6 @@
 import { Screen } from '../App'
 import { mockStudent, scoutInvitations } from '../data/mock'
+import { useDemoTrial } from '../state/demoTrial'
 
 interface Props {
   current: 'home' | 'explore' | 'passport' | 'companies' | 'scout' | 'profile'
@@ -15,6 +16,8 @@ const navItems: { key: Props['current']; label: string; screen: Screen }[] = [
 ]
 
 export default function StudentTopNav({ current, navigate }: Props) {
+  // 通知は Trial を提出して評価が届いた後に来る
+  const { notified } = useDemoTrial()
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
       <div className="mx-auto max-w-[1200px] px-6 h-16 flex items-center justify-between">
@@ -41,9 +44,11 @@ export default function StudentTopNav({ current, navigate }: Props) {
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('scoutInbox')} className="relative w-9 h-9 rounded-full bg-gray-50 text-lg flex items-center justify-center">
             💌
-            <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-[#EC4899] text-white text-[10px] leading-4 font-bold">
-              {scoutInvitations.length}
-            </span>
+            {notified && (
+              <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-[#EC4899] text-white text-[10px] leading-4 font-bold">
+                {scoutInvitations.length + 1}
+              </span>
+            )}
           </button>
           <button onClick={() => navigate('studentProfile')} className="flex items-center gap-2 rounded-full bg-gray-50 pl-2 pr-3 py-1.5">
             <span className="w-7 h-7 rounded-full bg-[#6C5CE7] text-white text-xs font-bold flex items-center justify-center">
