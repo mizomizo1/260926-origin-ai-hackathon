@@ -26,16 +26,14 @@ export default function CompanyMatch({ navigate }: Props) {
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="companies" navigate={navigate} spotlight={notified ? 'scout' : undefined} />
-      {/* Header */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="mx-auto max-w-[1200px] px-6 py-8">
-        <p className="text-xs font-bold text-[#6C5CE7] mb-1">Trial・価値観の相性分析</p>
-        <h1 className="text-3xl font-bold text-gray-900">あなたと相性が高い企業</h1>
-        <p className="text-sm text-gray-500 mt-2">Trialの評価、A/Bで見えた価値観、企業が重視する人物像を照らし合わせて候補企業を並べています。</p>
-        </div>
-      </div>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-10">
+        <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <p className="text-sm font-bold text-[#6C5CE7]">Trial・価値観の相性分析</p>
+          <h1 className="mt-1 text-3xl font-bold text-gray-900">あなたと相性が高い企業</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">Trialの評価、A/Bで見えた価値観、企業が重視する人物像を照らし合わせて候補企業を並べています。</p>
+        </section>
+
         <section className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr] gap-5">
           <div className="relative overflow-hidden rounded-3xl bg-[#17152B] p-7 lg:p-9 text-white min-h-[300px]">
             <div className="relative z-10 max-w-lg">

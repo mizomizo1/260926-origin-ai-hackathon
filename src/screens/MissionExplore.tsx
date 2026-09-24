@@ -33,9 +33,9 @@ export default function MissionExplore({ navigate }: Props) {
       <StudentTopNav current="explore" navigate={navigate} />
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between mb-8">
+        <section className="mb-8 flex flex-col gap-5 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-[#6C5CE7]">Trialを探す</p>
+            <p className="text-sm font-bold text-[#6C5CE7]">Trialを探す</p>
             <h1 className="text-3xl font-bold text-gray-900 mt-1">Trial一覧</h1>
             <p className="text-sm text-gray-500 mt-2">気になる仕事を、求人を見る前に短く試してみる。</p>
           </div>
@@ -46,7 +46,7 @@ export default function MissionExplore({ navigate }: Props) {
               </button>
             ))}
           </div>
-        </div>
+        </section>
 
         {showShelves && (
           <section className="mb-10 overflow-hidden rounded-3xl bg-[#17152B] text-white">

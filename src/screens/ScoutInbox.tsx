@@ -51,14 +51,14 @@ export default function ScoutInbox({ navigate }: Props) {
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="scout" navigate={navigate} />
-      <div className="bg-white border-b border-gray-100">
-        <div className="mx-auto max-w-[1200px] px-6 py-8">
-        <p className="text-xs text-gray-500 mb-1">企業からの関心</p>
-        <h1 className="text-3xl font-bold text-gray-900">スカウト</h1>
-        </div>
-      </div>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
+        <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <p className="text-sm font-bold text-[#EC4899]">企業からの関心</p>
+          <h1 className="mt-1 text-3xl font-bold text-gray-900">スカウト</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">Trialやプロフィールを見た企業からの反応をまとめています。</p>
+        </section>
+
         <section className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_380px]">
           <div className="overflow-hidden rounded-3xl bg-[#17152B] text-white shadow-sm">
             <div className="flex flex-col gap-6 p-6 lg:flex-row lg:items-end lg:justify-between">

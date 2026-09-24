@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
-import { missions, passportData, scoutInvitations } from '../data/mock'
+import { missions, mockStudent, passportData, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
 import { demoTrialScout } from '../data/demoTrial'
 import { markDemoNotified, useDemoTrial } from '../state/demoTrial'
@@ -10,7 +10,9 @@ interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function StudentHome({ navigate }: Props) {
   const featured = missions.find(m => (m as any).source === 'core') ?? missions[0]
-  const nextTrials = missions.filter(m => m.id !== featured.id).slice(0, 3)
+  const nextTrials = ['mis_003', 'mis_001', 'core_003']
+    .map(id => missions.find(m => m.id === id))
+    .filter(Boolean) as typeof missions
   const { evaluationComplete, notified, matchSeen } = useDemoTrial()
   const [noticeStage, setNoticeStage] = useState(0)
   const showDemoNotifications = notified || noticeStage > 0
@@ -52,6 +54,12 @@ export default function StudentHome({ navigate }: Props) {
       )}
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
+        <section className="mb-6 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <p className="text-sm font-bold text-[#6C5CE7]">ホーム</p>
+          <h1 className="mt-2 text-3xl font-bold text-gray-900">こんにちは、{mockStudent.name}さん</h1>
+          <p className="mt-2 text-sm leading-relaxed text-gray-500">今の仮説を確認しながら、次に試すTrialと企業からの反応を見ていきましょう。</p>
+        </section>
+
         <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_360px]">
           <div className="rounded-3xl bg-[#17152B] p-7 text-white lg:p-9">
             <p className="text-sm font-semibold text-[#A29BFE] mb-2">あなたの現在のキャリア仮説</p>
@@ -62,23 +70,26 @@ export default function StudentHome({ navigate }: Props) {
               <button onClick={() => navigate('studentProfile')} className="rounded-xl bg-white/10 px-5 py-3 text-sm font-bold text-white">プロフィールを見る</button>
             </div>
           </div>
-          <aside className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-            <p className="text-xs font-bold text-[#6C5CE7]">次におすすめ</p>
-            <div className="mt-4 rounded-2xl bg-[#F7F6FF] p-4">
-              <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ background: featured.color + '18' }}>{featured.emoji}</div>
-                <div>
-                <p className="text-sm font-bold text-gray-900">{featured.title}</p>
-                <p className="mt-1 text-xs leading-relaxed text-gray-500">{featured.duration} · {featured.category}</p>
-                </div>
+          <aside className="overflow-hidden rounded-3xl border border-[#6C5CE7]/30 bg-white shadow-sm">
+            <div className="relative p-5">
+              <div className="absolute right-[-34px] top-5 z-20 rotate-45 bg-[#F59E0B] px-10 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm">
+                Best Match
               </div>
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {featured.tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="rounded-xl bg-white px-2 py-2 text-center text-[11px] font-bold text-gray-500">{tag}</span>
-                ))}
+              <p className="text-xs font-bold text-[#6C5CE7]">次におすすめ</p>
+              <div className="mt-5 flex items-start justify-between gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ background: featured.color + '18' }}>{featured.emoji}</div>
+                <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{featured.duration}</span>
+              </div>
+              <h2 className="mt-5 min-h-[44px] text-base font-bold leading-snug text-gray-900">{featured.title}</h2>
+              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-500">{featured.summary}</p>
+              <div className="mt-5 flex gap-1.5 flex-wrap">
+                <span className="chip bg-gray-100 text-gray-600">{featured.category}</span>
+                <span className="chip bg-gray-100 text-gray-600">{featured.difficulty}</span>
               </div>
             </div>
-            <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="mt-5 w-full rounded-xl bg-[#6C5CE7] px-4 py-3 text-sm font-bold text-white">詳しく見る</button>
+            <button onClick={() => navigate('missionDetail', { missionId: featured.id })} className="w-full border-t border-gray-100 px-5 py-4 text-left text-xs font-bold text-[#6C5CE7]">
+              詳しく見る →
+            </button>
           </aside>
         </section>
 
@@ -112,24 +123,44 @@ export default function StudentHome({ navigate }: Props) {
         </section>
 
         <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">次のTrial</h2>
+          <div className="mb-4 flex items-end justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">次のTrial</h2>
+              <p className="mt-1 text-xs text-gray-500">相性が良さそうなTrialを優先表示しています</p>
+            </div>
             <button onClick={() => navigate('missionExplore')} className="text-sm font-bold text-[#6C5CE7]">Trialを探す</button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {nextTrials.map(trial => (
+          <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+            {nextTrials.map((trial, index) => {
+              const isCore = (trial as any).source === 'core'
+              return (
               <button key={trial.id} onClick={() => navigate('missionDetail', { missionId: trial.id })}
-                className="text-left bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:border-[#6C5CE7]">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style={{ background: trial.color + '18' }}>{trial.emoji}</div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-gray-900 truncate">{trial.title}</p>
-                    <p className="text-xs text-gray-500">{trial.company}</p>
+                className={`group relative text-left snap-start shrink-0 w-[292px] overflow-hidden border rounded-2xl shadow-sm hover:-translate-y-1 transition-all ${isCore ? 'bg-white border-[#6C5CE7]/40 hover:border-[#6C5CE7]' : 'bg-white border-gray-100 hover:border-gray-300'}`}>
+                {index === 0 && (
+                  <div className="absolute right-[-34px] top-5 z-20 rotate-45 bg-[#F59E0B] px-10 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm">
+                    Best Match
                   </div>
+                )}
+                <div className={isCore ? 'p-5' : 'p-5 text-white'} style={!isCore ? { background: `linear-gradient(135deg, ${trial.color}, #17152B)` } : undefined}>
+                  <div className="flex items-start justify-between gap-3 mb-6">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: isCore ? trial.color + '18' : 'rgba(255,255,255,0.18)' }}>{trial.emoji}</div>
+                    <span className={isCore ? 'text-gray-300 group-hover:text-[#6C5CE7] text-xl' : 'text-white/55 group-hover:text-white text-xl'}>↗</span>
+                  </div>
+                  <span className={isCore ? 'chip bg-[#EEF0FF] text-[#6C5CE7]' : 'chip bg-white/15 text-white'}>{isCore ? '基礎Trial' : '企業の仕事'}</span>
+                  <h3 className={`text-base font-bold leading-snug mt-3 line-clamp-2 min-h-[44px] ${isCore ? 'text-gray-900' : 'text-white'}`}>{trial.title}</h3>
+                  <p className={`mt-2 text-xs truncate ${isCore ? 'text-gray-500' : 'text-white/65'}`}>{trial.company}</p>
                 </div>
-                <p className="text-xs text-gray-600 line-clamp-2">{trial.summary}</p>
+                <div className="p-5">
+                  {!isCore && <p className="mb-3 text-xs font-bold text-gray-400">実際の企業テーマを体験</p>}
+                  <p className="line-clamp-2 min-h-[40px] text-xs leading-relaxed text-gray-600">{trial.summary}</p>
+                  <div className="flex gap-1.5 mt-5 flex-wrap">
+                    <span className="chip bg-gray-100 text-gray-600">{trial.duration}</span><span className="chip bg-gray-100 text-gray-600">{trial.difficulty}</span>
+                  </div>
+                  <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between"><span className="text-xs text-gray-500">{trial.category}</span><span className="text-xs font-bold" style={{ color: isCore ? '#6C5CE7' : trial.color }}>詳しく見る</span></div>
+                </div>
               </button>
-            ))}
+              )
+            })}
           </div>
         </section>
 
@@ -143,11 +174,27 @@ export default function StudentHome({ navigate }: Props) {
           </div>
           <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
             {passportData.experiences.slice(0, 3).map(exp => (
-              <div key={exp.id} className="snap-start shrink-0 w-[300px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <p className="text-2xl mb-3">{exp.emoji}</p>
-                <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
-                <p className="text-xs text-gray-500 mt-1">{exp.company} · {exp.date}</p>
-                <p className="text-xs text-gray-600 mt-3 line-clamp-2">{exp.memo}</p>
+              <div key={exp.id} className="relative snap-start shrink-0 w-[292px] overflow-hidden rounded-2xl border border-gray-200 bg-[#F3F4F6] shadow-sm opacity-90">
+                <div className="absolute right-[-32px] top-5 z-20 rotate-45 bg-gray-500 px-10 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm">
+                  Finished
+                </div>
+                <div className="p-5 text-white" style={{ background: 'linear-gradient(135deg, #4B5563, #111827)' }}>
+                  <div className="mb-6 flex items-start justify-between gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-2xl">{exp.emoji}</div>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-sm text-white/70">✓</span>
+                  </div>
+                  <span className="chip bg-white/10 text-white/70">完了済み</span>
+                  <h3 className="mt-3 min-h-[44px] text-base font-bold leading-snug text-white line-clamp-2">{exp.mission}</h3>
+                  <p className="mt-2 truncate text-xs text-white/65">{exp.company}</p>
+                </div>
+                <div className="p-5">
+                  <p className="line-clamp-2 min-h-[40px] text-xs leading-relaxed text-gray-600">{exp.memo}</p>
+                  <div className="mt-5 flex gap-1.5 flex-wrap">
+                    <span className="chip bg-white text-gray-600">満足度 {exp.satisfaction}</span>
+                    <span className="chip bg-white text-gray-500">{exp.date}</span>
+                  </div>
+                  <div className="mt-5 border-t border-gray-200 pt-3 text-xs font-bold text-gray-500">プロフィールに記録済み</div>
+                </div>
               </div>
             ))}
           </div>
