@@ -3,12 +3,34 @@ import { Screen } from '../App'
 interface Props { current: string; navigate: (s: Screen) => void }
 
 const items = [
-  { icon: '📊', label: 'ダッシュボード', screen: 'companyDashboard' as Screen },
-  { icon: '📋', label: 'Mission一覧', screen: 'missionList' as Screen },
-  { icon: '✏️', label: 'Mission作成', screen: 'createMission' as Screen },
-  { icon: '📈', label: '分析', screen: 'missionAnalytics' as Screen },
-  { icon: '👥', label: '学生一覧', screen: 'studentList' as Screen },
-  { icon: '💌', label: 'スカウト', screen: 'companyScouts' as Screen },
+  {
+    icon: '📊',
+    label: 'ホーム',
+    screen: 'companyDashboard' as Screen,
+    matches: ['companyDashboard'],
+    hint: '全体状況',
+  },
+  {
+    icon: '📋',
+    label: 'Mission',
+    screen: 'missionList' as Screen,
+    matches: ['missionList', 'createMission', 'missionAnalytics'],
+    hint: '作成・分析',
+  },
+  {
+    icon: '👥',
+    label: '学生',
+    screen: 'studentList' as Screen,
+    matches: ['studentList', 'studentDetail'],
+    hint: '候補分析',
+  },
+  {
+    icon: '💌',
+    label: 'スカウト',
+    screen: 'companyScouts' as Screen,
+    matches: ['companyScouts'],
+    hint: '接点管理',
+  },
 ]
 
 export default function CompanySidebar({ current, navigate }: Props) {
@@ -34,11 +56,14 @@ export default function CompanySidebar({ current, navigate }: Props) {
 
       {/* Nav */}
       <nav className="flex-1 space-y-1">
-        {items.map(({ icon, label, screen }) => (
+        {items.map(({ icon, label, screen, matches, hint }) => (
           <button key={label} onClick={() => navigate(screen)}
-            className={`company-sidebar-item ${current === screen ? 'active' : ''}`}>
+            className={`company-sidebar-item ${matches.includes(current) ? 'active' : ''}`}>
             <span className="text-lg">{icon}</span>
-            <span>{label}</span>
+            <span className="min-w-0">
+              <span className="block leading-tight">{label}</span>
+              <span className={`block text-[10px] leading-tight ${matches.includes(current) ? 'text-[#17152B]/45' : 'text-white/35'}`}>{hint}</span>
+            </span>
           </button>
         ))}
       </nav>

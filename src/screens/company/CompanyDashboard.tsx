@@ -22,10 +22,37 @@ export default function CompanyDashboard({ navigate }: Props) {
               <h1 className="mt-1 text-3xl font-bold text-gray-900">株式会社Lumoの採用Trial</h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">自社Mission、基礎Trialの反応、学生の価値観・提出記録を見ながら候補者を見つけます。</p>
             </div>
-            <button onClick={() => navigate('createMission')} className="rounded-xl bg-[#17152B] px-5 py-3 text-sm font-bold text-white hover:bg-[#24213A]">
-              Mission作成
-            </button>
+            <div className="flex gap-2">
+              <button onClick={() => navigate('missionList')} className="rounded-xl bg-[#EEF0FF] px-4 py-3 text-sm font-bold text-[#6C5CE7] hover:bg-[#E3E7FF]">
+                Missionを見る
+              </button>
+              <button onClick={() => navigate('studentList')} className="rounded-xl bg-[#17152B] px-4 py-3 text-sm font-bold text-white hover:bg-[#24213A]">
+                候補学生を見る
+              </button>
+            </div>
           </div>
+        </section>
+
+        <section className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
+          {[
+            { step: '1', title: 'Missionを整える', body: '公開状態と内容を確認', screen: 'missionList' as Screen, active: true },
+            { step: '2', title: '反応を読む', body: '完了率と興味ありを見る', screen: 'missionAnalytics' as Screen, active: false },
+            { step: '3', title: '学生を分析', body: '価値観と提出記録を確認', screen: 'studentList' as Screen, active: false },
+            { step: '4', title: 'スカウトする', body: '候補へ接点を作る', screen: 'companyScouts' as Screen, active: false },
+          ].map(item => (
+            <button
+              key={item.step}
+              onClick={() => navigate(item.screen)}
+              className={`rounded-2xl border p-4 text-left shadow-sm transition-colors ${item.active ? 'border-[#6C5CE7]/30 bg-white' : 'border-gray-100 bg-white hover:bg-[#F7F8FB]'}`}
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${item.active ? 'bg-[#6C5CE7] text-white' : 'bg-gray-100 text-gray-400'}`}>{item.step}</span>
+                {item.active && <span className="rounded-full bg-[#EEF0FF] px-2 py-0.5 text-[10px] font-bold text-[#6C5CE7]">Now</span>}
+              </div>
+              <p className="text-sm font-bold text-gray-900">{item.title}</p>
+              <p className="mt-1 text-xs text-gray-500">{item.body}</p>
+            </button>
+          ))}
         </section>
 
         <section className="mb-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
