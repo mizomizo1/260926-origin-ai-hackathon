@@ -22,7 +22,7 @@ export default function ABIntro({ navigate }: Props) {
         <div className="w-14 h-14 rounded-3xl bg-[#EEF0FF] text-3xl flex items-center justify-center mb-5">⚡</div>
         <h2 className="text-2xl font-bold text-gray-900 leading-tight">5問だけ、直感で選ぶ</h2>
         <p className="text-sm text-gray-500 leading-relaxed mt-3">
-          正解はありません。近い方を選ぶと、最初のおすすめMissionが出ます。
+          正解はありません。近い方を選ぶと、最初のおすすめTrialが出ます。
         </p>
 
         <div className="rounded-3xl bg-[#F7F6FF] p-4 mt-8">

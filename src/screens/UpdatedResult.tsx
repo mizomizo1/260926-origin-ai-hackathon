@@ -63,7 +63,7 @@ export default function UpdatedResult({ navigate }: Props) {
 
         {/* Next recommended */}
         <div>
-          <h3 className="text-sm font-bold text-gray-900 mb-3">次におすすめするMission</h3>
+          <h3 className="text-sm font-bold text-gray-900 mb-3">次におすすめするTrial</h3>
           {missions.slice(2, 3).map(m => (
             <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
               className="w-full mission-card card-shadow text-left">

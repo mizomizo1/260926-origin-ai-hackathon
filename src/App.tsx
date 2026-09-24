@@ -111,19 +111,19 @@ export default function App() {
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#6C5CE7] text-sm font-bold">CC</span>
                 <span>
                   <span className="block text-sm font-bold">Career Compass</span>
-                  <span className="block text-xs text-white/50">Job Trial Platform</span>
+                  <span className="block text-xs text-white/50">仕事体験プラットフォーム</span>
                 </span>
               </button>
               <div className="mt-24">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#A29BFE]">Start with a trial</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#A29BFE]">まずは体験から</p>
                 <h1 className="mt-4 text-4xl font-bold leading-tight">仕事を選ぶ前に、<br />少し試してみよう。</h1>
                 <p className="mt-5 text-sm leading-7 text-white/60">短い仕事体験と振り返りから、あなたのキャリアの仮説を育てます。</p>
               </div>
             </div>
             <div className="space-y-3 text-xs text-white/45">
-              <div className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-[#6C5CE7]" /> Explore real work</div>
-              <div className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-[#00B894]" /> Update your hypothesis</div>
-              <div className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-[#F59E0B]" /> Keep your Career Passport</div>
+              <div className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-[#6C5CE7]" /> 実際の仕事を探す</div>
+              <div className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-[#00B894]" /> 仮説を更新する</div>
+              <div className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-[#F59E0B]" /> キャリアパスポートに記録する</div>
             </div>
           </aside>
           <section className="min-w-0 overflow-y-auto bg-white">

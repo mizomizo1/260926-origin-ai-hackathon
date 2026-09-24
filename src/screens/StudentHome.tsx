@@ -32,10 +32,10 @@ export default function StudentHome({ navigate }: Props) {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {[
-            { label: 'Completed Trials', value: passportData.completedMissions, suffix: '個', color: '#6C5CE7' },
-            { label: 'Experience time', value: passportData.totalTime, suffix: '', color: '#00B894' },
-            { label: 'Scout received', value: scoutInvitations.length, suffix: '件', color: '#EC4899' },
-            { label: 'Weekly progress', value: '2/3', suffix: '', color: '#F59E0B' },
+            { label: '完了したTrial', value: passportData.completedMissions, suffix: '個', color: '#6C5CE7' },
+            { label: '体験時間', value: passportData.totalTime, suffix: '', color: '#00B894' },
+            { label: '届いたスカウト', value: scoutInvitations.length, suffix: '件', color: '#EC4899' },
+            { label: '今週の進捗', value: '2/3', suffix: '', color: '#F59E0B' },
           ].map(item => (
             <div key={item.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
               <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}{item.suffix}</p>
@@ -47,7 +47,7 @@ export default function StudentHome({ navigate }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
           <section className="rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-              <div><p className="text-xs font-bold text-[#6C5CE7]">CONTINUE WHERE YOU LEFT OFF</p><h2 className="text-xl font-bold text-gray-900 mt-1">{currentTrial.title}</h2></div>
+              <div><p className="text-xs font-bold text-[#6C5CE7]">続きから再開</p><h2 className="text-xl font-bold text-gray-900 mt-1">{currentTrial.title}</h2></div>
               <span className="text-2xl">{currentTrial.emoji}</span>
             </div>
             <div className="p-6 bg-[#F7F6FF]">
@@ -66,7 +66,7 @@ export default function StudentHome({ navigate }: Props) {
 
           <aside className="space-y-4">
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">Continue Current Trial</p>
+              <p className="text-sm font-bold text-gray-900">進行中のTrial</p>
               <p className="text-xs text-gray-500 mt-1">{currentTrial.title}</p>
               <div className="h-2 bg-gray-100 rounded-full overflow-hidden mt-4">
                 <div className="h-full w-2/5 rounded-full bg-[#6C5CE7]" />
@@ -78,7 +78,7 @@ export default function StudentHome({ navigate }: Props) {
             </div>
 
             <button onClick={() => navigate('scoutInbox')} className="w-full text-left bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">Scout</p>
+              <p className="text-sm font-bold text-gray-900">スカウト</p>
               <p className="text-xs text-gray-500 mt-1">{latestScout.companyName} · {latestScout.signal}</p>
               <span className="inline-flex mt-3 text-xs font-bold text-[#EC4899] bg-[#FDF2F8] rounded-full px-2.5 py-1">
                 {scoutInvitations.length}件
@@ -86,15 +86,15 @@ export default function StudentHome({ navigate }: Props) {
             </button>
 
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">Career Passport</p>
+              <p className="text-sm font-bold text-gray-900">キャリアパスポート</p>
               <div className="grid grid-cols-2 gap-3 mt-4">
                 <div>
                   <p className="text-2xl font-bold text-gray-900">{passportData.completedMissions}</p>
-                  <p className="text-xs text-gray-500">Completed</p>
+                  <p className="text-xs text-gray-500">完了</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">{passportData.totalTime}</p>
-                  <p className="text-xs text-gray-500">Experience</p>
+                  <p className="text-xs text-gray-500">体験時間</p>
                 </div>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function StudentHome({ navigate }: Props) {
         <section className="mt-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Recently Completed Trials</h2>
+              <h2 className="text-lg font-bold text-gray-900">最近終えたTrial</h2>
               <p className="text-sm text-gray-500">体験から仮説を更新していきます</p>
             </div>
             <button onClick={() => navigate('careerPassport')} className="text-sm font-bold text-[#6C5CE7]">Passportを見る</button>
@@ -123,8 +123,8 @@ export default function StudentHome({ navigate }: Props) {
 
         <section className="mt-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">Next Trials</h2>
-            <button onClick={() => navigate('missionExplore')} className="text-sm font-bold text-[#6C5CE7]">Explore Trials</button>
+            <h2 className="text-lg font-bold text-gray-900">次のTrial</h2>
+            <button onClick={() => navigate('missionExplore')} className="text-sm font-bold text-[#6C5CE7]">Trialを探す</button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {nextTrials.map(trial => (

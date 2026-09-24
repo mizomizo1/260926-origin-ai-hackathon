@@ -23,16 +23,16 @@ export default function ScoutInbox({ navigate }: Props) {
       <div className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-[1200px] px-6 py-8">
         <p className="text-xs text-gray-500 mb-1">企業からの関心</p>
-        <h1 className="text-3xl font-bold text-gray-900">Scout</h1>
+        <h1 className="text-3xl font-bold text-gray-900">スカウト</h1>
         </div>
       </div>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Scout', value: scoutInvitations.length, color: '#EC4899' },
-            { label: 'Profile views', value: profileViews.length, color: '#6C5CE7' },
-            { label: 'Companies', value: interestedCompanies.length, color: '#00B894' },
+            { label: 'スカウト', value: scoutInvitations.length, color: '#EC4899' },
+            { label: 'プロフィール閲覧', value: profileViews.length, color: '#6C5CE7' },
+            { label: '企業', value: interestedCompanies.length, color: '#00B894' },
           ].map(item => (
             <div key={item.label} className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm"><p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}</p><p className="text-xs text-gray-500 mt-1">{item.label}</p></div>
           ))}
@@ -40,9 +40,9 @@ export default function ScoutInbox({ navigate }: Props) {
         <div className="bg-[#17152B] rounded-3xl p-6 text-white shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold text-[#F9A8D4] mb-1">YOUR SIGNALS</p>
+              <p className="text-xs font-bold text-[#F9A8D4] mb-1">あなたの傾向</p>
               <h3 className="text-xl font-bold">あなたに関心を持つ企業</h3>
-              <p className="text-sm text-white/55 mt-2">Missionと価値観の記録を見て、企業があなたを見つけています。</p>
+              <p className="text-sm text-white/55 mt-2">Trialと価値観の記録を見て、企業があなたを見つけています。</p>
             </div>
             <div className="flex -space-x-2 pt-1">
               {interestedCompanies.map(company => (
@@ -65,7 +65,7 @@ export default function ScoutInbox({ navigate }: Props) {
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>
-              <p className="text-xs font-bold text-[#EC4899]">NEW OPPORTUNITIES</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
+              <p className="text-xs font-bold text-[#EC4899]">新着のスカウト</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
             </div>
           </div>
 
@@ -101,7 +101,7 @@ export default function ScoutInbox({ navigate }: Props) {
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>
-              <p className="text-xs font-bold text-[#6C5CE7]">RECENT ACTIVITY</p><h3 className="text-xl font-bold text-gray-900 mt-1">あなたをチェックした会社</h3>
+              <p className="text-xs font-bold text-[#6C5CE7]">最近の動き</p><h3 className="text-xl font-bold text-gray-900 mt-1">あなたをチェックした会社</h3>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">

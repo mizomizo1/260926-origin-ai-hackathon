@@ -11,8 +11,8 @@ export default function CareerPassport({ navigate }: Props) {
       <main className="mx-auto max-w-[1200px] px-6 py-8">
         <div className="flex justify-between items-end mb-6">
           <div>
-            <p className="text-sm font-semibold text-[#6C5CE7]">Your progress</p>
-            <h1 className="text-3xl font-bold text-gray-900 mt-1">Career Passport</h1>
+            <p className="text-sm font-semibold text-[#6C5CE7]">あなたの進捗</p>
+            <h1 className="text-3xl font-bold text-gray-900 mt-1">キャリアパスポート</h1>
             <p className="text-sm text-gray-500 mt-2">体験を重ねるほど、あなたのキャリア仮説が具体的になります。</p>
           </div>
           <div className="hidden sm:block text-4xl">🗺️</div>
@@ -21,7 +21,7 @@ export default function CareerPassport({ navigate }: Props) {
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-8 max-w-lg">
           {[
-            { label: '完了Mission', value: passportData.completedMissions, unit: '個', color: '#6C5CE7' },
+            { label: '完了Trial', value: passportData.completedMissions, unit: '個', color: '#6C5CE7' },
             { label: '総体験時間', value: passportData.totalTime, unit: '', color: '#00B894' },
           ].map(({ label, value, unit, color }) => (
             <div key={label} className="rounded-2xl p-5" style={{ background: color + '15' }}>
@@ -34,7 +34,7 @@ export default function CareerPassport({ navigate }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
         {/* Skills */}
         <div className="bg-[#17152B] rounded-3xl p-6 shadow-sm h-fit text-white">
-          <p className="text-xs font-bold text-[#A29BFE]">YOUR SIGNALS</p>
+          <p className="text-xs font-bold text-[#A29BFE]">あなたの傾向</p>
           <h3 className="text-xl font-bold mt-2 mb-6">スキル傾向</h3>
           <div className="space-y-3">
             {passportData.skills.map(({ label, value }) => (
@@ -54,7 +54,7 @@ export default function CareerPassport({ navigate }: Props) {
 
         {/* Experience cards */}
         <div>
-          <div className="flex items-end justify-between mb-4"><div><p className="text-xs font-bold text-[#6C5CE7]">YOUR JOURNEY</p><h3 className="text-xl font-bold text-gray-900 mt-1">体験ログ</h3></div><span className="text-xs text-gray-400">3 experiences</span></div>
+          <div className="flex items-end justify-between mb-4"><div><p className="text-xs font-bold text-[#6C5CE7]">これまでの歩み</p><h3 className="text-xl font-bold text-gray-900 mt-1">体験ログ</h3></div><span className="text-xs text-gray-400">3 experiences</span></div>
           <div className="space-y-4 border-l-2 border-[#EEF0FF] pl-5">
             {passportData.experiences.map(exp => (
               <div key={exp.id} className="relative bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

@@ -14,7 +14,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
       <StudentTopNav current="explore" navigate={navigate} />
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
-        <button onClick={() => navigate('missionExplore')} className="text-gray-500 text-sm mb-5 block">← Explore Trials</button>
+        <button onClick={() => navigate('missionExplore')} className="text-gray-500 text-sm mb-5 block">← Trialを探す</button>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
           <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -26,7 +26,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
                 </div>
                 <div>
                   <div className="flex gap-2 mb-2 flex-wrap">
-                    {isCore && <span className="chip text-white bg-[#111827]">Core Trial</span>}
+                    {isCore && <span className="chip text-white bg-[#111827]">基礎Trial</span>}
                     <span className="chip text-white" style={{ background: m.color }}>{m.category}</span>
                     <span className="chip bg-white text-gray-600">{m.difficulty}</span>
                   </div>
@@ -38,7 +38,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
 
             <div className="p-6 lg:p-8 space-y-8">
               <div>
-                <h2 className="text-lg font-bold text-gray-900 mb-3">Overview</h2>
+                <h2 className="text-lg font-bold text-gray-900 mb-3">概要</h2>
                 <p className="text-sm text-gray-600 leading-relaxed">{m.description}</p>
               </div>
 
@@ -54,7 +54,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
               </div>
 
               <div>
-                <h2 className="text-lg font-bold text-gray-900 mb-3">Task flow</h2>
+                <h2 className="text-lg font-bold text-gray-900 mb-3">進め方</h2>
                 <div className="space-y-3">
                   {m.steps.map((s, i) => (
                     <div key={i} className="flex items-start gap-3 rounded-xl border border-gray-100 p-4">
@@ -68,7 +68,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
               </div>
 
               <div className="bg-[#EEF0FF] rounded-2xl p-5">
-                <h2 className="text-base font-bold text-[#6C5CE7] mb-3">Recommended for</h2>
+                <h2 className="text-base font-bold text-[#6C5CE7] mb-3">こんな人におすすめ</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {m.recommendedFor.map((r, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
@@ -88,7 +88,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
           </section>
 
           <aside className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 h-fit sticky top-24">
-            <h2 className="text-base font-bold text-gray-900 mb-4">Trial info</h2>
+            <h2 className="text-base font-bold text-gray-900 mb-4">Trialの情報</h2>
             <div className="space-y-3 mb-5">
               {[
                 { label: '所要時間', value: m.duration },

@@ -21,7 +21,7 @@ export default function RoleSelect({ navigate }: Props) {
           <h3 className="text-xl font-bold text-white mb-1">学生として使う</h3>
           <p className="text-sm text-white/80">仕事体験を通じて自分に合うキャリアを探す</p>
           <div className="mt-4 flex gap-2 flex-wrap">
-            {['A/B選択', 'Job Trial', 'Career Passport'].map(t => (
+            {['A/B選択', 'Job Trial', 'キャリアパスポート'].map(t => (
               <span key={t} className="text-xs bg-white/20 text-white rounded-full px-3 py-1">{t}</span>
             ))}
           </div>

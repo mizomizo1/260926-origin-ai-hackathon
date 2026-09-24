@@ -7,11 +7,11 @@ interface Props {
 }
 
 const navItems: { key: Props['current']; label: string; screen: Screen }[] = [
-  { key: 'home', label: 'Home', screen: 'studentHome' },
-  { key: 'explore', label: 'Explore Trials', screen: 'missionExplore' },
-  { key: 'passport', label: 'Career Passport', screen: 'careerPassport' },
-  { key: 'companies', label: 'Companies', screen: 'companyMatch' },
-  { key: 'scout', label: 'Scout', screen: 'scoutInbox' },
+  { key: 'home', label: 'ホーム', screen: 'studentHome' },
+  { key: 'explore', label: 'Trialを探す', screen: 'missionExplore' },
+  { key: 'passport', label: 'キャリアパスポート', screen: 'careerPassport' },
+  { key: 'companies', label: '企業', screen: 'companyMatch' },
+  { key: 'scout', label: 'スカウト', screen: 'scoutInbox' },
 ]
 
 export default function StudentTopNav({ current, navigate }: Props) {
@@ -22,7 +22,7 @@ export default function StudentTopNav({ current, navigate }: Props) {
           <div className="w-9 h-9 rounded-xl bg-[#6C5CE7] text-white flex items-center justify-center font-bold">CC</div>
           <div>
             <p className="text-sm font-bold text-gray-900 leading-tight">Career Compass Trial</p>
-            <p className="text-xs text-gray-400 leading-tight">Job Trial Platform</p>
+            <p className="text-xs text-gray-400 leading-tight">仕事体験プラットフォーム</p>
           </div>
         </button>
 
