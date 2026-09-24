@@ -25,13 +25,13 @@ export default function StudentList({ navigate }: Props) {
       <CompanySidebar current="studentList" navigate={navigate} />
 
       <main className="flex-1 overflow-y-auto px-8 py-8">
-        <section className="mb-6 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+        <section className="mb-6 border-b border-gray-200 pb-6">
           <p className="text-sm font-bold text-[#6C5CE7]">学生分析</p>
           <h1 className="mt-1 text-3xl font-bold text-gray-900">Missionを体験した学生</h1>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">自社Missionと基礎Trialの記録をもとに、相性が高い学生を確認できます。</p>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">反応と体験履歴を見ながら、次に話したい学生を探します。</p>
         </section>
 
-        <section className="mb-5 flex flex-col gap-3 rounded-3xl border border-gray-100 bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+        <section className="mb-6 flex flex-col gap-3 border-b border-gray-200 pb-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full lg:max-w-sm">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">検索</span>
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="名前・学部・タグ"
@@ -49,7 +49,7 @@ export default function StudentList({ navigate }: Props) {
 
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
           {filtered.map(student => (
-            <article key={student.id} className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition-transform hover:-translate-y-1">
+            <article key={student.id} className="rounded-2xl border border-gray-200 bg-white p-5 transition-transform hover:-translate-y-1 hover:border-gray-400">
               <div className="flex items-start justify-between gap-3">
                 <button onClick={() => navigate('studentDetail', { studentId: student.id })} className="flex min-w-0 items-center gap-3 text-left">
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#6C5CE7] text-base font-bold text-white">{student.name[0]}</span>
@@ -77,15 +77,15 @@ export default function StudentList({ navigate }: Props) {
               </div>
 
               <div className="mt-4 flex flex-wrap gap-1.5">
-                {student.fitTags.map(tag => <span key={tag} className="rounded-full bg-gray-100 px-2 py-1 text-[11px] font-bold text-gray-500">{tag}</span>)}
+                {student.fitTags.slice(0, 3).map(tag => <span key={tag} className="rounded-full bg-gray-100 px-2 py-1 text-[11px] font-bold text-gray-500">{tag}</span>)}
               </div>
 
               <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4">
                 <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${student.status === 'スカウト候補' ? 'bg-[#E8FBF5] text-[#00B894]' : 'bg-gray-100 text-gray-500'}`}>{student.status}</span>
                 <div className="flex gap-2">
-                  <button onClick={() => navigate('studentDetail', { studentId: student.id })} className="rounded-xl bg-[#EEF0FF] px-3 py-2 text-xs font-bold text-[#6C5CE7]">分析</button>
+                    <button onClick={() => navigate('studentDetail', { studentId: student.id })} className="rounded-xl bg-[#EEF0FF] px-3 py-2 text-xs font-bold text-[#6C5CE7]">詳細</button>
                   {student.status === 'スカウト候補' && (
-                    <button onClick={() => navigate('companyScouts')} className="rounded-xl bg-[#FDF2F8] px-3 py-2 text-xs font-bold text-[#EC4899]">スカウト</button>
+                    <button onClick={() => navigate('scoutCompose', { studentId: student.id })} className="rounded-xl bg-[#FDF2F8] px-3 py-2 text-xs font-bold text-[#EC4899]">スカウト</button>
                   )}
                 </div>
               </div>

@@ -25,7 +25,7 @@ export default function ScoutManagement({ navigate }: Props) {
               <h1 className="mt-1 text-3xl font-bold text-gray-900">学生への接点を管理</h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">Trialの提出内容、価値観サマリ、基礎Trialのシグナルをもとにスカウト候補を確認します。</p>
             </div>
-            <button className="rounded-xl bg-[#17152B] px-5 py-3 text-sm font-bold text-white hover:bg-[#24213A]">
+            <button onClick={() => navigate('scoutCompose', { studentId: candidates[0]?.id })} className="rounded-xl bg-[#17152B] px-5 py-3 text-sm font-bold text-white hover:bg-[#24213A]">
               スカウト作成
             </button>
           </div>
@@ -81,7 +81,7 @@ export default function ScoutManagement({ navigate }: Props) {
             <h2 className="mt-1 text-xl font-bold text-gray-900">次に見る候補</h2>
             <div className="mt-5 space-y-3">
               {candidates.map(student => (
-                <button key={student.id} onClick={() => navigate('studentDetail', { studentId: student.id })}
+                  <button key={student.id} onClick={() => navigate('scoutCompose', { studentId: student.id })}
                   className="w-full rounded-2xl bg-[#F7F8FB] p-4 text-left hover:bg-[#EEF0FF]">
                   <div className="flex items-center gap-3">
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#6C5CE7] text-sm font-bold text-white">{student.name[0]}</span>
@@ -89,7 +89,7 @@ export default function ScoutManagement({ navigate }: Props) {
                       <p className="truncate text-sm font-bold text-gray-900">{student.name}</p>
                       <p className="truncate text-xs text-gray-500">{student.fitTags.join('・')}</p>
                     </div>
-                    <span className="text-xs font-bold text-[#6C5CE7]">分析</span>
+                    <span className="text-xs font-bold text-[#EC4899]">作成</span>
                   </div>
                 </button>
               ))}

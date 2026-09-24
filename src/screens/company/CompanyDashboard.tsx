@@ -1,6 +1,6 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
-import { companyCoreTrialInsights, companyMissions, companyScoutPipeline, companyStudents } from '../../data/mock'
+import { companyMissions, companyScoutPipeline, companyStudents } from '../../data/mock'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -15,15 +15,15 @@ export default function CompanyDashboard({ navigate }: Props) {
       <CompanySidebar current="companyDashboard" navigate={navigate} />
 
       <main className="flex-1 overflow-y-auto px-8 py-8">
-        <section className="mb-6 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+        <section className="mb-6 border-b border-gray-200 pb-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm font-bold text-[#6C5CE7]">企業ホーム</p>
               <h1 className="mt-1 text-3xl font-bold text-gray-900">株式会社Lumoの採用Trial</h1>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">自社Mission、基礎Trialの反応、学生の価値観・提出記録を見ながら候補者を見つけます。</p>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">公開中のMissionと、学生の反応をひとつの流れで確認できます。</p>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => navigate('missionList')} className="rounded-xl bg-[#EEF0FF] px-4 py-3 text-sm font-bold text-[#6C5CE7] hover:bg-[#E3E7FF]">
+              <button onClick={() => navigate('missionList')} className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-700 hover:border-[#6C5CE7] hover:text-[#6C5CE7]">
                 Missionを見る
               </button>
               <button onClick={() => navigate('studentList')} className="rounded-xl bg-[#17152B] px-4 py-3 text-sm font-bold text-white hover:bg-[#24213A]">
@@ -33,133 +33,103 @@ export default function CompanyDashboard({ navigate }: Props) {
           </div>
         </section>
 
-        <section className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
+        <section className="mb-8 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-gray-200 py-4 xl:grid-cols-4">
           {[
-            { step: '1', title: 'Missionを整える', body: '公開状態と内容を確認', screen: 'missionList' as Screen, active: true },
-            { step: '2', title: '反応を読む', body: '完了率と興味ありを見る', screen: 'missionAnalytics' as Screen, active: false },
-            { step: '3', title: '学生を分析', body: '価値観と提出記録を確認', screen: 'studentList' as Screen, active: false },
-            { step: '4', title: 'スカウトする', body: '候補へ接点を作る', screen: 'companyScouts' as Screen, active: false },
+            { label: '公開中Mission', value: published.length, note: `${companyMissions.length}件を管理`, color: '#6C5CE7' },
+            { label: '体験した学生', value: totalParticipants, note: '自社Mission累計', color: '#00B894' },
+            { label: 'スカウト候補', value: scoutCandidates.length, note: '高相性の学生', color: '#EC4899' },
           ].map(item => (
-            <button
-              key={item.step}
-              onClick={() => navigate(item.screen)}
-              className={`rounded-2xl border p-4 text-left shadow-sm transition-colors ${item.active ? 'border-[#6C5CE7]/30 bg-white' : 'border-gray-100 bg-white hover:bg-[#F7F8FB]'}`}
-            >
-              <div className="mb-3 flex items-center gap-2">
-                <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${item.active ? 'bg-[#6C5CE7] text-white' : 'bg-gray-100 text-gray-400'}`}>{item.step}</span>
-                {item.active && <span className="rounded-full bg-[#EEF0FF] px-2 py-0.5 text-[10px] font-bold text-[#6C5CE7]">Now</span>}
+            <div key={item.label} className="flex items-baseline justify-between gap-3">
+              <div>
+                <p className="text-2xl font-bold leading-none" style={{ color: item.color }}>{item.value}</p>
+                <p className="mt-2 text-xs font-bold text-gray-900">{item.label}</p>
               </div>
-              <p className="text-sm font-bold text-gray-900">{item.title}</p>
-              <p className="mt-1 text-xs text-gray-500">{item.body}</p>
-            </button>
-          ))}
-        </section>
-
-        <section className="mb-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
-          {[
-            { label: '公開中Mission', value: published.length, note: `${companyMissions.length}件を管理`, color: '#6C5CE7', bg: '#EEF0FF' },
-            { label: '体験した学生', value: totalParticipants, note: '自社Mission累計', color: '#00B894', bg: '#E8FBF5' },
-            { label: 'スカウト候補', value: scoutCandidates.length, note: '高相性の学生', color: '#EC4899', bg: '#FDF2F8' },
-            { label: '基礎Trial接点', value: companyCoreTrialInsights.reduce((sum, trial) => sum + trial.scoutFit, 0), note: '自社候補に近い反応', color: '#F59E0B', bg: '#FEF3C7' },
-          ].map(item => (
-            <div key={item.label} className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-bold" style={{ background: item.bg, color: item.color }}>{item.value}</span>
-                <span className="text-[11px] font-bold text-gray-400">{item.note}</span>
-              </div>
-              <p className="text-sm font-bold text-gray-900">{item.label}</p>
+              <span className="text-right text-[11px] font-bold text-gray-400">{item.note}</span>
             </div>
           ))}
         </section>
 
-        <section className="mb-6 grid grid-cols-1 gap-5 xl:grid-cols-[1.25fr_0.75fr]">
-          <div className="overflow-hidden rounded-3xl bg-[#17152B] p-7 text-white shadow-sm">
-            <p className="text-xs font-bold text-[#A29BFE]">Mission Health</p>
-            <h2 className="mt-2 text-2xl font-bold">公開中の自社Missionを管理</h2>
-            <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
+        <section className="mb-8">
+          <div className="mb-4 flex items-end justify-between">
+            <div>
+              <p className="text-xs font-bold text-[#6C5CE7]">Mission Health</p>
+              <h2 className="mt-1 text-2xl font-bold text-gray-900">公開中の自社Mission</h2>
+            </div>
+            <button onClick={() => navigate('missionList')} className="text-xs font-bold text-[#6C5CE7]">すべて管理</button>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
               {published.map(mission => (
-                <button key={mission.id} onClick={() => navigate('missionAnalytics')} className="rounded-2xl bg-white/10 p-4 text-left transition-colors hover:bg-white/15">
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <span className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white/75">{mission.category}</span>
-                    <span className="text-xs font-bold text-[#A29BFE]">{mission.completionRate}%</span>
-                  </div>
-                  <p className="min-h-[40px] text-sm font-bold leading-snug">{mission.title}</p>
-                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/50">{mission.summary}</p>
-                  <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs text-white/45">
-                    <span>{mission.participants}名</span>
-                    <span>興味あり {mission.interestRate}%</span>
+                <button key={mission.id} onClick={() => navigate('missionAnalytics')} className="group relative w-[300px] shrink-0 snap-start overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-sm transition-all hover:-translate-y-1 hover:border-gray-400">
+                  <div className="h-1" style={{ backgroundColor: mission.id === 'mis_001' ? '#6C5CE7' : '#00B894' }} />
+                  <div className="p-5">
+                    <div className="mb-6 flex items-start justify-between gap-3">
+                      <span className="chip bg-gray-100 text-gray-600">{mission.category}</span>
+                      <span className="text-xl text-gray-300 transition-colors group-hover:text-gray-700">↗</span>
+                    </div>
+                    <h3 className="min-h-[44px] text-base font-bold leading-snug text-gray-900">{mission.title}</h3>
+                    <p className="mt-2 line-clamp-2 min-h-[40px] text-xs leading-relaxed text-gray-500">{mission.summary}</p>
+                    <div className="mt-5 flex flex-wrap gap-1.5">
+                      {mission.tags.slice(0, 3).map(tag => <span key={tag} className="chip bg-gray-100 text-gray-500">{tag}</span>)}
+                    </div>
+                    <div className="mt-5 border-t border-gray-100 pt-4">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-gray-900">完了率 {mission.completionRate}%</span>
+                        <span className="text-gray-400">興味あり {mission.interestRate}%</span>
+                      </div>
+                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">
+                        <div className="h-full rounded-full" style={{ width: `${mission.completionRate}%`, backgroundColor: mission.id === 'mis_001' ? '#6C5CE7' : '#00B894' }} />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between text-xs text-gray-400">
+                      <span>{mission.participants}名が体験</span>
+                      <span>{mission.updatedAt}</span>
+                    </div>
                   </div>
                 </button>
               ))}
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-            <p className="text-xs font-bold text-[#6C5CE7]">基礎Trialから見る候補</p>
-            <h2 className="mt-2 text-xl font-bold text-gray-900">自社Mission前のシグナル</h2>
-            <div className="mt-5 space-y-3">
-              {companyCoreTrialInsights.map(trial => (
-                <div key={trial.id} className="rounded-2xl bg-[#F7F8FB] p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">{trial.title}</p>
-                      <p className="mt-1 text-xs text-gray-500">{trial.note}</p>
-                    </div>
-                    <span className="rounded-full bg-[#EEF0FF] px-2.5 py-1 text-xs font-bold text-[#6C5CE7]">{trial.scoutFit}人</span>
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {trial.strongSignals.map(signal => <span key={signal} className="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-gray-500">{signal}</span>)}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
-        <section className="grid grid-cols-1 gap-5 xl:grid-cols-[0.85fr_1.15fr]">
-          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex items-end justify-between">
+        <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="mb-3 flex items-end justify-between">
               <div>
                 <p className="text-xs font-bold text-[#EC4899]">Scout Queue</p>
-                <h2 className="mt-1 text-xl font-bold text-gray-900">次に見る学生</h2>
+                <h2 className="mt-1 text-lg font-bold text-gray-900">次に見る学生</h2>
               </div>
               <button onClick={() => navigate('studentList')} className="text-xs font-bold text-[#6C5CE7]">学生一覧</button>
             </div>
-            <div className="space-y-3">
+            <div className="flex gap-2 overflow-x-auto pb-1">
               {topStudents.map(student => (
-                <button key={student.id} onClick={() => navigate('studentDetail', { studentId: student.id })} className="w-full rounded-2xl bg-[#F7F8FB] p-4 text-left hover:bg-[#EEF0FF]">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#6C5CE7] text-sm font-bold text-white">{student.name[0]}</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-bold text-gray-900">{student.name}</p>
-                      <p className="truncate text-xs text-gray-500">{student.schoolYear} · {student.fitTags.join('・')}</p>
-                    </div>
-                    <span className="text-sm font-bold text-[#6C5CE7]">{student.satisfaction}</span>
+                <button key={student.id} onClick={() => navigate('studentDetail', { studentId: student.id })} className="min-w-[154px] flex-1 rounded-xl border border-gray-100 p-3 text-left hover:border-[#EC4899]/50">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17152B] text-xs font-bold text-white">{student.name[0]}</span>
+                    <span className="text-sm font-bold text-[#EC4899]">{student.satisfaction}</span>
                   </div>
+                  <p className="mt-3 truncate text-sm font-bold text-gray-900">{student.name}</p>
+                  <p className="mt-1 truncate text-[11px] text-gray-500">{student.schoolYear} · {student.fitTags[0]}</p>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex items-end justify-between">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="mb-3 flex items-end justify-between">
               <div>
                 <p className="text-xs font-bold text-[#6C5CE7]">学生分析</p>
-                <h2 className="mt-1 text-xl font-bold text-gray-900">反応している学生の傾向</h2>
+                <h2 className="mt-1 text-lg font-bold text-gray-900">反応している学生</h2>
               </div>
               <button onClick={() => navigate('companyScouts')} className="text-xs font-bold text-[#6C5CE7]">スカウト管理</button>
             </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className="flex gap-2 overflow-x-auto pb-1">
               {companyScoutPipeline.map(item => (
-                <button key={item.id} onClick={() => navigate('studentDetail', { studentId: item.studentId })} className="rounded-2xl border border-gray-100 p-4 text-left hover:border-[#6C5CE7]/40">
-                  <div className="mb-3 flex items-center justify-between gap-2">
-                    <p className="text-sm font-bold text-gray-900">{item.studentName}</p>
-                    <span className="rounded-full bg-[#EEF0FF] px-2 py-0.5 text-[11px] font-bold text-[#6C5CE7]">{item.status}</span>
+                <button key={item.id} onClick={() => navigate('studentDetail', { studentId: item.studentId })} className="min-w-[180px] flex-1 rounded-xl border border-gray-100 p-3 text-left hover:border-[#6C5CE7]/40">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate text-sm font-bold text-gray-900">{item.studentName}</p>
+                    <span className="shrink-0 text-[10px] font-bold text-[#6C5CE7]">{item.status}</span>
                   </div>
-                  <p className="line-clamp-2 text-xs leading-relaxed text-gray-600">{item.fitReason}</p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {item.viewed.map(view => <span key={view} className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500">{view}</span>)}
-                  </div>
+                  <p className="mt-2 line-clamp-1 text-xs leading-relaxed text-gray-600">{item.fitReason}</p>
+                  <p className="mt-2 truncate text-[11px] text-gray-400">{item.viewed.join(' · ')}</p>
                 </button>
               ))}
             </div>

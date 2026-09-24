@@ -1,6 +1,6 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
-import { companyCoreTrialInsights, companyScoutPipeline, companyStudents, passportData, preferenceLabels } from '../../data/mock'
+import { companyScoutPipeline, companyStudents, passportData, preferenceLabels } from '../../data/mock'
 
 interface Props { navigate: (s: Screen) => void; studentId?: string }
 
@@ -52,7 +52,7 @@ export default function StudentDetail({ navigate, studentId }: Props) {
               <p className="text-xs font-bold text-[#6C5CE7]">価値観サマリ</p>
               <h2 className="mt-2 text-xl font-bold text-gray-900">{topValue.shortLabel}を重視する傾向</h2>
               <div className="mt-5 space-y-3">
-                {values.map(item => (
+                {values.slice(0, 4).map(item => (
                   <div key={item.key}>
                     <div className="mb-1 flex items-center justify-between text-xs">
                       <span className="font-bold text-gray-700">{item.shortLabel}</span>
@@ -78,8 +78,8 @@ export default function StudentDetail({ navigate, studentId }: Props) {
                   <span key={item} className="rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-bold text-gray-500">{item}</span>
                 ))}
               </div>
-              <button onClick={() => navigate('companyScouts')} className="mt-5 w-full rounded-xl bg-[#17152B] py-3 text-sm font-bold text-white hover:bg-[#24213A]">
-                スカウト管理で確認
+              <button onClick={() => navigate('scoutCompose', { studentId: student.id })} className="mt-5 w-full rounded-xl bg-[#EC4899] py-3 text-sm font-bold text-white hover:bg-[#DB2777]">
+                この学生にスカウトを作成
               </button>
             </div>
           </div>
@@ -113,21 +113,6 @@ export default function StudentDetail({ navigate, studentId }: Props) {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold text-[#F59E0B]">Core Trial Signals</p>
-              <h2 className="mt-1 text-xl font-bold text-gray-900">基礎Trialで見る補助シグナル</h2>
-              <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
-                {companyCoreTrialInsights.map(trial => (
-                  <div key={trial.id} className="rounded-2xl bg-[#F7F8FB] p-4">
-                    <p className="min-h-[38px] text-sm font-bold leading-snug text-gray-900">{trial.title}</p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {trial.strongSignals.slice(0, 2).map(signal => <span key={signal} className="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-gray-500">{signal}</span>)}
-                    </div>
-                    <p className="mt-3 text-xs font-bold text-[#F59E0B]">候補接点 {trial.scoutFit}人</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
       </main>
