@@ -25,7 +25,7 @@ export default function CompanyMatch({ navigate }: Props) {
         <section className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr] gap-5">
           <div className="relative overflow-hidden rounded-3xl bg-[#17152B] p-7 lg:p-9 text-white min-h-[300px]">
             <div className="relative z-10 max-w-lg">
-              <span className="chip bg-white/10 text-[#A29BFE]">TOP MATCH · 92%</span>
+              <span className="chip bg-white/10 text-[#A29BFE]">一番のおすすめ · 92%</span>
               <div className="flex items-center gap-3 mt-5">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl" style={{ background: featured.color + '35' }}>{featured.emoji}</div>
                 <div><h2 className="text-2xl font-bold">{featured.name}</h2><p className="text-sm text-white/55">{featured.industry} · {featured.location}</p></div>
@@ -36,10 +36,10 @@ export default function CompanyMatch({ navigate }: Props) {
             <div className="absolute -right-8 -bottom-12 text-[170px] opacity-20">{featured.emoji}</div>
           </div>
           <div className="rounded-3xl bg-white border border-gray-100 p-6 shadow-sm">
-            <p className="text-xs font-bold text-[#6C5CE7]">WHY THIS FIT</p>
+            <p className="text-xs font-bold text-[#6C5CE7]">おすすめの理由</p>
             <h2 className="text-xl font-bold text-gray-900 mt-3">あなたの体験と<br />重なるポイント</h2>
             <div className="mt-6 space-y-3">
-              {['商品企画Mission', 'チーム志向', '成長機会'].map((item, index) => (
+              {['商品企画Trial', 'チーム志向', '成長機会'].map((item, index) => (
                 <div key={item} className="flex items-center gap-3 rounded-xl bg-[#F7F6FF] px-3 py-3"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#6C5CE7] text-xs text-white">{index + 1}</span><span className="text-sm font-medium text-gray-700">{item}</span></div>
               ))}
             </div>
@@ -57,7 +57,7 @@ export default function CompanyMatch({ navigate }: Props) {
                 <div key={company.id} className="snap-start shrink-0 w-[280px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:-translate-y-1 transition-transform" style={{ borderTop: `4px solid ${company.color}` }}>
                   <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-3 min-w-0"><div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shrink-0" style={{ background: company.color + '18' }}>{company.emoji}</div><div className="min-w-0"><p className="font-bold text-gray-900 truncate">{company.name}</p><p className="text-xs text-gray-500 truncate">{company.industry}</p></div></div><span className="text-sm font-bold" style={{ color: company.color }}>{section.scores[index]}%</span></div>
                   <p className="text-sm text-gray-600 leading-relaxed mt-6 line-clamp-2 min-h-[42px]">{company.whyFit[0]}</p>
-                  <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400"><span>{company.location}</span><span>{company.openMissions} Mission</span></div>
+                  <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400"><span>{company.location}</span><span>{company.openMissions} Trial</span></div>
                 </div>
               ))}
             </div>

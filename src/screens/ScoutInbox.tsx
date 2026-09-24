@@ -1,11 +1,17 @@
 import { Screen } from '../App'
+import type { NavParams } from '../App'
 import { companies, profileViews, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { demoTrialScout } from '../data/demoTrial'
+import { useDemoTrial } from '../state/demoTrial'
 
-interface Props { navigate: (s: Screen) => void }
+interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function ScoutInbox({ navigate }: Props) {
-  const scouts = scoutInvitations.map(scout => ({
+  const { notified } = useDemoTrial()
+  // Trial の提出・評価で届いたスカウトを先頭に出す
+  const allScouts = [demoTrialScout, ...scoutInvitations]
+  const scouts = allScouts.map(scout => ({
     scout,
     company: companies.find(company => company.id === scout.companyId) ?? companies[0],
   }))
@@ -17,22 +23,37 @@ export default function ScoutInbox({ navigate }: Props) {
     .filter((company, index, list) => list.findIndex(item => item.id === company.id) === index)
     .slice(0, 4)
 
+  // 提出前は通知を出さない(答えたから届いた、という体験にするため)
+  if (!notified) return (
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="scout" navigate={navigate} />
+      <main className="mx-auto max-w-[640px] px-6 py-16 text-center">
+        <div className="w-16 h-16 rounded-full bg-[#FDF2F8] text-3xl flex items-center justify-center mx-auto">💌</div>
+        <h1 className="text-2xl font-bold text-gray-900 mt-5">スカウトはまだ届いていません</h1>
+        <p className="text-sm text-gray-500 mt-2 leading-relaxed">最初のTrial(12分)を提出すると、<br />あなたの回答を見た企業から反応が届きます。</p>
+        <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="mt-6 rounded-xl bg-[#EC4899] px-6 py-3 text-sm font-bold text-white">
+          最初のTrialを始める →
+        </button>
+      </main>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="scout" navigate={navigate} />
       <div className="bg-white border-b border-gray-100">
         <div className="mx-auto max-w-[1200px] px-6 py-8">
         <p className="text-xs text-gray-500 mb-1">企業からの関心</p>
-        <h1 className="text-3xl font-bold text-gray-900">Scout</h1>
+        <h1 className="text-3xl font-bold text-gray-900">スカウト</h1>
         </div>
       </div>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Scout', value: scoutInvitations.length, color: '#EC4899' },
-            { label: 'Profile views', value: profileViews.length, color: '#6C5CE7' },
-            { label: 'Companies', value: interestedCompanies.length, color: '#00B894' },
+            { label: 'スカウト', value: allScouts.length, color: '#EC4899' },
+            { label: 'プロフィール閲覧', value: profileViews.length, color: '#6C5CE7' },
+            { label: '企業', value: interestedCompanies.length, color: '#00B894' },
           ].map(item => (
             <div key={item.label} className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm"><p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}</p><p className="text-xs text-gray-500 mt-1">{item.label}</p></div>
           ))}
@@ -40,9 +61,9 @@ export default function ScoutInbox({ navigate }: Props) {
         <div className="bg-[#17152B] rounded-3xl p-6 text-white shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold text-[#F9A8D4] mb-1">YOUR SIGNALS</p>
+              <p className="text-xs font-bold text-[#F9A8D4] mb-1">あなたの傾向</p>
               <h3 className="text-xl font-bold">あなたに関心を持つ企業</h3>
-              <p className="text-sm text-white/55 mt-2">Missionと価値観の記録を見て、企業があなたを見つけています。</p>
+              <p className="text-sm text-white/55 mt-2">Trialと価値観の記録を見て、企業があなたを見つけています。</p>
             </div>
             <div className="flex -space-x-2 pt-1">
               {interestedCompanies.map(company => (
@@ -62,10 +83,20 @@ export default function ScoutInbox({ navigate }: Props) {
           </div>
         </div>
 
+        <div className="rounded-2xl bg-[#FDF2F8] border border-[#FBCFE8] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-bold text-gray-900">Trialを増やすと、企業に見つけてもらいやすくなります</p>
+            <p className="text-xs text-gray-600 mt-1">体験の記録が増えるほど、あなたの関心や強みが企業に伝わります。</p>
+          </div>
+          <button onClick={() => navigate('missionExplore')} className="shrink-0 rounded-xl bg-[#EC4899] px-5 py-2.5 text-sm font-bold text-white">
+            Trialを探す →
+          </button>
+        </div>
+
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>
-              <p className="text-xs font-bold text-[#EC4899]">NEW OPPORTUNITIES</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
+              <p className="text-xs font-bold text-[#EC4899]">新着のスカウト</p><h3 className="text-xl font-bold text-gray-900 mt-1">スカウト</h3>
             </div>
           </div>
 
@@ -101,7 +132,7 @@ export default function ScoutInbox({ navigate }: Props) {
         <section>
           <div className="flex items-end justify-between mb-3">
             <div>
-              <p className="text-xs font-bold text-[#6C5CE7]">RECENT ACTIVITY</p><h3 className="text-xl font-bold text-gray-900 mt-1">あなたをチェックした会社</h3>
+              <p className="text-xs font-bold text-[#6C5CE7]">最近の動き</p><h3 className="text-xl font-bold text-gray-900 mt-1">あなたをチェックした会社</h3>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">

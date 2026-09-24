@@ -30,6 +30,7 @@ export default function Reflection({ navigate, missionId }: Props) {
         <div className="text-3xl mb-2">💬</div>
         <h2 className="text-2xl font-bold text-gray-900">体験の振り返り</h2>
         <p className="text-sm text-gray-500 mt-1">「{m.title}」を終えて</p>
+        <p className="text-xs font-bold text-[#6C5CE7] mt-3">振り返りを送ると、この体験がキャリアパスポートに記録され、キャリア地図が更新されます。</p>
       </div>
 
       <div className="space-y-6">
@@ -93,6 +94,7 @@ export default function Reflection({ navigate, missionId }: Props) {
           style={{ background: canSubmit ? '#6C5CE7' : '#D1D5DB' }}>
           振り返りを送信する
         </button>
+        {!canSubmit && <p className="text-xs text-gray-400 text-center mt-2">あと{questions.filter(q => !ratings[q.id]).length + (style ? 0 : 1)}項目で送信できます</p>}
       </div>
       </div>
       </main>

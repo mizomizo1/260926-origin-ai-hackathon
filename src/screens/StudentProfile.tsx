@@ -28,7 +28,7 @@ export default function StudentProfile({ navigate }: Props) {
   const typeDescription = '人との相性や学べる環境を見ながら、小さく仕事を試すと選びやすそうです。'
   const analysisEvidence = [
     'チームで相談する選択が多い',
-    '企画Missionの満足度が高い',
+    '企画Trialの満足度が高い',
     '企業からも対話型の職種で反応あり',
   ]
   const weeklyGoal = 3
@@ -51,7 +51,7 @@ export default function StudentProfile({ navigate }: Props) {
           美
         </div>
         <div>
-        <p className="text-xs font-bold text-[#A29BFE] mb-1">YOUR PROFILE</p>
+        <p className="text-xs font-bold text-[#A29BFE] mb-1">あなたのプロフィール</p>
         <h1 className="text-2xl font-bold">{mockStudent.name}</h1>
         <p className="text-sm text-white/55 mt-1">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
         <div className="flex gap-2 mt-3 flex-wrap">
@@ -67,7 +67,7 @@ export default function StudentProfile({ navigate }: Props) {
         {/* Value summary */}
         <div className="bg-white rounded-3xl p-6 card-shadow lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
-            <div><p className="text-xs font-bold text-[#6C5CE7]">YOUR HYPOTHESIS</p><h3 className="text-xl font-bold text-gray-900 mt-1">価値観サマリ</h3></div>
+            <div><p className="text-xs font-bold text-[#6C5CE7]">あなたの仮説</p><h3 className="text-xl font-bold text-gray-900 mt-1">価値観サマリ</h3></div>
             <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">更新中</span>
           </div>
 
@@ -91,7 +91,7 @@ export default function StudentProfile({ navigate }: Props) {
 
           <div className="mt-3 rounded-2xl bg-[#EEF0FF] px-4 py-3 md:col-span-2">
             <p className="text-[11px] font-bold text-[#6C5CE7] mb-1">次に確かめること</p>
-            <p className="text-xs text-gray-700 leading-relaxed">人と話しながら企画を作るMissionで、楽しさが続くかを見る。</p>
+            <p className="text-xs text-gray-700 leading-relaxed">人と話しながら企画を作るTrialで、楽しさが続くかを見る。</p>
           </div>
         </div>
 
@@ -140,7 +140,7 @@ export default function StudentProfile({ navigate }: Props) {
         <div className="bg-white rounded-3xl p-3.5 card-shadow">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold text-gray-900">体験記録</h3>
-            <span className="text-xs text-gray-400">Career Passport</span>
+            <span className="text-xs text-gray-400">キャリアパスポート</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="relative w-24 h-24 flex-shrink-0">
