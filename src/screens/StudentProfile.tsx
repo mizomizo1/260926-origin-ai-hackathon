@@ -44,42 +44,56 @@ export default function StudentProfile({ navigate }: Props) {
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="profile" navigate={navigate} />
-      {/* Header */}
-      <div className="bg-[#17152B] text-white">
-        <div className="mx-auto max-w-[1200px] px-6 py-8 flex items-center gap-5">
-        <div className="w-20 h-20 rounded-full bg-[#6C5CE7] text-white text-3xl font-bold flex items-center justify-center shrink-0 ring-4 ring-white/10">
-          美
-        </div>
-        <div>
-        <p className="text-xs font-bold text-[#A29BFE] mb-1">プロフィール・体験ログ</p>
-        <h1 className="text-2xl font-bold">{mockStudent.name}</h1>
-        <p className="text-sm text-white/55 mt-1">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
-        <div className="flex gap-2 mt-3 flex-wrap">
-          {mockStudent.interests.map(i => (
-            <span key={i} className="chip bg-white/10 text-white/80">{i}</span>
-          ))}
-        </div>
-        </div>
-        </div>
-      </div>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-5">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#6C5CE7] text-2xl font-bold text-white shadow-sm">
+                {mockStudent.name[0]}
+              </div>
+              <div>
+                <p className="text-sm font-bold text-[#6C5CE7]">プロフィール</p>
+                <h1 className="mt-1 text-3xl font-bold text-gray-900">{mockStudent.name}</h1>
+                <p className="mt-1 text-sm text-gray-500">{mockStudent.schoolYear} · {mockStudent.faculty}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2 lg:w-[430px]">
+              {[
+                { label: '完了Trial', value: passportData.completedMissions },
+                { label: 'スカウト', value: scoutInvitations.length },
+                { label: '閲覧企業', value: profileViews.length },
+              ].map(item => (
+                <div key={item.label} className="rounded-2xl bg-[#F7F8FB] px-3 py-3 text-center">
+                  <p className="text-lg font-bold text-gray-900">{item.value}</p>
+                  <p className="mt-0.5 text-[11px] font-bold text-gray-400">{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-2 border-t border-gray-100 pt-4">
+            {mockStudent.interests.map(i => (
+              <span key={i} className="rounded-full bg-[#EEF0FF] px-3 py-1.5 text-xs font-bold text-[#6C5CE7]">{i}</span>
+            ))}
+          </div>
+        </section>
+
         {/* Value summary */}
-        <div className="bg-white rounded-3xl p-6 card-shadow lg:col-span-2">
+        <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
             <div><p className="text-xs font-bold text-[#6C5CE7]">あなたの仮説</p><h3 className="text-xl font-bold text-gray-900 mt-1">価値観サマリ</h3></div>
             <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] rounded-full px-2.5 py-1">更新中</span>
           </div>
 
-          <div className="rounded-3xl bg-[#F7F6FF] p-5 border-l-4 border-[#6C5CE7] mt-5">
+          <div className="rounded-3xl bg-[#F7F6FF] p-5 mt-5">
             <p className="text-xs font-bold text-[#6C5CE7] mb-2">現在の仮説</p>
             <p className="text-lg font-bold text-gray-900 leading-tight">{typeTitle}</p>
             <p className="text-xs text-gray-600 leading-relaxed mt-2">{typeDescription}</p>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="mt-5">
             <p className="text-xs font-bold text-gray-500 mb-2">そう見ている理由</p>
-            <div className="space-y-2 md:col-span-2">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
               {analysisEvidence.map(item => (
                 <div key={item} className="flex items-center gap-2 rounded-2xl bg-white border border-gray-100 px-3 py-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#6C5CE7] flex-shrink-0" />
@@ -96,7 +110,7 @@ export default function StudentProfile({ navigate }: Props) {
         </div>
 
         {/* Company signals */}
-        <div className="bg-white rounded-3xl p-3.5 card-shadow">
+        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-bold text-gray-900">企業からの反応</h3>
             <span className="text-xs text-gray-400">直近</span>
@@ -137,7 +151,7 @@ export default function StudentProfile({ navigate }: Props) {
         </div>
 
         {/* Experience profile */}
-        <div className="bg-white rounded-3xl p-5 card-shadow">
+        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <div>
               <p className="text-xs font-bold text-[#6C5CE7]">体験から見えるプロフィール</p>
@@ -203,7 +217,7 @@ export default function StudentProfile({ navigate }: Props) {
         </div>
 
         {/* Experience log */}
-        <div className="bg-white rounded-3xl p-5 card-shadow">
+        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-end justify-between">
             <div>
               <p className="text-xs font-bold text-[#6C5CE7]">これまでの歩み</p>
@@ -231,7 +245,7 @@ export default function StudentProfile({ navigate }: Props) {
         </div>
 
         {/* Settings */}
-        <div className="bg-white/70 rounded-3xl p-4">
+        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
           <h3 className="text-xs font-bold text-gray-500 mb-2">設定</h3>
           <div className="space-y-1">
             {['プロフィール編集', '通知設定', 'ヘルプ'].map(item => (

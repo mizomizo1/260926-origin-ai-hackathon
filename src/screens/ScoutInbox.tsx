@@ -3,6 +3,7 @@ import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { companies, profileViews, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import CompanyDetailModal from '../components/CompanyDetailModal'
 import { demoTrialScout } from '../data/demoTrial'
 import { useDemoTrial } from '../state/demoTrial'
 
@@ -12,6 +13,9 @@ export default function ScoutInbox({ navigate }: Props) {
   const { notified } = useDemoTrial()
   const [countProgress, setCountProgress] = useState(0)
   const [visibleActivityCount, setVisibleActivityCount] = useState(1)
+  const [selectedCompany, setSelectedCompany] = useState<(typeof companies)[number] | null>(null)
+  const [selectedScout, setSelectedScout] = useState<(typeof scoutInvitations)[number] | typeof demoTrialScout | null>(null)
+  const [savedScoutIds, setSavedScoutIds] = useState<Set<string>>(() => new Set(scoutInvitations.filter(scout => scout.status === '保存中').map(scout => scout.id)))
   // Trial の提出・評価で届いたスカウトを先頭に出す
   const allScouts = [demoTrialScout, ...scoutInvitations]
   const scouts = allScouts.map(scout => ({
@@ -186,8 +190,28 @@ export default function ScoutInbox({ navigate }: Props) {
                       </div>
                     </div>
                     <div className="flex gap-2 sm:shrink-0">
-                      <button className="rounded-xl bg-[#6C5CE7] px-4 py-2 text-xs font-bold text-white">詳細</button>
-                      <button className="rounded-xl bg-gray-100 px-4 py-2 text-xs font-bold text-gray-600">保存</button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedCompany(company)
+                          setSelectedScout(scout)
+                        }}
+                        className="rounded-xl bg-[#6C5CE7] px-4 py-2 text-xs font-bold text-white"
+                      >
+                        詳細
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSavedScoutIds(prev => {
+                          const next = new Set(prev)
+                          if (next.has(scout.id)) next.delete(scout.id)
+                          else next.add(scout.id)
+                          return next
+                        })}
+                        className={`rounded-xl px-4 py-2 text-xs font-bold ${savedScoutIds.has(scout.id) ? 'bg-[#E8FBF5] text-[#00B894]' : 'bg-gray-100 text-gray-600'}`}
+                      >
+                        {savedScoutIds.has(scout.id) ? '保存済み' : '保存'}
+                      </button>
                     </div>
                   </div>
                   <div className="mt-4 rounded-2xl bg-[#F7F6FF] px-4 py-3">
@@ -226,6 +250,25 @@ export default function ScoutInbox({ navigate }: Props) {
           </aside>
         </section>
       </main>
+      {selectedCompany && selectedScout && (
+        <CompanyDetailModal
+          company={selectedCompany}
+          context={{
+            label: 'Scout Detail',
+            title: `${selectedScout.role}として関心が届いています`,
+            body: `${selectedScout.signal}。${selectedScout.message}`,
+          }}
+          onClose={() => {
+            setSelectedCompany(null)
+            setSelectedScout(null)
+          }}
+          onExplore={() => {
+            setSelectedCompany(null)
+            setSelectedScout(null)
+            navigate('missionExplore')
+          }}
+        />
+      )}
     </div>
   )
 }

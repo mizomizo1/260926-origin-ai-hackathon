@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Screen } from '../App'
 import { companies, profileViews, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import CompanyDetailModal from '../components/CompanyDetailModal'
 import { demoTrialScout } from '../data/demoTrial'
 import { markDemoMatchSeen, useDemoTrial } from '../state/demoTrial'
 
@@ -9,6 +10,7 @@ interface Props { navigate: (s: Screen) => void }
 
 export default function CompanyMatch({ navigate }: Props) {
   const [filter, setFilter] = useState<'all' | 'scout' | 'viewed' | 'planning'>('all')
+  const [selectedCompany, setSelectedCompany] = useState<(typeof companies)[number] | null>(null)
   const { notified } = useDemoTrial()
   const featured = companies.find(company => company.id === 'com_003') ?? companies[0]
   const remaining = companies.filter(company => company.id !== featured.id)
@@ -75,7 +77,7 @@ export default function CompanyMatch({ navigate }: Props) {
                   </div>
                 ))}
               </div>
-              <div className="mt-5 flex items-center gap-3"><button className="rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#17152B]">分析を見る</button><span className="text-xs text-white/45">{featured.openMissions}つの公開Trial</span></div>
+              <div className="mt-5 flex items-center gap-3"><button onClick={() => setSelectedCompany(featured)} className="rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#17152B]">企業情報を見る</button><span className="text-xs text-white/45">{featured.openMissions}つの公開Trial</span></div>
             </div>
             <div className="absolute -right-8 -bottom-12 text-[170px] opacity-20">{featured.emoji}</div>
           </div>
@@ -142,7 +144,9 @@ export default function CompanyMatch({ navigate }: Props) {
               {visibleFitMap.map((item) => (
                 <button
                   key={item.company.id}
-                  className="absolute z-20 w-[168px] rounded-2xl border border-white bg-white p-3 text-left shadow-md transition-transform hover:scale-[1.03]"
+                  type="button"
+                  onClick={() => setSelectedCompany(item.company)}
+                  className="group absolute z-20 w-[168px] rounded-2xl border border-white bg-white p-3 text-left shadow-md transition-transform hover:z-30 hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]"
                   style={{
                     left: `calc(${item.x}% - 84px)`,
                     top: `calc(${item.y}% - 42px)`,
@@ -160,6 +164,20 @@ export default function CompanyMatch({ navigate }: Props) {
                       <div className="mt-1 flex gap-1">
                         {scoutCompanyIds.has(item.company.id) && <span className="rounded-full bg-[#FDF2F8] px-1.5 py-0.5 text-[9px] font-bold text-[#EC4899]">Scout</span>}
                         {viewedCompanyIds.has(item.company.id) && <span className="rounded-full bg-[#EEF0FF] px-1.5 py-0.5 text-[9px] font-bold text-[#6C5CE7]">View</span>}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`pointer-events-none absolute left-1/2 z-40 w-[230px] -translate-x-1/2 rounded-2xl border border-gray-100 bg-white p-3 text-left opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus:opacity-100 ${item.y > 48 ? 'bottom-[calc(100%+8px)]' : 'top-[calc(100%+8px)]'}`}>
+                    <p className="text-[11px] font-bold text-gray-900">判断理由</p>
+                    <p className="mt-1 text-xs leading-relaxed text-gray-600">{item.note}</p>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <div className="rounded-xl bg-[#EEF0FF] px-2 py-1.5">
+                        <p className="text-[10px] font-bold text-[#6C5CE7]">Trial</p>
+                        <p className="text-xs font-bold text-gray-900">{item.trial}%</p>
+                      </div>
+                      <div className="rounded-xl bg-[#E8FBF5] px-2 py-1.5">
+                        <p className="text-[10px] font-bold text-[#00B894]">価値観</p>
+                        <p className="text-xs font-bold text-gray-900">{item.values}%</p>
                       </div>
                     </div>
                   </div>
@@ -183,7 +201,16 @@ export default function CompanyMatch({ navigate }: Props) {
                     <p className="text-[11px] font-bold text-gray-400">分析根拠</p>
                     <p className="mt-1 text-xs text-gray-600">価値観・Trial評価・職種特徴の一致</p>
                   </div>
-                  <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400"><span>{company.location}</span><span>{company.openMissions} Trial</span></div>
+                  <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between gap-3 text-xs text-gray-400">
+                    <span>{company.location}</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCompany(company)}
+                      className="rounded-xl bg-[#17152B] px-3 py-2 text-[11px] font-bold text-white hover:bg-[#24213A]"
+                    >
+                      詳細
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -191,6 +218,16 @@ export default function CompanyMatch({ navigate }: Props) {
         ))}
 
       </main>
+      {selectedCompany && (
+        <CompanyDetailModal
+          company={selectedCompany}
+          onClose={() => setSelectedCompany(null)}
+          onExplore={() => {
+            setSelectedCompany(null)
+            navigate('missionExplore')
+          }}
+        />
+      )}
     </div>
   )
 }
