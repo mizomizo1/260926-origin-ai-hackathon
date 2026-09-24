@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { companies, profileViews, scoutInvitations } from '../data/mock'
@@ -9,6 +10,8 @@ interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
 export default function ScoutInbox({ navigate }: Props) {
   const { notified } = useDemoTrial()
+  const [countProgress, setCountProgress] = useState(0)
+  const [visibleActivityCount, setVisibleActivityCount] = useState(1)
   // Trial の提出・評価で届いたスカウトを先頭に出す
   const allScouts = [demoTrialScout, ...scoutInvitations]
   const scouts = allScouts.map(scout => ({
@@ -33,6 +36,29 @@ export default function ScoutInbox({ navigate }: Props) {
     `${scouts[1]?.scout.companyName}から新しいスカウト`,
   ].filter(Boolean)
 
+  useEffect(() => {
+    if (!notified) return
+    setCountProgress(0)
+    setVisibleActivityCount(1)
+    const startedAt = window.performance.now()
+    let frame = 0
+    const tick = (now: number) => {
+      const progress = Math.min((now - startedAt) / 900, 1)
+      setCountProgress(progress)
+      if (progress < 1) frame = window.requestAnimationFrame(tick)
+    }
+    frame = window.requestAnimationFrame(tick)
+    const activityTimers = [650, 1250].map((ms, index) =>
+      window.setTimeout(() => setVisibleActivityCount(index + 2), ms)
+    )
+    return () => {
+      window.cancelAnimationFrame(frame)
+      activityTimers.forEach(timer => window.clearTimeout(timer))
+    }
+  }, [notified])
+
+  const animatedValue = (value: number) => Math.round(value * countProgress)
+
   // 提出前は通知を出さない(答えたから届いた、という体験にするため)
   if (!notified) return (
     <div className="min-h-screen bg-[#F7F8FB]">
@@ -51,6 +77,20 @@ export default function ScoutInbox({ navigate }: Props) {
   return (
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="scout" navigate={navigate} />
+      <style>{`
+        @keyframes ccScoutSlideIn {
+          from { opacity: 0; transform: translateX(42px) scale(0.92); }
+          to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes ccScoutFadeUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes ccScoutPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(0,184,148,0.32); }
+          50% { box-shadow: 0 0 0 8px rgba(0,184,148,0); }
+        }
+      `}</style>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8 space-y-8">
         <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
@@ -67,10 +107,14 @@ export default function ScoutInbox({ navigate }: Props) {
                 <h2 className="mt-2 text-2xl font-bold">あなたのTrialを見た企業が動き始めました</h2>
                 <p className="mt-3 max-w-xl text-sm leading-7 text-white/55">提出内容やプロフィールを見た企業が、スカウトや閲覧として反応しています。</p>
               </div>
-              <div className="flex -space-x-3">
-                {interestedCompanies.map(company => (
-                  <div key={company.id} className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[#17152B] text-xl"
-                    style={{ background: company.color }}>
+              <div className="flex min-w-[170px] justify-end -space-x-4 overflow-visible pr-1">
+                {interestedCompanies.map((company, index) => (
+                  <div key={company.id} className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[#17152B] text-xl opacity-0"
+                    style={{
+                      background: company.color,
+                      animation: `ccScoutSlideIn 520ms ease-out ${index * 160}ms forwards`,
+                      zIndex: interestedCompanies.length + index,
+                    }}>
                     {company.emoji}
                   </div>
                 ))}
@@ -81,7 +125,7 @@ export default function ScoutInbox({ navigate }: Props) {
               {interestStats.map(item => (
                 <div key={item.label} className="border-white/10 px-6 py-5 sm:border-r sm:last:border-r-0">
                   <div className="flex items-baseline gap-2">
-                    <p className="text-4xl font-bold" style={{ color: item.color }}>{item.value}</p>
+                    <p className="text-4xl font-bold tabular-nums transition-all" style={{ color: item.color }}>{animatedValue(item.value)}</p>
                     <p className="text-sm font-bold text-white">{item.label}</p>
                   </div>
                   <p className="mt-2 text-xs text-white/45">{item.note}</p>
@@ -93,11 +137,11 @@ export default function ScoutInbox({ navigate }: Props) {
           <aside className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <p className="text-sm font-bold text-gray-900">いまの動き</p>
-              <span className="rounded-full bg-[#E8FBF5] px-2.5 py-1 text-[11px] font-bold text-[#00B894]">Live</span>
+              <span className="rounded-full bg-[#E8FBF5] px-2.5 py-1 text-[11px] font-bold text-[#00B894]" style={{ animation: 'ccScoutPulse 1.5s ease-in-out infinite' }}>Live</span>
             </div>
             <div className="mt-4 space-y-4">
-              {liveActivities.map((activity, index) => (
-                <div key={activity} className="relative flex gap-3">
+              {liveActivities.slice(0, visibleActivityCount).map((activity, index) => (
+                <div key={activity} className="relative flex gap-3 opacity-0" style={{ animation: 'ccScoutFadeUp 420ms ease-out forwards' }}>
                   {index < liveActivities.length - 1 && <div className="absolute left-[13px] top-8 bottom-[-16px] w-px bg-gray-100" />}
                   <span className="relative z-10 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#EEF0FF] text-[11px] font-bold text-[#6C5CE7]">{index + 1}</span>
                   <div>

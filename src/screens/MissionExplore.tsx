@@ -53,21 +53,8 @@ export default function MissionExplore({ navigate }: Props) {
             <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-[0.82fr_1.18fr] lg:p-8">
               <div className="flex flex-col justify-between">
                 <div>
-                  <span className="chip bg-white/10 text-[#A29BFE]">Start Point</span>
-                  <h2 className="mt-4 text-2xl font-bold leading-tight lg:text-3xl">まずは、あなたの仮説を<br />ひとつ試してみよう。</h2>
-                  <p className="mt-3 text-sm leading-relaxed text-white/60">初めてなら基礎Trialがおすすめ。正解ではなく、考え方のクセを知るための短い体験です。</p>
-                </div>
-                <div className="mt-6 grid grid-cols-3 gap-2">
-                  {[
-                    { label: '平均時間', value: '12分' },
-                    { label: '形式', value: 'テキスト' },
-                    { label: '目的', value: '仮説検証' },
-                  ].map(item => (
-                    <div key={item.label} className="rounded-2xl bg-white/10 px-3 py-3">
-                      <p className="text-[10px] font-bold text-white/40">{item.label}</p>
-                      <p className="mt-1 text-sm font-bold">{item.value}</p>
-                    </div>
-                  ))}
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-white">Start Point · 基礎Trial</p>
+                  <h2 className="mt-4 text-2xl font-bold leading-tight lg:text-3xl">最初の一歩に、<br />かんたんな仕事を用意しました。</h2>
                 </div>
               </div>
 
