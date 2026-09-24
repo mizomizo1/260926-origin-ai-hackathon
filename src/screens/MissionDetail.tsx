@@ -1,6 +1,7 @@
 import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions } from '../data/mock'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
@@ -9,106 +10,109 @@ export default function MissionDetail({ navigate, missionId }: Props) {
   const isCore = (m as any).source === 'core'
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white">
-      {/* Hero */}
-      <div className="px-5 pt-8 pb-6 relative overflow-hidden" style={{ background: m.color + '15' }}>
-        <button onClick={() => navigate('missionExplore')} className="text-gray-500 text-sm mb-4 block">← 戻る</button>
-        <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-3xl flex items-center justify-center text-4xl flex-shrink-0"
-            style={{ background: m.color + '30' }}>
-            {m.emoji}
-          </div>
-          <div>
-            <div className="flex gap-2 mb-2">
-              {isCore && <span className="chip text-white text-xs px-3 py-1 bg-[#111827]">共通Mission</span>}
-              <span className="chip text-white text-xs px-3 py-1" style={{ background: m.color }}>{m.category}</span>
-              <span className="chip bg-white text-gray-600 text-xs px-3 py-1">{m.difficulty}</span>
-            </div>
-            <h1 className="text-xl font-bold text-gray-900">{m.title}</h1>
-            <p className="text-sm text-gray-500 mt-1">{m.company}</p>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="explore" navigate={navigate} />
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 pb-32 space-y-5">
-        {/* Meta */}
-        <div className="flex gap-3">
-          {[
-            { icon: '⏱️', label: '所要時間', value: m.duration },
-            { icon: '👤', label: 'スタイル', value: m.style },
-          ].map(({ icon, label, value }) => (
-            <div key={label} className="flex-1 bg-gray-50 rounded-2xl p-3 text-center">
-              <p className="text-lg">{icon}</p>
-              <p className="text-xs text-gray-500">{label}</p>
-              <p className="text-sm font-semibold text-gray-800 mt-0.5">{value}</p>
-            </div>
-          ))}
-        </div>
+      <main className="mx-auto max-w-[1200px] px-6 py-8">
+        <button onClick={() => navigate('missionExplore')} className="text-gray-500 text-sm mb-5 block">← Explore Trials</button>
 
-        {/* Overview */}
-        <div>
-          <h3 className="text-sm font-bold text-gray-900 mb-2">Mission概要</h3>
-          <p className="text-sm text-gray-600 leading-relaxed">{m.description}</p>
-        </div>
-
-        {isCore && (
-          <div className="bg-[#F7F6FF] rounded-2xl p-4 border-l-4 border-[#6C5CE7]">
-            <h3 className="text-sm font-bold text-[#6C5CE7] mb-1">このMissionで見ること</h3>
-            <p className="text-xs text-gray-700 leading-relaxed">企業との相性を見る前に、整理力・伝える力・判断のクセを把握します。</p>
-          </div>
-        )}
-
-        {/* Recommended for */}
-        <div className="bg-[#EEF0FF] rounded-2xl p-4">
-          <h3 className="text-sm font-bold text-[#6C5CE7] mb-2">こんな人におすすめ</h3>
-          {m.recommendedFor.map((r, i) => (
-            <div key={i} className="flex items-center gap-2 text-sm text-gray-700 mt-1">
-              <span className="text-[#6C5CE7]">✓</span> {r}
-            </div>
-          ))}
-        </div>
-
-        {/* What you gain */}
-        <div>
-          <h3 className="text-sm font-bold text-gray-900 mb-2">得られること</h3>
-          <div className="flex flex-wrap gap-2">
-            {m.gains.map(g => (
-              <span key={g} className="chip bg-gray-100 text-gray-700 text-xs px-3 py-1.5">{g}</span>
-            ))}
-          </div>
-        </div>
-
-        {/* Steps */}
-        <div>
-          <h3 className="text-sm font-bold text-gray-900 mb-2">進め方</h3>
-          <div className="space-y-2">
-            {m.steps.map((s, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white flex-shrink-0 mt-0.5"
-                  style={{ background: m.color }}>
-                  {i + 1}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+          <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="p-6 lg:p-8" style={{ background: m.color + '10' }}>
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
+                  style={{ background: m.color + '22' }}>
+                  {m.emoji}
                 </div>
-                <p className="text-sm text-gray-700">{s}</p>
+                <div>
+                  <div className="flex gap-2 mb-2 flex-wrap">
+                    {isCore && <span className="chip text-white bg-[#111827]">Core Trial</span>}
+                    <span className="chip text-white" style={{ background: m.color }}>{m.category}</span>
+                    <span className="chip bg-white text-gray-600">{m.difficulty}</span>
+                  </div>
+                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">{m.title}</h1>
+                  <p className="text-sm text-gray-500 mt-2">{m.company}</p>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Tags */}
-        <div className="flex gap-2 flex-wrap">
-          {m.tags.map(t => (
-            <span key={t} className="text-xs text-[#6C5CE7] bg-[#EEF0FF] px-3 py-1 rounded-full">#{t}</span>
-          ))}
-        </div>
-      </div>
+            <div className="p-6 lg:p-8 space-y-8">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 mb-3">Overview</h2>
+                <p className="text-sm text-gray-600 leading-relaxed">{m.description}</p>
+              </div>
 
-      {/* CTA */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 px-5 py-4">
-        <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="primary-btn">
-          このMissionを試す
-        </button>
-      </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 mb-3">このTrialで体験すること</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {m.gains.map(g => (
+                    <div key={g} className="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                      <p className="text-sm font-bold text-gray-800">{g}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 mb-3">Task flow</h2>
+                <div className="space-y-3">
+                  {m.steps.map((s, i) => (
+                    <div key={i} className="flex items-start gap-3 rounded-xl border border-gray-100 p-4">
+                      <div className="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center text-white flex-shrink-0" style={{ background: m.color }}>
+                        {i + 1}
+                      </div>
+                      <p className="text-sm text-gray-700">{s}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-[#EEF0FF] rounded-2xl p-5">
+                <h2 className="text-base font-bold text-[#6C5CE7] mb-3">Recommended for</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {m.recommendedFor.map((r, i) => (
+                    <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                      <span className="text-[#6C5CE7]">✓</span> {r}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {isCore && (
+                <div className="bg-[#F7F6FF] rounded-2xl p-5 border-l-4 border-[#6C5CE7]">
+                  <h2 className="text-base font-bold text-[#6C5CE7] mb-1">このTrialで見ること</h2>
+                  <p className="text-sm text-gray-700 leading-relaxed">企業との相性を見る前に、整理力・伝える力・判断のクセを把握します。</p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          <aside className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 h-fit sticky top-24">
+            <h2 className="text-base font-bold text-gray-900 mb-4">Trial info</h2>
+            <div className="space-y-3 mb-5">
+              {[
+                { label: '所要時間', value: m.duration },
+                { label: '難易度', value: m.difficulty },
+                { label: '形式', value: m.style },
+                { label: '提出物', value: 'テキスト回答' },
+              ].map(item => (
+                <div key={item.label} className="flex justify-between gap-4 border-b border-gray-100 pb-3 last:border-0">
+                  <span className="text-sm text-gray-500">{item.label}</span>
+                  <span className="text-sm font-bold text-gray-900 text-right">{item.value}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">
+              このJob Trialを開始
+            </button>
+            <div className="flex gap-2 flex-wrap mt-4">
+              {m.tags.map(t => (
+                <span key={t} className="text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">{t}</span>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </main>
     </div>
   )
 }

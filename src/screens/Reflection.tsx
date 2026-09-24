@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Screen } from '../App'
 import { missions } from '../data/mock'
+import StudentTopNav from '../components/StudentTopNav'
 
 interface Props { navigate: (s: Screen) => void; missionId?: string }
 
@@ -21,14 +22,17 @@ export default function Reflection({ navigate, missionId }: Props) {
   const canSubmit = questions.every(q => ratings[q.id]) && style
 
   return (
-    <div className="flex flex-col min-h-[780px] bg-white px-5 py-8">
+    <div className="min-h-screen bg-[#F7F8FB]">
+      <StudentTopNav current="explore" navigate={navigate} />
+      <main className="mx-auto max-w-[760px] px-6 py-10">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8">
       <div className="mb-6">
         <div className="text-3xl mb-2">💬</div>
         <h2 className="text-2xl font-bold text-gray-900">体験の振り返り</h2>
         <p className="text-sm text-gray-500 mt-1">「{m.title}」を終えて</p>
       </div>
 
-      <div className="flex-1 space-y-6 overflow-y-auto pb-24">
+      <div className="space-y-6">
         {questions.map(q => (
           <div key={q.id}>
             <p className="text-sm font-medium text-gray-800 mb-2">
@@ -90,6 +94,8 @@ export default function Reflection({ navigate, missionId }: Props) {
           振り返りを送信する
         </button>
       </div>
+      </div>
+      </main>
     </div>
   )
 }
