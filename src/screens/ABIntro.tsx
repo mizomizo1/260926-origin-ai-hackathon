@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Screen } from '../App'
 import abIllustration from '../assets/ab-test-comparison.png'
+import { AppIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -44,7 +45,7 @@ export default function ABIntro({ navigate }: Props) {
                 onMouseLeave={() => setPressedIndex(null)}
                 onTouchStart={() => setPressedIndex(index)}
                 onTouchEnd={() => setPressedIndex(null)}
-                className={`rounded-2xl p-4 text-sm font-bold transition-all duration-150 ${pressedIndex === index ? 'scale-95' : demoChoice === index ? 'scale-[1.02]' : ''}`}
+                className={`rounded-2xl p-4 text-center text-sm font-bold transition-all duration-150 ${pressedIndex === index ? 'scale-95' : demoChoice === index ? 'scale-[1.02]' : ''}`}
                 style={index === 0
                   ? {
                     background: demoChoice === index ? '#6C5CE7' : 'white',
@@ -56,7 +57,16 @@ export default function ABIntro({ navigate }: Props) {
                   }
                 }
               >
-                {choice}{demoChoice === index && <span className="ml-1">✓</span>}
+                <span className="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-sm font-black" style={{
+                  background: demoChoice === index ? 'rgba(255,255,255,0.18)' : index === 0 ? '#EEF0FF' : '#E8FBF5',
+                  color: demoChoice === index ? 'white' : index === 0 ? '#6C5CE7' : '#00B894',
+                }}>
+                  {index === 0 ? 'A' : 'B'}
+                </span>
+                <span className="inline-flex items-center justify-center gap-1.5">
+                  {choice}
+                  {demoChoice === index && <AppIcon name="check" className="h-3.5 w-3.5" />}
+                </span>
               </button>
             ))}
           </div>
