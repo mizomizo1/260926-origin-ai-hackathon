@@ -23,6 +23,9 @@ export default function CompanyDashboard({ navigate }: Props) {
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-500">公開中のMissionと、学生の反応をひとつの流れで確認できます。</p>
             </div>
             <div className="flex gap-2">
+              <button onClick={() => navigate('companyProfile')} className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-700 hover:border-[#6C5CE7] hover:text-[#6C5CE7]">
+                企業情報
+              </button>
               <button onClick={() => navigate('missionList')} className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-700 hover:border-[#6C5CE7] hover:text-[#6C5CE7]">
                 Missionを見る
               </button>

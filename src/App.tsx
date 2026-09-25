@@ -20,6 +20,7 @@ import CareerPassport from './screens/CareerPassport'
 import TrialEvaluation from './screens/TrialEvaluation'
 import CompanyLogin from './screens/company/CompanyLogin'
 import CompanyDashboard from './screens/company/CompanyDashboard'
+import CompanyProfile from './screens/company/CompanyProfile'
 import MissionList from './screens/company/MissionList'
 import CreateMission from './screens/company/CreateMission'
 import MissionAnalytics from './screens/company/MissionAnalytics'
@@ -34,7 +35,7 @@ export type Screen =
   | 'studentHome' | 'missionExplore' | 'missionDetail' | 'missionTrial'
   | 'reflection' | 'updatedResult' | 'companyMatch' | 'scoutInbox' | 'studentProfile' | 'careerPassport'
   | 'trialEvaluation'
-  | 'companyLogin' | 'companyDashboard' | 'missionList' | 'createMission'
+  | 'companyLogin' | 'companyDashboard' | 'companyProfile' | 'missionList' | 'createMission'
   | 'missionAnalytics' | 'studentList' | 'studentDetail' | 'companyScouts' | 'scoutCompose'
 
 export type NavParams = { missionId?: string; studentId?: string; companyScreen?: string }
@@ -51,7 +52,7 @@ export default function App() {
     window.scrollTo(0, 0)
   }
 
-  const isCompany = ['companyLogin', 'companyDashboard', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail', 'companyScouts', 'scoutCompose'].includes(screen)
+  const isCompany = ['companyLogin', 'companyDashboard', 'companyProfile', 'missionList', 'createMission', 'missionAnalytics', 'studentList', 'studentDetail', 'companyScouts', 'scoutCompose'].includes(screen)
   const bgClass = isCompany ? 'bg-gray-50' : 'bg-[#F7F6FF] min-h-screen'
 
   const renderScreen = () => {
@@ -85,6 +86,7 @@ export default function App() {
       case 'trialEvaluation': return <TrialEvaluation navigate={navigate} />
       case 'companyLogin': return <CompanyLogin navigate={navigate} />
       case 'companyDashboard': return <CompanyDashboard navigate={navigate} />
+      case 'companyProfile': return <CompanyProfile navigate={navigate} />
       case 'missionList': return <MissionList navigate={navigate} />
       case 'createMission': return <CreateMission navigate={navigate} />
       case 'missionAnalytics': return <MissionAnalytics navigate={navigate} />

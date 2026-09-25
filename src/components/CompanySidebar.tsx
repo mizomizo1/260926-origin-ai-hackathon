@@ -12,6 +12,13 @@ const items = [
     hint: '全体状況',
   },
   {
+    icon: 'building' as AppIconName,
+    label: '企業情報',
+    screen: 'companyProfile' as Screen,
+    matches: ['companyProfile'],
+    hint: '基本情報',
+  },
+  {
     icon: 'clipboard' as AppIconName,
     label: 'Mission',
     screen: 'missionList' as Screen,
@@ -47,7 +54,7 @@ export default function CompanySidebar({ current, navigate }: Props) {
       </div>
 
       {/* Company */}
-      <div className="flex items-center gap-2 px-2 mb-6 pb-6 border-b border-white/10">
+      <button onClick={() => navigate('companyProfile')} className="mb-6 flex w-full items-center gap-2 border-b border-white/10 px-2 pb-6 text-left transition-opacity hover:opacity-90">
         <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white/80">
           <AppIcon name="sparkle" className="h-4 w-4" />
         </div>
@@ -55,7 +62,7 @@ export default function CompanySidebar({ current, navigate }: Props) {
           <p className="text-white text-xs font-semibold">株式会社Lumo</p>
           <p className="text-white/40 text-xs">消費財 · 東京</p>
         </div>
-      </div>
+      </button>
 
       {/* Nav */}
       <nav className="flex-1 space-y-1">
@@ -73,7 +80,7 @@ export default function CompanySidebar({ current, navigate }: Props) {
 
       {/* Bottom */}
       <div className="space-y-1 border-t border-white/10 pt-4">
-        <button className="company-sidebar-item">
+        <button onClick={() => navigate('companyProfile')} className="company-sidebar-item">
           <AppIcon name="gear" className="h-4 w-4 shrink-0" />
           <span>設定</span>
         </button>
