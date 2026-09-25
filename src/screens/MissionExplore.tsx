@@ -3,6 +3,7 @@ import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -66,7 +67,9 @@ export default function MissionExplore({ navigate }: Props) {
                     className={`snap-start min-h-[250px] w-[270px] shrink-0 rounded-3xl border p-5 text-left transition-transform hover:-translate-y-1 ${index === 0 ? 'border-white/30 bg-white text-gray-900' : 'border-white/10 bg-white/10 text-white'}`}
                   >
                     <div className="flex items-start justify-between">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl text-2xl" style={{ background: index === 0 ? trial.color + '18' : 'rgba(255,255,255,0.15)' }}>{trial.emoji}</div>
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: index === 0 ? trial.color + '18' : 'rgba(255,255,255,0.15)', color: index === 0 ? trial.color : 'white' }}>
+                        <DataIcon value={trial.emoji} className="h-5 w-5" />
+                      </div>
                       <span className={`chip ${index === 0 ? 'bg-[#EEF0FF] text-[#6C5CE7]' : 'bg-white/10 text-white/70'}`}>{trial.duration}</span>
                     </div>
                     <p className={`mt-6 text-xs font-bold ${index === 0 ? 'text-[#6C5CE7]' : 'text-[#A29BFE]'}`}>{index === 0 ? '最初におすすめ' : (trial as any).source === 'core' ? '基礎Trial' : '企業Trial'}</p>
@@ -106,8 +109,10 @@ export default function MissionExplore({ navigate }: Props) {
                     )}
                     <div className={isCore ? 'p-5' : 'p-5 text-white'} style={!isCore ? { background: `linear-gradient(135deg, ${m.color}, #17152B)` } : undefined}>
                       <div className="flex items-start justify-between gap-3 mb-6">
-                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: isCore ? m.color + '18' : 'rgba(255,255,255,0.18)' }}>{m.emoji}</div>
-                        <span className={isCore ? 'text-gray-300 group-hover:text-[#6C5CE7] text-xl' : 'text-white/55 group-hover:text-white text-xl'}>↗</span>
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: isCore ? m.color + '18' : 'rgba(255,255,255,0.18)', color: isCore ? m.color : 'white' }}>
+                          <DataIcon value={m.emoji} className="h-5 w-5" />
+                        </div>
+                        <AppIcon name="arrowUpRight" className={isCore ? 'h-5 w-5 text-gray-300 group-hover:text-[#6C5CE7]' : 'h-5 w-5 text-white/55 group-hover:text-white'} />
                       </div>
                       <span className={isCore ? 'chip bg-[#EEF0FF] text-[#6C5CE7]' : 'chip bg-white/15 text-white'}>{isCore ? '基礎Trial' : '企業の仕事'}</span>
                       <h3 className={`text-base font-bold leading-snug mt-3 line-clamp-2 min-h-[44px] ${isCore ? 'text-gray-900' : 'text-white'}`}>{m.title}</h3>

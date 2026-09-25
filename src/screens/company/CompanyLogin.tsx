@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Screen } from '../../App'
+import { AppIcon } from '../../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -12,7 +13,9 @@ export default function CompanyLogin({ navigate }: Props) {
       {/* Left */}
       <div className="hidden lg:flex w-1/2 flex-col justify-between p-12">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#6C5CE7] flex items-center justify-center text-xl">🧭</div>
+          <div className="w-10 h-10 rounded-xl bg-[#6C5CE7] text-white flex items-center justify-center">
+            <AppIcon name="compass" className="h-5 w-5" />
+          </div>
           <span className="text-white text-lg font-bold">Career Compass</span>
         </div>
         <div>
@@ -68,7 +71,10 @@ export default function CompanyLogin({ navigate }: Props) {
           <div className="mt-4 pt-4 border-t border-gray-100">
             <button onClick={() => navigate('companyDashboard')}
               className="w-full py-3 rounded-xl text-sm font-medium text-gray-600 border-2 border-gray-100 hover:bg-gray-50 transition-colors">
-              🎯 デモ企業で入る
+              <span className="inline-flex items-center justify-center gap-2">
+                <AppIcon name="target" className="h-4 w-4 text-[#6C5CE7]" />
+                デモ企業で入る
+              </span>
             </button>
           </div>
 

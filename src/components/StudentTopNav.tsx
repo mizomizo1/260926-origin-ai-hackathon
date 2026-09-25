@@ -2,6 +2,7 @@ import { Screen } from '../App'
 import { mockStudent, scoutInvitations } from '../data/mock'
 import { useDemoTrial } from '../state/demoTrial'
 import GuideRing from './GuideRing'
+import { AppIcon } from './AppIcon'
 
 interface Props {
   current: 'home' | 'explore' | 'passport' | 'companies' | 'scout' | 'profile'
@@ -54,7 +55,7 @@ export default function StudentTopNav({ current, navigate, spotlight }: Props) {
 
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('scoutInbox')} className="relative w-9 h-9 rounded-full bg-gray-50 text-lg flex items-center justify-center">
-            💌
+            <AppIcon name="envelope" className="h-4 w-4 text-[#EC4899]" />
             {notified && (
               <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-[#EC4899] text-white text-[10px] leading-4 font-bold">
                 {scoutInvitations.length + 1}

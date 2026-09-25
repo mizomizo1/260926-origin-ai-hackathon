@@ -1,4 +1,5 @@
 import { Screen } from '../App'
+import { AppIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -22,9 +23,9 @@ export default function Splash({ navigate }: Props) {
         {/* Logo */}
         <div className="text-center lg:text-left">
           <div className="mb-8 flex flex-col items-center lg:items-start">
-          <div className="w-20 h-20 rounded-3xl mb-4 flex items-center justify-center text-4xl"
+          <div className="w-20 h-20 rounded-3xl mb-4 flex items-center justify-center text-white"
             style={{ background: 'rgba(108, 92, 231, 0.3)', border: '2px solid rgba(108, 92, 231, 0.5)', backdropFilter: 'blur(10px)' }}>
-            🧭
+            <AppIcon name="compass" className="h-9 w-9" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-wide">Career Compass</h1>
           <span className="text-sm font-medium mt-1" style={{ color: '#A29BFE' }}>Trial</span>

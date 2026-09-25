@@ -1,4 +1,5 @@
 import { companies, missions } from '../data/mock'
+import { DataIcon } from './AppIcon'
 
 type Company = (typeof companies)[number]
 
@@ -46,8 +47,8 @@ export default function CompanyDetailModal({ company, onClose, onExplore, contex
             ×
           </button>
           <div className="relative z-10 flex flex-col gap-5 pr-10 sm:flex-row sm:items-center">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl" style={{ background: company.color }}>
-              {company.emoji}
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-white" style={{ background: company.color }}>
+              <DataIcon value={company.emoji} className="h-7 w-7" />
             </div>
             <div>
               <p className="text-xs font-bold text-white/45">Company Detail</p>
@@ -55,7 +56,9 @@ export default function CompanyDetailModal({ company, onClose, onExplore, contex
               <p className="mt-1 text-sm text-white/55">{company.industry} · {company.location}</p>
             </div>
           </div>
-          <div className="absolute -bottom-16 right-5 text-[150px] opacity-10">{company.emoji}</div>
+          <div className="absolute -bottom-8 right-8 text-white/10">
+            <DataIcon value={company.emoji} className="h-36 w-36" />
+          </div>
         </div>
 
         <div className="max-h-[calc(92vh-150px)] overflow-y-auto p-6">

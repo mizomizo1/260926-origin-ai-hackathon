@@ -5,6 +5,7 @@ import StudentTopNav from '../components/StudentTopNav'
 import CompanyDetailModal from '../components/CompanyDetailModal'
 import { demoTrialScout } from '../data/demoTrial'
 import { markDemoMatchSeen, useDemoTrial } from '../state/demoTrial'
+import { DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -65,7 +66,9 @@ export default function CompanyMatch({ navigate }: Props) {
             <div className="relative z-10 max-w-lg">
               <span className="chip bg-white/10 text-[#A29BFE]">総合相性 · 92%</span>
               <div className="flex items-center gap-3 mt-5">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl" style={{ background: featured.color + '35' }}>{featured.emoji}</div>
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: featured.color + '35', color: featured.color }}>
+                  <DataIcon value={featured.emoji} className="h-6 w-6" />
+                </div>
                 <div><h2 className="text-2xl font-bold">{featured.name}</h2><p className="text-sm text-white/55">{featured.industry} · {featured.location}</p></div>
               </div>
               <p className="text-sm text-white/65 leading-relaxed mt-6">{featured.description}</p>
@@ -79,7 +82,9 @@ export default function CompanyMatch({ navigate }: Props) {
               </div>
               <div className="mt-5 flex items-center gap-3"><button onClick={() => setSelectedCompany(featured)} className="rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#17152B]">企業情報を見る</button><span className="text-xs text-white/45">{featured.openMissions}つの公開Trial</span></div>
             </div>
-            <div className="absolute -right-8 -bottom-12 text-[170px] opacity-20">{featured.emoji}</div>
+            <div className="absolute -right-4 -bottom-8 text-white/20">
+              <DataIcon value={featured.emoji} className="h-40 w-40" />
+            </div>
           </div>
           <div className="rounded-3xl bg-white border border-gray-100 p-6 shadow-sm">
             <p className="text-xs font-bold text-[#6C5CE7]">相性が高い理由</p>
@@ -154,7 +159,9 @@ export default function CompanyMatch({ navigate }: Props) {
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-lg" style={{ background: item.company.color + '18' }}>{item.company.emoji}</span>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ background: item.company.color + '18', color: item.company.color }}>
+                      <DataIcon value={item.company.emoji} className="h-4 w-4" />
+                    </span>
                     <div className="min-w-0">
                       <p className="truncate text-xs font-bold text-gray-900">{item.company.name}</p>
                       <div className="mt-1 flex items-center gap-2">
@@ -195,7 +202,7 @@ export default function CompanyMatch({ navigate }: Props) {
             <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
               {section.items.map((company, index) => (
                 <div key={company.id} className="snap-start shrink-0 w-[280px] bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:-translate-y-1 transition-transform" style={{ borderTop: `4px solid ${company.color}` }}>
-                  <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-3 min-w-0"><div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shrink-0" style={{ background: company.color + '18' }}>{company.emoji}</div><div className="min-w-0"><p className="font-bold text-gray-900 truncate">{company.name}</p><p className="text-xs text-gray-500 truncate">{company.industry}</p></div></div><span className="text-sm font-bold" style={{ color: company.color }}>{scoreFor(index, section.baseScore)}%</span></div>
+                  <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-3 min-w-0"><div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style={{ background: company.color + '18', color: company.color }}><DataIcon value={company.emoji} className="h-5 w-5" /></div><div className="min-w-0"><p className="font-bold text-gray-900 truncate">{company.name}</p><p className="text-xs text-gray-500 truncate">{company.industry}</p></div></div><span className="text-sm font-bold" style={{ color: company.color }}>{scoreFor(index, section.baseScore)}%</span></div>
                   <p className="text-sm text-gray-600 leading-relaxed mt-6 line-clamp-2 min-h-[42px]">{company.whyFit[0]}</p>
                   <div className="mt-4 rounded-2xl bg-gray-50 px-3 py-2">
                     <p className="text-[11px] font-bold text-gray-400">分析根拠</p>

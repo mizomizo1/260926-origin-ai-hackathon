@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Screen } from '../App'
+import { DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -81,7 +82,7 @@ export default function Onboarding({ navigate }: Props) {
         <section className="rounded-[32px] border border-white/70 bg-white/75 p-8 shadow-[0_24px_70px_rgba(31,41,55,0.12)] backdrop-blur">
           <div className="grid gap-5">
             <div className="flex min-h-[280px] items-center justify-center rounded-[28px]" style={{ background: slide.color }}>
-              <div className="text-[120px] leading-none drop-shadow-sm">{slide.emoji}</div>
+              <DataIcon value={slide.emoji} className="h-32 w-32 text-white drop-shadow-sm" />
             </div>
             <div className="grid grid-cols-3 gap-3">
               {slides.map((item, index) => (
@@ -90,7 +91,9 @@ export default function Onboarding({ navigate }: Props) {
                   onClick={() => setCurrent(index)}
                   className={`rounded-2xl border p-4 text-left transition-all ${index === current ? 'border-transparent bg-white shadow-sm' : 'border-white/70 bg-white/45'}`}
                 >
-                  <div className="text-2xl">{item.emoji}</div>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: item.bg, color: item.color }}>
+                    <DataIcon value={item.emoji} className="h-4 w-4" />
+                  </div>
                   <p className="mt-2 text-xs font-bold leading-relaxed text-gray-700">{item.title.replace('\n', '')}</p>
                 </button>
               ))}

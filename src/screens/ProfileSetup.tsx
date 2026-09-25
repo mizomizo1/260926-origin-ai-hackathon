@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Screen } from '../App'
+import { AppIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -30,7 +31,9 @@ export default function ProfileSetup({ navigate }: Props) {
         </div>
 
       <div className="mt-10 mb-6">
-        <div className="text-3xl mb-2">📝</div>
+        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF0FF] text-[#6C5CE7]">
+          <AppIcon name="write" className="h-5 w-5" />
+        </div>
         <h1 className="text-4xl font-bold text-gray-900">基本情報を教えてください</h1>
         <p className="text-base leading-8 text-gray-500 mt-3">入力済みの内容のままで進めます。後から変更できます。</p>
       </div>
@@ -72,7 +75,9 @@ export default function ProfileSetup({ navigate }: Props) {
         </div>
 
       <div className="mt-10 mb-6">
-        <div className="text-3xl mb-2">🎯</div>
+        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF0FF] text-[#6C5CE7]">
+          <AppIcon name="target" className="h-5 w-5" />
+        </div>
         <h1 className="text-4xl font-bold text-gray-900">興味のある職種を選んでください</h1>
         <p className="text-base text-gray-500 mt-3">複数選択可 · {interests.length}個選択中</p>
       </div>

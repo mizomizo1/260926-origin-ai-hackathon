@@ -6,6 +6,7 @@ import StudentTopNav from '../components/StudentTopNav'
 import GuideRing from '../components/GuideRing'
 import { demoTrial } from '../data/demoTrial'
 import { submitDemoTrial } from '../state/demoTrial'
+import { DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
@@ -66,7 +67,9 @@ export default function MissionTrial({ navigate, missionId }: Props) {
 
           <section className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <div className="p-5 border-b border-gray-100 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl" style={{ background: m.color + '18' }}>{m.emoji}</div>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: m.color + '18', color: m.color }}>
+                <DataIcon value={m.emoji} className="h-5 w-5" />
+              </div>
               <div>
                 <p className="text-xs text-gray-500">{m.company}</p>
                 <h1 className="text-lg font-bold text-gray-900">{m.title}</h1>

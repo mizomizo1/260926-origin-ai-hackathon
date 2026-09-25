@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Screen } from '../App'
+import { AppIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -27,7 +28,9 @@ export default function StudentLogin({ navigate }: Props) {
 
       <section className="rounded-3xl border border-gray-100 bg-white p-7 shadow-[0_24px_70px_rgba(31,41,55,0.10)]">
       <div className="mb-8">
-        <div className="text-4xl mb-3">👋</div>
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF0FF] text-[#6C5CE7]">
+          <AppIcon name="handshake" className="h-5 w-5" />
+        </div>
         <h2 className="text-2xl font-bold text-gray-900">ログイン / 登録</h2>
         <p className="text-sm text-gray-500 mt-1">アカウントで続けましょう</p>
       </div>

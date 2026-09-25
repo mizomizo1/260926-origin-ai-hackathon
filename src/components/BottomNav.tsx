@@ -1,12 +1,13 @@
 import { Screen } from '../App'
+import { AppIcon, type AppIconName } from './AppIcon'
 
-type NavItem = { icon: string; label: string; screen: Screen }
+type NavItem = { icon: AppIconName; label: string; screen: Screen }
 const items: NavItem[] = [
-  { icon: '🏠', label: 'Home', screen: 'studentHome' },
-  { icon: '🎯', label: 'Mission', screen: 'missionExplore' },
-  { icon: '🏢', label: 'Company', screen: 'companyMatch' },
-  { icon: '💌', label: 'Scout', screen: 'scoutInbox' },
-  { icon: '👤', label: 'Profile', screen: 'studentProfile' },
+  { icon: 'home', label: 'Home', screen: 'studentHome' },
+  { icon: 'target', label: 'Mission', screen: 'missionExplore' },
+  { icon: 'buildings', label: 'Company', screen: 'companyMatch' },
+  { icon: 'envelope', label: 'Scout', screen: 'scoutInbox' },
+  { icon: 'person', label: 'Profile', screen: 'studentProfile' },
 ]
 
 interface Props { current: string; navigate: (s: Screen) => void }
@@ -19,7 +20,7 @@ export default function BottomNav({ current, navigate }: Props) {
         const isActive = current === label.toLowerCase()
         return (
           <button key={label} onClick={() => navigate(screen)} className={`bottom-nav-item flex-1 ${isActive ? 'active' : ''}`}>
-            <span className="text-xl leading-none">{icon}</span>
+            <AppIcon name={icon} className="h-5 w-5" />
             <span>{label}</span>
           </button>
         )

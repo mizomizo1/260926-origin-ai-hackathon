@@ -3,6 +3,7 @@ import type { NavParams } from '../App'
 import { missions } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
 import GuideRing from '../components/GuideRing'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void; missionId?: string }
 
@@ -21,9 +22,9 @@ export default function MissionDetail({ navigate, missionId }: Props) {
           <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-6 lg:p-8" style={{ background: m.color + '10' }}>
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
-                  style={{ background: m.color + '22' }}>
-                  {m.emoji}
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: m.color + '22', color: m.color }}>
+                  <DataIcon value={m.emoji} className="h-6 w-6" />
                 </div>
                 <div>
                   <div className="flex gap-2 mb-2 flex-wrap">
@@ -73,7 +74,7 @@ export default function MissionDetail({ navigate, missionId }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {m.recommendedFor.map((r, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                      <span className="text-[#6C5CE7]">✓</span> {r}
+                      <AppIcon name="check" className="h-4 w-4 shrink-0 text-[#6C5CE7]" /> {r}
                     </div>
                   ))}
                 </div>
@@ -104,9 +105,9 @@ export default function MissionDetail({ navigate, missionId }: Props) {
               ))}
             </div>
             <div className="rounded-xl bg-[#EEF0FF] p-3 mb-3 space-y-1.5 text-xs text-gray-700">
-              <p><span className="text-[#6C5CE7] font-bold">✓</span> 正解はありません</p>
-              <p><span className="text-[#6C5CE7] font-bold">✓</span> 途中で保存できます</p>
-              <p><span className="text-[#6C5CE7] font-bold">✓</span> 目安は{m.duration}です</p>
+              <p className="flex items-center gap-1.5"><AppIcon name="check" className="h-3.5 w-3.5 text-[#6C5CE7]" /> 正解はありません</p>
+              <p className="flex items-center gap-1.5"><AppIcon name="check" className="h-3.5 w-3.5 text-[#6C5CE7]" /> 途中で保存できます</p>
+              <p className="flex items-center gap-1.5"><AppIcon name="check" className="h-3.5 w-3.5 text-[#6C5CE7]" /> 目安は{m.duration}です</p>
             </div>
             <GuideRing active label="ここから始めよう" radius="12px" className="mt-5">
               <button onClick={() => navigate('missionTrial', { missionId: m.id })} className="w-full py-3 rounded-xl bg-[#6C5CE7] text-white text-sm font-bold">

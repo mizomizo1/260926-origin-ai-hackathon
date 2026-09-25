@@ -6,6 +6,7 @@ import StudentTopNav from '../components/StudentTopNav'
 import CompanyDetailModal from '../components/CompanyDetailModal'
 import { demoTrialScout } from '../data/demoTrial'
 import { useDemoTrial } from '../state/demoTrial'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -68,7 +69,9 @@ export default function ScoutInbox({ navigate }: Props) {
     <div className="min-h-screen bg-[#F7F8FB]">
       <StudentTopNav current="scout" navigate={navigate} />
       <main className="mx-auto max-w-[640px] px-6 py-16 text-center">
-        <div className="w-16 h-16 rounded-full bg-[#FDF2F8] text-3xl flex items-center justify-center mx-auto">💌</div>
+        <div className="w-16 h-16 rounded-full bg-[#FDF2F8] text-[#EC4899] flex items-center justify-center mx-auto">
+          <AppIcon name="envelope" className="h-7 w-7" />
+        </div>
         <h1 className="text-2xl font-bold text-gray-900 mt-5">スカウトはまだ届いていません</h1>
         <p className="text-sm text-gray-500 mt-2 leading-relaxed">最初のTrial(12分)を提出すると、<br />あなたの回答を見た企業から反応が届きます。</p>
         <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="mt-6 rounded-xl bg-[#EC4899] px-6 py-3 text-sm font-bold text-white">
@@ -122,7 +125,7 @@ export default function ScoutInbox({ navigate }: Props) {
                       animation: `ccScoutSlideIn 520ms ease-out ${index * 160}ms forwards`,
                       zIndex: interestedCompanies.length + index,
                     }}>
-                    {company.emoji}
+                    <DataIcon value={company.emoji} className="h-5 w-5 text-white" />
                   </div>
                 ))}
               </div>
@@ -176,8 +179,8 @@ export default function ScoutInbox({ navigate }: Props) {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-start gap-3 min-w-0">
                       <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
-                        style={{ background: company.color + '18' }}>
-                        {company.emoji}
+                        style={{ background: company.color + '18', color: company.color }}>
+                        <DataIcon value={company.emoji} className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -233,8 +236,8 @@ export default function ScoutInbox({ navigate }: Props) {
               {views.map((view, index) => (
                 <div key={view.id} className="flex gap-3 rounded-2xl bg-gray-50 px-3 py-2.5">
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0 z-10"
-                    style={{ background: view.company.color + '18' }}>
-                    {view.company.emoji}
+                    style={{ background: view.company.color + '18', color: view.company.color }}>
+                    <DataIcon value={view.company.emoji} className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">

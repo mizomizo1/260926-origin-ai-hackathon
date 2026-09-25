@@ -1,6 +1,7 @@
 import { Screen } from '../App'
 import { companies, mockStudent, preferenceLabels, passportData, profileViews, scoutInvitations } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -118,7 +119,9 @@ export default function StudentProfile({ navigate }: Props) {
 
           <div className="rounded-2xl bg-[#FDF2F8] p-3 mb-3">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-lg flex-shrink-0">💌</div>
+              <div className="w-10 h-10 rounded-2xl bg-white text-[#EC4899] flex items-center justify-center flex-shrink-0">
+                <AppIcon name="envelope" className="h-4 w-4" />
+              </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-bold text-[#EC4899]">スカウト {scoutInvitations.length}件</p>
@@ -135,9 +138,9 @@ export default function StudentProfile({ navigate }: Props) {
             <div className="space-y-2">
               {enrichedViews.map(view => (
                 <div key={view.id} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                    style={{ background: view.company.color + '18' }}>
-                    {view.company.emoji}
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: view.company.color + '18', color: view.company.color }}>
+                    <DataIcon value={view.company.emoji} className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-bold text-gray-800 truncate">{view.companyName}</p>
@@ -229,8 +232,8 @@ export default function StudentProfile({ navigate }: Props) {
             {passportData.experiences.slice(0, 3).map(exp => (
               <div key={exp.id} className="rounded-2xl border border-gray-100 bg-[#F7F8FB] p-3">
                 <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-lg flex-shrink-0">
-                  {exp.emoji}
+                <div className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-[#6C5CE7] flex-shrink-0">
+                  <DataIcon value={exp.emoji} className="h-4 w-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-gray-800 truncate">{exp.mission}</p>

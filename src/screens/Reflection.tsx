@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Screen } from '../App'
 import { missions } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void; missionId?: string }
 
@@ -27,7 +28,9 @@ export default function Reflection({ navigate, missionId }: Props) {
       <main className="mx-auto max-w-[760px] px-6 py-10">
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8">
       <div className="mb-6">
-        <div className="text-3xl mb-2">💬</div>
+        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF0FF] text-[#6C5CE7]">
+          <AppIcon name="chat" className="h-5 w-5" />
+        </div>
         <h2 className="text-2xl font-bold text-gray-900">体験の振り返り</h2>
         <p className="text-sm text-gray-500 mt-1">「{m.title}」を終えて</p>
         <p className="text-xs font-bold text-[#6C5CE7] mt-3">振り返りを送ると、この体験がキャリアパスポートに記録され、キャリア地図が更新されます。</p>
@@ -37,7 +40,7 @@ export default function Reflection({ navigate, missionId }: Props) {
         {questions.map(q => (
           <div key={q.id}>
             <p className="text-sm font-medium text-gray-800 mb-2">
-              {q.emoji} {q.label}
+              <span className="inline-flex items-center gap-1.5"><DataIcon value={q.emoji} className="h-4 w-4 text-[#6C5CE7]" /> {q.label}</span>
             </p>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map(v => (
@@ -59,7 +62,7 @@ export default function Reflection({ navigate, missionId }: Props) {
 
         {/* Work style */}
         <div>
-          <p className="text-sm font-medium text-gray-800 mb-2">🤝 どちらが合っていた？</p>
+          <p className="mb-2 flex items-center gap-1.5 text-sm font-medium text-gray-800"><AppIcon name="handshake" className="h-4 w-4 text-[#6C5CE7]" /> どちらが合っていた？</p>
           <div className="flex gap-3">
             {[{ id: 'solo' as const, label: '一人作業', emoji: '🧑‍💻' }, { id: 'team' as const, label: 'チーム作業', emoji: '👥' }].map(({ id, label, emoji }) => (
               <button key={id} onClick={() => setStyle(id)}
@@ -68,7 +71,7 @@ export default function Reflection({ navigate, missionId }: Props) {
                   ? { borderColor: '#6C5CE7', background: '#EEF0FF', color: '#6C5CE7' }
                   : { borderColor: '#E5E7EB', color: '#6B7280' }
                 }>
-                {emoji} {label}
+                <span className="inline-flex items-center justify-center gap-1.5"><DataIcon value={emoji} className="h-4 w-4" /> {label}</span>
               </button>
             ))}
           </div>
@@ -76,7 +79,7 @@ export default function Reflection({ navigate, missionId }: Props) {
 
         {/* Comment */}
         <div>
-          <p className="text-sm font-medium text-gray-800 mb-2">✍️ 一言感想（任意）</p>
+          <p className="mb-2 flex items-center gap-1.5 text-sm font-medium text-gray-800"><AppIcon name="write" className="h-4 w-4 text-[#6C5CE7]" /> 一言感想（任意）</p>
           <textarea
             value={comment} onChange={e => setComment(e.target.value)}
             placeholder="感じたことを書いてみよう..."

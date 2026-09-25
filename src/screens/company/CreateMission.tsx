@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
+import { AppIcon } from '../../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -130,7 +131,9 @@ export default function CreateMission({ navigate }: Props) {
               <div className="mt-4 overflow-hidden rounded-2xl border border-[#6C5CE7]/30 bg-white">
                 <div className="p-5">
                   <div className="mb-5 flex items-start justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#6C5CE7]/10 text-2xl">✨</div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#6C5CE7]/10 text-[#6C5CE7]">
+                      <AppIcon name="sparkle" className="h-5 w-5" />
+                    </div>
                     <span className="rounded-full bg-[#EEF0FF] px-2.5 py-1 text-[11px] font-bold text-[#6C5CE7]">{duration}</span>
                   </div>
                   <p className="text-xs font-bold text-[#6C5CE7]">{category}</p>

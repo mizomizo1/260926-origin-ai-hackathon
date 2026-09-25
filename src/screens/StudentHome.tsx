@@ -5,6 +5,7 @@ import { missions, mockStudent, passportData, scoutInvitations } from '../data/m
 import StudentTopNav from '../components/StudentTopNav'
 import { demoTrialScout } from '../data/demoTrial'
 import { markDemoNotified, useDemoTrial } from '../state/demoTrial'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -77,7 +78,9 @@ export default function StudentHome({ navigate }: Props) {
               </div>
               <p className="text-xs font-bold text-[#6C5CE7]">次におすすめ</p>
               <div className="mt-5 flex items-start justify-between gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ background: featured.color + '18' }}>{featured.emoji}</div>
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl" style={{ background: featured.color + '18', color: featured.color }}>
+                  <DataIcon value={featured.emoji} className="h-5 w-5" />
+                </div>
                 <span className="chip bg-[#EEF0FF] text-[#6C5CE7]">{featured.duration}</span>
               </div>
               <h2 className="mt-5 min-h-[44px] text-base font-bold leading-snug text-gray-900">{featured.title}</h2>
@@ -113,7 +116,10 @@ export default function StudentHome({ navigate }: Props) {
             </div>
             ) : (
             <button onClick={() => navigate('missionDetail', { missionId: 'core_001' })} className="w-full text-left bg-[#FDF2F8] rounded-2xl border border-[#FBCFE8] p-5 shadow-sm">
-              <p className="text-sm font-bold text-gray-900">💌 スカウトはまだ届いていません</p>
+              <p className="flex items-center gap-2 text-sm font-bold text-gray-900">
+                <AppIcon name="envelope" className="h-4 w-4 text-[#EC4899]" />
+                スカウトはまだ届いていません
+              </p>
               <p className="text-xs text-gray-600 mt-1 leading-relaxed">最初のTrial(12分)を提出すると、あなたの回答を見た企業から反応が届きます。</p>
               <span className="inline-flex mt-3 text-xs font-bold text-white bg-[#EC4899] rounded-full px-3 py-1.5">
                 最初のTrialを始める →
@@ -143,8 +149,10 @@ export default function StudentHome({ navigate }: Props) {
                 )}
                 <div className={isCore ? 'p-5' : 'p-5 text-white'} style={!isCore ? { background: `linear-gradient(135deg, ${trial.color}, #17152B)` } : undefined}>
                   <div className="flex items-start justify-between gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: isCore ? trial.color + '18' : 'rgba(255,255,255,0.18)' }}>{trial.emoji}</div>
-                    <span className={isCore ? 'text-gray-300 group-hover:text-[#6C5CE7] text-xl' : 'text-white/55 group-hover:text-white text-xl'}>↗</span>
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: isCore ? trial.color + '18' : 'rgba(255,255,255,0.18)', color: isCore ? trial.color : 'white' }}>
+                      <DataIcon value={trial.emoji} className="h-5 w-5" />
+                    </div>
+                    <AppIcon name="arrowUpRight" className={isCore ? 'h-5 w-5 text-gray-300 group-hover:text-[#6C5CE7]' : 'h-5 w-5 text-white/55 group-hover:text-white'} />
                   </div>
                   <span className={isCore ? 'chip bg-[#EEF0FF] text-[#6C5CE7]' : 'chip bg-white/15 text-white'}>{isCore ? '基礎Trial' : '企業の仕事'}</span>
                   <h3 className={`text-base font-bold leading-snug mt-3 line-clamp-2 min-h-[44px] ${isCore ? 'text-gray-900' : 'text-white'}`}>{trial.title}</h3>
@@ -180,8 +188,12 @@ export default function StudentHome({ navigate }: Props) {
                 </div>
                 <div className="p-5 text-white" style={{ background: 'linear-gradient(135deg, #4B5563, #111827)' }}>
                   <div className="mb-6 flex items-start justify-between gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-2xl">{exp.emoji}</div>
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-sm text-white/70">✓</span>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-white">
+                      <DataIcon value={exp.emoji} className="h-5 w-5" />
+                    </div>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/70">
+                      <AppIcon name="check" className="h-4 w-4" />
+                    </span>
                   </div>
                   <span className="chip bg-white/10 text-white/70">完了済み</span>
                   <h3 className="mt-3 min-h-[44px] text-base font-bold leading-snug text-white line-clamp-2">{exp.mission}</h3>

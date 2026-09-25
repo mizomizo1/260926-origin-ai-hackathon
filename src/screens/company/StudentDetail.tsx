@@ -1,6 +1,7 @@
 import { Screen } from '../../App'
 import CompanySidebar from '../../components/CompanySidebar'
 import { companyScoutPipeline, companyStudents, passportData, preferenceLabels } from '../../data/mock'
+import { DataIcon } from '../../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void; studentId?: string }
 
@@ -97,7 +98,9 @@ export default function StudentDetail({ navigate, studentId }: Props) {
                 {experiences.map(exp => (
                   <div key={exp.id} className="rounded-2xl bg-[#F7F8FB] p-4">
                     <div className="flex items-start gap-3">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xl">{exp.emoji}</span>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#6C5CE7]">
+                        <DataIcon value={exp.emoji} className="h-4 w-4" />
+                      </span>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
                         <p className="mt-0.5 text-xs text-gray-500">{exp.company} · {exp.date}</p>

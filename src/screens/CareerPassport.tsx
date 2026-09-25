@@ -1,6 +1,7 @@
 import { Screen } from '../App'
 import { passportData } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen) => void }
 
@@ -15,7 +16,9 @@ export default function CareerPassport({ navigate }: Props) {
             <h1 className="text-3xl font-bold text-gray-900 mt-1">キャリアパスポート</h1>
             <p className="text-sm text-gray-500 mt-2">体験を重ねるほど、あなたのキャリア仮説が具体的になります。</p>
           </div>
-          <div className="hidden sm:block text-4xl">🗺️</div>
+          <div className="hidden h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF0FF] text-[#6C5CE7] sm:flex">
+            <AppIcon name="map" className="h-6 w-6" />
+          </div>
         </div>
 
         {/* Stats */}
@@ -79,9 +82,9 @@ export default function CareerPassport({ navigate }: Props) {
               <div key={exp.id} className="relative bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                 <span className="absolute -left-[27px] top-6 w-3 h-3 rounded-full bg-[#6C5CE7] ring-4 ring-[#F7F8FB]" />
                 <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 text-[#6C5CE7]"
                     style={{ background: '#EEF0FF' }}>
-                    {exp.emoji}
+                    <DataIcon value={exp.emoji} className="h-5 w-5" />
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-bold text-gray-900">{exp.mission}</p>
@@ -89,11 +92,11 @@ export default function CareerPassport({ navigate }: Props) {
                     <div className="flex gap-3 mt-2">
                       <div className="flex items-center gap-1">
                         <span className="text-xs text-gray-500">満足度</span>
-                        <span className="text-xs font-bold text-[#F59E0B]">⭐ {exp.satisfaction}</span>
+                        <span className="flex items-center gap-1 text-xs font-bold text-[#F59E0B]"><AppIcon name="trophy" className="h-3 w-3" /> {exp.satisfaction}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <span className="text-xs text-gray-500">継続意欲</span>
-                        <span className="text-xs font-bold text-[#6C5CE7]">🔥 {exp.willingness}</span>
+                        <span className="flex items-center gap-1 text-xs font-bold text-[#6C5CE7]"><AppIcon name="fire" className="h-3 w-3" /> {exp.willingness}</span>
                       </div>
                     </div>
                   </div>

@@ -2,6 +2,7 @@ import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { abQuestions, preferenceLabels } from '../data/mock'
 import GuideRing from '../components/GuideRing'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void; answers: ('a' | 'b')[] }
 
@@ -31,7 +32,9 @@ export default function PreferenceResult({ navigate, answers }: Props) {
               <h1 className="mt-3 text-3xl font-bold text-gray-900">あなたの価値観の仮説</h1>
               <p className="mt-2 text-sm text-gray-500">A/Bの回答から、最初に試すTrialの方向性をまとめました。</p>
             </div>
-            <div className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-white text-3xl shadow-sm sm:flex">🔮</div>
+            <div className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-white text-[#6C5CE7] shadow-sm sm:flex">
+              <AppIcon name="sparkle" className="h-7 w-7" />
+            </div>
           </div>
 
           <div className="mt-7 rounded-3xl border border-[#D8D5FF] bg-white p-6">
@@ -50,7 +53,9 @@ export default function PreferenceResult({ navigate, answers }: Props) {
               {scoreItems.map(item => (
                 <div key={item.key} className="rounded-2xl bg-[#F7F6FF] px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-white text-lg">{item.icon}</span>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-white text-[#6C5CE7]">
+                      <DataIcon value={item.icon} className="h-4 w-4" />
+                    </span>
                     <div>
                       <p className="text-sm font-bold text-gray-900">{item.shortLabel}</p>
                       <p className="mt-1 text-xs leading-relaxed text-gray-500">{item.label}</p>

@@ -2,6 +2,7 @@ import { Screen } from '../App'
 import type { NavParams } from '../App'
 import { missions, preferenceLabels, mockStudent } from '../data/mock'
 import StudentTopNav from '../components/StudentTopNav'
+import { AppIcon, DataIcon } from '../components/AppIcon'
 
 interface Props { navigate: (s: Screen, p?: NavParams) => void }
 
@@ -17,7 +18,7 @@ export default function UpdatedResult({ navigate }: Props) {
         <div className="mx-auto max-w-[760px] px-6 py-10 text-center">
         <div className="w-16 h-16 rounded-full bg-[#6C5CE7] flex items-center justify-center text-3xl mx-auto mb-4"
           style={{ boxShadow: '0 8px 24px rgba(108,92,231,0.3)' }}>
-          🗺️
+          <AppIcon name="map" className="h-7 w-7 text-white" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">キャリア地図を更新しました！</h2>
         <p className="text-sm text-gray-500 mt-1">お疲れさまでした。この体験はキャリアパスポートに記録されました</p>
@@ -44,7 +45,7 @@ export default function UpdatedResult({ navigate }: Props) {
               return (
                 <div key={key}>
                   <div className="flex justify-between text-xs text-gray-600 mb-1">
-                    <span>{icon} {label}</span>
+                    <span className="flex items-center gap-1.5"><DataIcon value={icon} className="h-3.5 w-3.5 text-[#6C5CE7]" /> {label}</span>
                     <span className="font-mono font-medium" style={{ color: diff > 0 ? '#00B894' : diff < 0 ? '#EF4444' : '#9CA3AF' }}>
                       {diff > 0 ? `+${diff}` : diff === 0 ? '±0' : diff}
                     </span>
@@ -68,8 +69,8 @@ export default function UpdatedResult({ navigate }: Props) {
             <button key={m.id} onClick={() => navigate('missionDetail', { missionId: m.id })}
               className="w-full mission-card card-shadow text-left">
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style={{ background: m.color + '20' }}>
-                  {m.emoji}
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: m.color + '20', color: m.color }}>
+                  <DataIcon value={m.emoji} className="h-5 w-5" />
                 </div>
                 <div>
                   <div className="flex gap-2 mb-1">
@@ -86,7 +87,10 @@ export default function UpdatedResult({ navigate }: Props) {
 
         {/* Company teaser */}
         <div className="rounded-2xl border-2 border-dashed border-[#6C5CE7]/30 p-4 text-center">
-          <p className="text-sm font-semibold text-gray-700 mb-1">🏢 気になる企業が見つかりました</p>
+          <p className="mb-1 flex items-center justify-center gap-2 text-sm font-semibold text-gray-700">
+            <AppIcon name="buildings" className="h-4 w-4 text-[#6C5CE7]" />
+            気になる企業が見つかりました
+          </p>
           <p className="text-xs text-gray-500 mb-3">あなたの体験結果に関心を持っている企業があります</p>
           <button onClick={() => navigate('companyMatch')} className="text-sm text-[#6C5CE7] font-semibold">
             企業を確認する →
